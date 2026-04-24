@@ -88,10 +88,12 @@
   }
   .hero-m3.active { opacity: 1; }
   /* Dégradé noir discret en bas pour lisibilité du texte blanc */
-  .hero-overlay {
+.hero-overlay {
     position: absolute;
     inset: 0;
-    background:
+    /* On ajoute rgba(0,0,0,0.2) comme base avant le dégradé */
+    background: 
+      linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
       linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.55) 100%);
     pointer-events: none;
     z-index: 1;
