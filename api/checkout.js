@@ -59,14 +59,14 @@ export default async function handler(req, res) {
         circuit_color: config.circuitColor,
         circuit_opacity: config.circuitOpacity,
         email: customer.email,
-        prenom: customer.prenom,
-        nom: customer.nom,
-        telephone: customer.telephone,
-        adresse: customer.adresse,
-        complement: customer.complement,
-        ville: customer.ville,
-        code_postal: customer.codepostal,
-        pays: customer.pays || 'France',
+        prenom: customer.prenom || customer.firstname,
+        nom: customer.nom || customer.lastname,
+        telephone: customer.telephone || customer.phone,
+        adresse: customer.adresse || customer.address,
+        complement: customer.complement || customer.address2,
+        ville: customer.ville || customer.city,
+        code_postal: customer.codepostal || customer.postcode || customer.zip,
+        pays: mapCountry(customer.pays || customer.country),
         quantite: qty,
         unit_price_eur: unit,
         shipping_eur: ship,
@@ -144,4 +144,15 @@ function generateRef() {
   let r = '';
   for (let i = 0; i < 8; i++) r += chars[Math.floor(Math.random() * chars.length)];
   return r;
+}
+
+// Convertit un code ISO ('FR', 'BE'...) ou un nom déjà français en nom complet
+function mapCountry(input) {
+  if (!input) return 'France';
+  const map = {
+    FR: 'France', BE: 'Belgique', CH: 'Suisse',
+    LU: 'Luxembourg', DE: 'Allemagne', IT: 'Italie',
+    ES: 'Espagne', NL: 'Pays-Bas', PT: 'Portugal'
+  };
+  return map[input.toUpperCase()] || input;
 }
