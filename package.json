@@ -1,8 +1,9 @@
 {
-  "name": "purewerk",
-  "version": "1.0.0",
-  "description": "PureWerk — stickers personnalisés avec paiement Stripe et vérification d'authenticité",
+  "name": "purespec",
+  "version": "2.0.0",
+  "description": "PureSpec — Stickers premium personnalisés avec Stripe, Supabase Auth, registry et back-office",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vercel dev",
     "deploy": "vercel --prod"
@@ -10,8 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
     "stripe": "^17.0.0",
-    "resend": "^4.0.0",
-    "micro": "^10.0.1"
+    "resend": "^4.0.0"
   },
   "engines": {
     "node": ">=18.x"

@@ -1,174 +1,160 @@
-# PureWerk — Site e-commerce avec vérification d'authenticité
+# PureSpec
 
-Site complet pour vendre des stickers personnalisés avec :
-- Paiement sécurisé Stripe (CB + Apple Pay + Google Pay automatiques)
-- Email de confirmation automatique après paiement
-- Vérification d'authenticité par référence (comme Apple)
-- Base de données Supabase qui stocke chaque commande
+Site e-commerce pour la vente de stickers électrostatiques premium personnalisés (format vignette d'assurance), avec configurateur visuel, pipette couleur depuis photo, registry de vérification d'authenticité, comptes client et back-office admin.
 
----
+## Stack
 
-## Architecture
+- **Front** : HTML/CSS/JS vanilla, design Apple-like
+- **Back** : API serverless (Vercel functions, Node 18+)
+- **DB** : Supabase (Postgres + Auth)
+- **Paiement** : Stripe Checkout
+- **Emails** : Resend
+- **Déploiement** : Vercel
+
+## Structure
 
 ```
-Client navigateur
-   │
-   ├─► /              → public/index.html (site statique)
-   │
-   ├─► POST /api/checkout    → Crée session Stripe + pré-enregistre commande
-   ├─► POST /api/webhook     → Reçoit confirmation Stripe → marque payée + email
-   └─► GET  /api/verify/:ref → Récupère infos sticker authentique
-                                    │
-                                    ▼
-                              Supabase (PostgreSQL)
+purespec/
+├── public/
+│   ├── index.html          Page d'accueil (atelier + story)
+│   ├── registry.html       Vérification authenticité
+│   ├── account.html        Espace client (commandes + profil)
+│   ├── admin.html          Back-office admin
+│   ├── contact.html        Formulaire contact
+│   ├── login.html          Magic-link auth
+│   ├── legal.html          Mentions légales / CGV / privacy
+│   ├── css/                Styles (main, sticker, modals, atelier)
+│   └── js/                 Scripts partagés (common, layout, atelier, status)
+├── api/
+│   ├── checkout.js         POST → crée commande + session Stripe
+│   ├── webhook.js          Stripe webhook (paid + email)
+│   ├── config.js           Sert URL Supabase publique au client
+│   ├── verify/[ref].js     Vérif authenticité Registry
+│   ├── contact/index.js    Reçoit messages contact
+│   ├── account/
+│   │   ├── orders.js       Liste commandes user
+│   │   ├── order/[ref].js  Détail commande (avec timeline)
+│   │   └── profile.js      GET/PATCH profil
+│   └── admin/
+│       ├── me.js           Vérif rôle admin
+│       ├── orders.js       Liste + filtres + stats
+│       ├── order/[id].js   GET + PATCH (statut, tracking, notes)
+│       ├── messages.js     Liste tickets contact
+│       └── message/[id].js Update statut ticket
+├── lib/
+│   ├── supabase.js         Client + getUserFromToken + requireAdmin
+│   ├── helpers.js          generateReference, validation
+│   └── email-templates.js  4 templates HTML (confirmation, shipped, contact-received, admin-notif)
+├── supabase/
+│   └── schema.sql          Schéma complet (profiles, orders, events, contact_messages + RLS)
+└── package.json
 ```
 
----
+## Installation
 
-## Déploiement (étape par étape)
-
-### 1. Créer les comptes (gratuits)
-
-- **Vercel** : https://vercel.com (hébergement)
-- **Supabase** : https://supabase.com (base de données)
-- **Stripe** : https://stripe.com (paiement) — passe en mode "Test" pour démarrer
-- **Resend** : https://resend.com (emails)
-
-### 2. Configurer Supabase
-
-1. Crée un nouveau projet sur https://supabase.com
-2. Va dans **SQL Editor** → **New Query**
-3. Copie/colle le contenu de `supabase/schema.sql` et exécute
-4. Va dans **Settings → API** et récupère :
-   - `Project URL` → ce sera `SUPABASE_URL`
-   - `service_role secret` → ce sera `SUPABASE_SERVICE_ROLE_KEY` (⚠️ à garder secret)
-
-### 3. Configurer Stripe
-
-1. Sur https://dashboard.stripe.com → **Developers → API keys**
-2. Récupère :
-   - `Secret key` → `STRIPE_SECRET_KEY`
-   - `Publishable key` → `STRIPE_PUBLISHABLE_KEY`
-3. Active Apple Pay et Google Pay :
-   - **Settings → Payment methods** → active "Apple Pay" et "Google Pay" (automatique avec Checkout)
-4. Pour le webhook, on le configure **après** le déploiement (étape 6).
-
-### 4. Configurer Resend
-
-1. Sur https://resend.com → **API Keys** → crée une clé → `RESEND_API_KEY`
-2. **Domains** → ajoute ton domaine (ex: `purewerk.fr`) et suis les instructions DNS pour le vérifier
-   - Tant que tu n'as pas de domaine vérifié, tu peux utiliser `onboarding@resend.dev` comme `EMAIL_FROM` pour tester (mais limite 100 emails/jour vers ta propre adresse uniquement)
-
-### 5. Déployer sur Vercel
+### 1. Cloner et installer
 
 ```bash
-# Dans le dossier du projet
-npm install -g vercel
-vercel login
+git clone <repo>
+cd purespec
+npm install
+```
+
+### 2. Créer un projet Supabase
+
+1. Aller sur [supabase.com](https://supabase.com) et créer un nouveau projet
+2. SQL Editor → New query → coller le contenu de `supabase/schema.sql` → exécuter
+3. **Activer l'auth email** : Authentication → Providers → Email → "Enable Email provider" + désactiver "Confirm email" (magic link suffit)
+4. **Configurer la redirection** : Authentication → URL Configuration → Redirect URLs : ajouter `https://votre-domaine.com/account` et `http://localhost:3000/account`
+5. Récupérer dans Settings → API :
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY` (service_role — secret)
+   - `SUPABASE_ANON_KEY` (anon public)
+
+### 3. Stripe
+
+1. [stripe.com](https://stripe.com) → Dashboard → Récupérer `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY`
+2. Webhooks → Add endpoint : `https://votre-domaine.com/api/webhook`, événement `checkout.session.completed`
+3. Récupérer le `STRIPE_WEBHOOK_SECRET`
+
+### 4. Resend
+
+1. [resend.com](https://resend.com) → Créer une API key
+2. Vérifier votre domaine d'envoi (DNS)
+
+### 5. Variables d'environnement Vercel
+
+Dans Vercel → Settings → Environment Variables (ou `.env.local` en dev) :
+
+```bash
+SITE_URL=https://purespec.fr
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+SUPABASE_ANON_KEY=eyJ...
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+RESEND_API_KEY=re_...
+EMAIL_FROM=PureSpec <hello@purespec.fr>
+EMAIL_REPLY_TO=hello@purespec.fr
+ADMIN_EMAIL=admin@purespec.fr
+```
+
+### 6. Déployer
+
+```bash
 vercel --prod
 ```
 
-Puis sur le dashboard Vercel → **Project Settings → Environment Variables**, ajoute toutes les variables de `.env.example`.
+### 7. Créer un admin
 
-Redéploie après avoir ajouté les variables : `vercel --prod`
+Après votre premier déploiement :
 
-### 6. Configurer le webhook Stripe
+1. Aller sur `/account/login`, se connecter avec votre email (réception magic link)
+2. Cliquer le lien — votre compte est créé automatiquement (trigger Supabase)
+3. Dans Supabase SQL Editor :
 
-1. Sur https://dashboard.stripe.com → **Developers → Webhooks → Add endpoint**
-2. URL : `https://ton-projet.vercel.app/api/webhook`
-3. Évènement à écouter : `checkout.session.completed`
-4. Récupère le **Signing secret** → ajoute-le sur Vercel comme `STRIPE_WEBHOOK_SECRET`
-5. Redéploie une dernière fois
-
-### 7. Tester
-
-1. Ouvre ton site, configure un sticker, clique "Commander"
-2. Sur Stripe, utilise une carte de test : `4242 4242 4242 4242` / n'importe quelle date future / n'importe quel CVC
-3. Tu reçois l'email de confirmation
-4. Reviens sur le site, va dans la section "Vérifier l'authenticité", entre la référence
-5. ✅ Le sticker doit apparaître comme authentique
-
----
-
-## Passer en production (vraies cartes)
-
-1. Sur Stripe, active ton compte (KYC entreprise)
-2. Bascule en mode **Live** et remplace les clés `sk_test_` / `pk_test_` par les `sk_live_` / `pk_live_`
-3. Refais le webhook en mode Live (la clé webhook change aussi)
-4. Vérifie ton domaine d'envoi sur Resend pour ne plus avoir de limite
-
----
-
-## Structure des fichiers
-
-```
-purewerk/
-├── public/
-│   └── index.html              ← Site front-end (modifié avec section vérif)
-├── api/
-│   ├── checkout.js             ← POST : crée session Stripe + enregistre commande
-│   ├── webhook.js              ← POST : Stripe → mise à jour commande + email
-│   └── verify/[ref].js         ← GET  : vérifie une référence
-├── lib/
-│   ├── supabase.js             ← Client Supabase
-│   └── email-template.js       ← Template HTML email
-├── supabase/
-│   └── schema.sql              ← Script création table
-├── package.json
-├── vercel.json
-├── .env.example                ← Template variables d'environnement
-└── README.md                   ← Ce fichier
+```sql
+UPDATE profiles SET is_admin = TRUE WHERE email = 'votre@email.com';
 ```
 
----
+4. Aller sur `/admin` — vous avez accès au back-office.
 
-## Comment ça marche
+## Développement local
 
-### Quand un client commande
+```bash
+vercel dev
+```
 
-1. Front : remplit le formulaire → `POST /api/checkout`
-2. Backend : enregistre la commande en BDD avec statut `pending` + crée session Stripe
-3. Client : redirigé vers la page Stripe Checkout (CB / Apple Pay / Google Pay)
-4. Après paiement : Stripe appelle `POST /api/webhook`
-5. Backend : passe la commande en `paid` + envoie email Resend
-6. Client : redirigé vers le site avec confirmation
+Le site tourne sur `http://localhost:3000`. Les routes API sont accessibles.
 
-### Quand on vérifie une référence
+Pour les emails en dev : Resend permet d'envoyer en mode test. Pour Stripe webhook en dev :
 
-1. Front : `GET /api/verify/P0789453`
-2. Backend : cherche la commande dans Supabase, ne renvoie que les infos publiques
-3. Front : affiche soit ✅ authentique avec les détails, soit ❌ non reconnu
+```bash
+stripe listen --forward-to localhost:3000/api/webhook
+```
 
----
+## Format de référence
+
+Chaque sticker porte une référence unique de **8 caractères** : `PS` + 6 alphanumériques (ex: `PS7K9L2M`). Les chars `O`, `I`, `0`, `1` sont exclus pour éviter la confusion visuelle.
+
+## Workflow d'une commande
+
+1. **Client** : configure son sticker dans l'atelier, clique "Commander"
+2. **API checkout** : génère ref + order_number, crée la commande (statut `pending`), session Stripe
+3. **Client** : paie sur Stripe
+4. **Webhook Stripe** : passe la commande à `paid`, envoie email de confirmation
+5. **Admin** : voit la commande dans `/admin`, la passe à `in_production` puis `shipped` (avec n° tracking → email auto)
+6. **Client** : suit le statut sur `/account` + reçoit les emails à chaque étape
 
 ## Sécurité
 
-- La clé `service_role` Supabase n'est utilisée **que côté serveur** (les API endpoints)
-- Le RLS (Row Level Security) est activé sur la table `orders`, donc personne ne peut lire la BDD depuis le navigateur
-- Le webhook Stripe vérifie la signature pour s'assurer que la requête vient bien de Stripe
-- L'endpoint `/api/verify` ne renvoie **jamais** les données client (email, adresse, prix) — uniquement les caractéristiques publiques du sticker
+- Service-role key uniquement côté serveur (env var, jamais exposée)
+- RLS activée sur toutes les tables sensibles
+- Tokens JWT vérifiés côté API pour `/api/account/*` et `/api/admin/*`
+- Sanitization basique des inputs utilisateurs
+- Stripe webhook signé
 
----
+## License
 
-## Personnalisations courantes
-
-**Changer le prix** : dans `public/index.html`, cherche `UNIT_PRICE` et `SHIPPING`.
-
-**Modifier le template email** : `lib/email-template.js`.
-
-**Voir les commandes** : sur Supabase → **Table Editor** → `orders`. Tu peux aussi y changer manuellement le statut en `shipped` quand tu envoies.
-
-**Limiter la vérification aux commandes expédiées** : dans `api/verify/[ref].js`, change `.in('statut', ['paid', 'shipped'])` en `.eq('statut', 'shipped')`.
-
----
-
-## Coûts à prévoir
-
-| Service | Gratuit jusqu'à | Coût après |
-|---|---|---|
-| Vercel | 100 GB de bande passante / mois | 20 €/mois |
-| Supabase | 500 Mo BDD + 50 000 utilisateurs | 25 €/mois |
-| Stripe | — | 1.5 % + 0.25 € par transaction (UE) |
-| Resend | 3 000 emails / mois | 20 €/mois pour 50 000 |
-
-Pour démarrer : **0 €/mois** en frais fixes, uniquement les frais Stripe variables.
+Tous droits réservés.

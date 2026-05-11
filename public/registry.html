@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registry — PureSpec</title>
+<meta name="description" content="Vérifiez l'authenticité d'un sticker PureSpec à partir de sa référence.">
+
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="/css/main.css">
+
+<style>
+  .registry-hero {
+    padding: clamp(72px, 12vw, 140px) 0 clamp(40px, 6vw, 64px);
+    text-align: center;
+  }
+  .registry-form-wrap {
+    max-width: 480px;
+    margin: 40px auto 0;
+  }
+  .registry-result {
+    max-width: 560px;
+    margin: 32px auto 0;
+    display: none;
+  }
+  .registry-result.show { display: block; }
+  .result-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    text-align: left;
+  }
+  .result-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .result-icon-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .result-icon-circle.success { background: var(--success-soft); color: var(--success); }
+  .result-icon-circle.danger { background: var(--danger-soft); color: var(--danger); }
+  .result-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .result-list { margin-top: 8px; }
+  .result-list .row-between { padding: 12px 0; border-bottom: 1px solid var(--line-faint); font-size: 14px; }
+  .result-list .row-between:last-child { border-bottom: 0; }
+  .result-list .muted { font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<section class="registry-hero">
+  <div class="container">
+    <div class="eyebrow eyebrow-accent">Registry</div>
+    <h1 class="display-2 mt-2">Vérifiez l'authenticité.</h1>
+    <p class="lead mt-4" style="max-width:560px;margin-left:auto;margin-right:auto;">
+      Chaque sticker PureSpec porte une référence unique. Saisissez-la ci-dessous pour confirmer son origine.
+    </p>
+
+    <div class="registry-form-wrap">
+      <form id="verifyForm" onsubmit="verifyRef(event)">
+        <label class="label text-left">Référence du sticker</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">PS</span>
+          <input class="input input-mono" id="refInput" type="text" maxlength="6" placeholder="XXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+        </div>
+        <p class="hint text-center mt-2">Format : PS + 6 caractères. Inscrite en lecture verticale sur le sticker.</p>
+        <button class="btn btn-primary btn-block btn-lg mt-6" id="verifyBtn" type="submit">
+          Vérifier
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="registry-result" id="resultBlock"></div>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+
+<script>
+function escapeHtml(s){return PureSpec.escapeHtml(s);}
+
+async function verifyRef(e) {
+  e.preventDefault();
+  const input = document.getElementById('refInput');
+  const value = (input.value || '').trim().toUpperCase();
+  if (!value || value.length < 6) {
+    PureSpec.showToast('Référence incomplète');
+    return;
+  }
+  const fullRef = 'PS' + value;
+  const btn = document.getElementById('verifyBtn');
+  const resultBlock = document.getElementById('resultBlock');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner spinner-light"></span><span>Vérification…</span>';
+  resultBlock.classList.remove('show');
+
+  try {
+    const data = await PureSpec.apiRequest('/api/verify/' + fullRef);
+    if (data.authentic) {
+      renderAuthentic(data.sticker);
+    } else {
+      renderNotFound(fullRef);
+    }
+  } catch (err) {
+    if (err.status === 404) {
+      renderNotFound(fullRef);
+    } else if (err.status === 400) {
+      renderInvalid();
+    } else {
+      PureSpec.showToast('Erreur : ' + err.message, 'danger');
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Vérifier';
+  }
+}
+
+function renderAuthentic(s) {
+  const block = document.getElementById('resultBlock');
+  block.innerHTML = `
+    <div class="result-card fade-up">
+      <div class="result-badge-row">
+        <div class="result-icon-circle success">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <span class="badge badge-success"><span class="badge-dot"></span>Authentique</span>
+          <h3 class="result-title mt-2">Sticker certifié PureSpec</h3>
+        </div>
+      </div>
+      <div class="result-list">
+        <div class="row-between"><span class="muted">Référence</span><span class="mono">${escapeHtml(s.reference)}</span></div>
+        <div class="row-between"><span class="muted">Marque & modèle</span><span>${escapeHtml((s.marque||'') + ' ' + (s.modele||''))}</span></div>
+        <div class="row-between"><span class="muted">Version</span><span>${escapeHtml(s.version || '—')}</span></div>
+        <div class="row-between"><span class="muted">Code moteur</span><span>${escapeHtml(s.moteur || '—')}</span></div>
+        <div class="row-between"><span class="muted">Couleur</span><span>${escapeHtml(s.couleur || '—')}${s.code_couleur ? ' (' + escapeHtml(s.code_couleur) + ')' : ''}</span></div>
+        ${s.instagram ? `<div class="row-between"><span class="muted">Instagram</span><span>@${escapeHtml(s.instagram)}</span></div>` : ''}
+        <div class="row-between"><span class="muted">Date de validation</span><span>${PureSpec.formatDate(s.date)}</span></div>
+      </div>
+    </div>
+  `;
+  block.classList.add('show');
+}
+
+function renderNotFound(ref) {
+  const block = document.getElementById('resultBlock');
+  block.innerHTML = `
+    <div class="result-card fade-up">
+      <div class="result-badge-row">
+        <div class="result-icon-circle danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <div>
+          <span class="badge badge-danger"><span class="badge-dot"></span>Inconnu</span>
+          <h3 class="result-title mt-2">Aucun sticker authentique avec cette référence</h3>
+        </div>
+      </div>
+      <p class="body">La référence <strong class="mono">${escapeHtml(ref)}</strong> ne correspond à aucun sticker PureSpec validé.</p>
+      <p class="body mt-2">Vérifiez la saisie (PS + 6 caractères, gravés en lecture verticale au dos). Si le doute persiste, contactez-nous.</p>
+      <a href="/contact" class="btn btn-outline mt-6">Signaler à PureSpec</a>
+    </div>
+  `;
+  block.classList.add('show');
+}
+
+function renderInvalid() {
+  const block = document.getElementById('resultBlock');
+  block.innerHTML = `
+    <div class="result-card fade-up">
+      <div class="result-badge-row">
+        <div class="result-icon-circle danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        <div>
+          <span class="badge badge-warning"><span class="badge-dot"></span>Format invalide</span>
+          <h3 class="result-title mt-2">Référence mal formatée</h3>
+        </div>
+      </div>
+      <p class="body">Une référence PureSpec valide est composée de <strong>PS</strong> suivi de 6 caractères alphanumériques.</p>
+    </div>
+  `;
+  block.classList.add('show');
+}
+
+// Auto-uppercase
+document.getElementById('refInput').addEventListener('input', e => {
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+});
+
+// Pré-remplissage via ?ref=...
+const params = new URLSearchParams(window.location.search);
+const preRef = params.get('ref');
+if (preRef) {
+  const cleaned = preRef.toUpperCase().replace(/^PS/, '').replace(/[^A-Z0-9]/g, '').slice(0, 6);
+  document.getElementById('refInput').value = cleaned;
+  if (cleaned.length === 6) {
+    document.getElementById('verifyForm').dispatchEvent(new Event('submit'));
+  }
+}
+</script>
+
+<script>
+  window.PURESPEC_CONFIG = {
+    supabaseUrl: window.SUPABASE_URL || '__SUPABASE_URL__',
+    supabaseAnonKey: window.SUPABASE_ANON_KEY || '__SUPABASE_ANON_KEY__'
+  };
+</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="/js/common.js"></script>
+<script src="/js/layout.js"></script>
+
+</body>
+</html>
