@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion — PureSpec</title>
+<meta name="description" content="Accédez à votre espace client PureSpec.">
+
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="/css/main.css">
+
+<style>
+  .login-wrap {
+    min-height: calc(100vh - 52px - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: 40px 36px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+  }
+  .login-icon {
+    width: 56px; height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .login-success {
+    display: none;
+  }
+  .login-success.show { display: block; }
+</style>
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <div id="loginForm">
+      <div class="login-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V7l-3 2-3-2-3 2-3-2-3 2-3-2v1l3 2 3-2 3 2 3-2 3 2 3-2zM3 12l3 2 3-2 3 2 3-2 3 2 3-2"/><path d="M3 17l3-2 3 2 3-2 3 2 3-2 3 2"/></svg>
+      </div>
+      <h1 class="title">Connexion à votre compte</h1>
+      <p class="body mt-2">Saisissez votre email — nous vous envoyons un lien sécurisé.</p>
+
+      <form onsubmit="sendMagicLink(event)" class="mt-6">
+        <input class="input" id="emailInput" type="email" placeholder="vous@email.com" required autocomplete="email">
+        <button class="btn btn-primary btn-block btn-lg mt-4" type="submit" id="loginBtn">
+          Recevoir le lien de connexion
+        </button>
+      </form>
+
+      <p class="hint mt-6">
+        Aucun mot de passe à mémoriser.<br>
+        Pas encore de commande ? <a href="/" style="color:var(--ink);text-decoration:underline;">Commencez ici</a>.
+      </p>
+    </div>
+
+    <div class="login-success" id="loginSuccess">
+      <div class="login-icon" style="background:var(--success-soft);color:var(--success);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h1 class="title">Vérifiez vos emails.</h1>
+      <p class="body mt-4">Un lien de connexion a été envoyé à <strong id="sentEmail" style="color:var(--ink);"></strong>.</p>
+      <p class="body mt-2">Cliquez sur le lien dans l'email pour vous connecter. Le lien expire dans 1 heure.</p>
+      <button class="btn btn-ghost mt-6" onclick="resetLogin()">Renvoyer le lien</button>
+    </div>
+  </div>
+</div>
+
+<div id="footer-slot"></div>
+
+<script>
+async function sendMagicLink(e) {
+  e.preventDefault();
+  const email = document.getElementById('emailInput').value.trim();
+  if (!email) return;
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner spinner-light"></span><span>Envoi…</span>';
+
+  try {
+    await PureSpec.signInWithMagicLink(email, window.location.origin + '/account');
+    document.getElementById('sentEmail').textContent = email;
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('loginSuccess').classList.add('show');
+  } catch (err) {
+    PureSpec.showToast('Erreur : ' + err.message, 'danger');
+    btn.disabled = false;
+    btn.textContent = 'Recevoir le lien de connexion';
+  }
+}
+
+function resetLogin() {
+  document.getElementById('loginForm').style.display = '';
+  document.getElementById('loginSuccess').classList.remove('show');
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginBtn').textContent = 'Recevoir le lien de connexion';
+}
+
+// Si déjà connecté, redirige vers /account
+(async () => {
+  // Attendre que Supabase soit chargé
+  await new Promise(r => setTimeout(r, 200));
+  const user = await PureSpec.getCurrentUser();
+  if (user) {
+    window.location.href = '/account';
+  }
+})();
+</script>
+
+<script>
+  window.PURESPEC_CONFIG = {
+    supabaseUrl: window.SUPABASE_URL || '__SUPABASE_URL__',
+    supabaseAnonKey: window.SUPABASE_ANON_KEY || '__SUPABASE_ANON_KEY__'
+  };
+</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="/js/common.js"></script>
+<script src="/js/layout.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* ============================================================
+   Sticker — rendu visuel fidèle au sticker physique
+   ============================================================ */
+
+.sticker-stage {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: clamp(20px, 4vw, 56px);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  transition: all var(--t-slow) var(--ease);
+}
+@media (max-width: 1023px) {
+  .sticker-stage {
+    padding: 28px 16px;
+    min-height: 280px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+.sticker-scale-wrapper {
+  transform: scale(2.4);
+  transform-origin: center;
+  transition: transform var(--t-std) var(--ease);
+}
+@media (max-width: 1023px) {
+  .sticker-scale-wrapper { transform: scale(1.6); }
+}
+@media (max-width: 480px) {
+  .sticker-scale-wrapper { transform: scale(1.3); }
+}
+
+.sticker {
+  width: 123px; height: 184px;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  border: 2px solid #000;
+  box-sizing: border-box;
+}
+.sticker-shadow {
+  width: 107px; height: 168px;
+  background: #fff;
+  box-shadow: 0px 0px 7.8px 1px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sticker-main {
+  width: 107px; height: 139px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.sticker-bg {
+  position: absolute; inset: 0;
+  background: #8B1C23;
+  transition: background var(--t-std) var(--ease);
+}
+.sticker-circuit {
+  position: absolute; inset: 0;
+  width: 107px; height: 139px;
+  background-color: #000;
+  opacity: 0.25;
+  -webkit-mask-size: cover; mask-size: cover;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  pointer-events: none;
+  transition: background-color var(--t-std) var(--ease), opacity var(--t-std) var(--ease);
+}
+.sticker-logo {
+  position: absolute;
+  top: 3px; right: 5px;
+  z-index: 10;
+  width: 47px; height: 12px;
+}
+.sticker-logo img { width: 100%; height: 100%; object-fit: contain; }
+.sticker-content {
+  position: absolute;
+  bottom: 8px; left: 7px; right: 7px;
+  z-index: 10;
+}
+.txt-line {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  color: #fff;
+  line-height: 1.18;
+  transition: color var(--t-std) var(--ease);
+}
+.txt-line.bold { font-weight: 700; font-size: 12px; }
+.txt-line.code { font-weight: 400; font-size: 11px; }
+.spacer { height: 4px; }
+.spacer.big { height: 9px; }
+.sticker-stripe {
+  width: 107px; height: 29px;
+  background: #fff;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: 2px;
+  transition: background var(--t-std) var(--ease), color var(--t-std) var(--ease);
+  color: #111;
+}
+.sticker-stripe svg { width: 9px; height: 9px; flex-shrink: 0; display: block; }
+.sticker-stripe-txt {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 7px;
+  letter-spacing: 0.3px;
+  line-height: 9px;
+  height: 9px;
+  display: inline-block;
+  transform: translateY(0.75px);
+}
+.sticker-ref-wrap {
+  position: absolute;
+  right: -2px; bottom: 6px;
+  width: 8px;
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+.sticker-ref {
+  font-size: 5px;
+  font-weight: 100;
+  color: #000;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg) translateX(0.5px);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
