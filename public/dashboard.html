@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon espace — PureSpec</title>
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/shared.css">
+<style>
+  body { background: #fafafc; }
+  .dash-header {
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 32px 24px 0;
+  }
+  .dash-header-inner { max-width: 1100px; margin: 0 auto; }
+  .dash-tabs {
+    display: flex;
+    gap: 4px;
+    margin-top: 28px;
+    overflow-x: auto;
+  }
+  .dash-tab {
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .dash-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  .dash-body { padding: 36px 24px 80px; }
+  .dash-body-inner { max-width: 1100px; margin: 0 auto; }
+  .dash-pane { display: none; }
+  .dash-pane.active { display: block; }
+
+  .order-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 18px;
+    padding: 22px;
+    transition: all .2s;
+    cursor: pointer;
+  }
+  .order-card:hover {
+    border-color: rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,0.08);
+  }
+  .order-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .order-thumb {
+    width: 70px; height: 50px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 600px) {
+    .order-card-head { flex-direction: column; gap: 12px; }
+  }
+  .order-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,0,0,0.04);
+    font-size: 13px;
+  }
+  .order-meta-label {
+    font-size: 11px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .order-meta-value {
+    color: var(--ink);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .order-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .order-modal-overlay.show { display: flex; }
+  .order-modal {
+    background: #fff;
+    border-radius: 22px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .order-modal-head {
+    padding: 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .order-modal-body { padding: 24px; }
+  .order-modal-close {
+    width: 32px; height: 32px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-blur">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">PureSpec</a>
+    <div class="nav-links">
+      <a href="/#atelier" class="nav-link">Atelier</a>
+      <a href="/#story" class="nav-link">Philosophie</a>
+      <a href="/registry" class="nav-link">Registry</a>
+      <a href="/contact" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="/dashboard" class="nav-account" id="navAccountIcon" aria-label="Mon compte">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="/#atelier" class="nav-cta">Concevoir</a>
+    </div>
+  </div>
+</nav>
+<div class="nav-spacer"></div>
+
+<main>
+  <header class="dash-header">
+    <div class="dash-header-inner">
+      <div class="flex items-center justify-between" style="flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.1em">Mon espace</div>
+          <h1 class="text-3xl font-bold mt-2" style="letter-spacing:-0.035em" id="dashTitle">Bonjour</h1>
+        </div>
+        <button onclick="doLogout()" class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Déconnexion
+        </button>
+      </div>
+
+      <div class="dash-tabs">
+        <button class="dash-tab active" data-tab="orders">Mes commandes</button>
+        <button class="dash-tab" data-tab="profile">Profil &amp; adresse</button>
+        <button class="dash-tab" data-tab="security">Sécurité</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dash-body">
+    <div class="dash-body-inner">
+
+      <!-- ORDERS PANE -->
+      <div class="dash-pane active" id="paneOrders">
+        <div id="welcomeAlert"></div>
+        <div id="ordersList">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="skeleton" style="height:160px"></div>
+            <div class="skeleton" style="height:160px"></div>
+            <div class="skeleton" style="height:160px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE PANE -->
+      <div class="dash-pane" id="paneProfile">
+        <div class="card-lg card max-w-2xl">
+          <h2 class="text-xl font-bold mb-2" style="letter-spacing:-0.02em">Mes informations</h2>
+          <p class="text-sm mb-6" style="color:var(--gray)">Ces informations seront préremplies à votre prochaine commande.</p>
+
+          <form id="profileForm" onsubmit="saveProfile(event)">
+            <div class="grid grid-cols-2 gap-3" style="margin-bottom:14px">
+              <div>
+                <label class="apple-label" for="pPrenom">Prénom</label>
+                <input type="text" id="pPrenom" name="prenom" class="apple-input">
+              </div>
+              <div>
+                <label class="apple-label" for="pNom">Nom</label>
+                <input type="text" id="pNom" name="nom" class="apple-input">
+              </div>
+            </div>
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="pEmail">Email</label>
+              <input type="email" id="pEmail" name="email" class="apple-input" disabled style="opacity:0.6">
+              <p class="text-xs mt-2" style="color:var(--gray)">L'email ne peut pas être modifié.</p>
+            </div>
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="pTel">Téléphone</label>
+              <input type="tel" id="pTel" name="telephone" class="apple-input">
+            </div>
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="pAdr">Adresse</label>
+              <input type="text" id="pAdr" name="adresse" class="apple-input">
+            </div>
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="pCompl">Complément (étage, bâtiment...)</label>
+              <input type="text" id="pCompl" name="complement" class="apple-input">
+            </div>
+            <div class="grid grid-cols-2 gap-3" style="margin-bottom:14px">
+              <div>
+                <label class="apple-label" for="pCP">Code postal</label>
+                <input type="text" id="pCP" name="code_postal" class="apple-input">
+              </div>
+              <div>
+                <label class="apple-label" for="pVille">Ville</label>
+                <input type="text" id="pVille" name="ville" class="apple-input">
+              </div>
+            </div>
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="pPays">Pays</label>
+              <input type="text" id="pPays" name="pays" class="apple-input" placeholder="France">
+            </div>
+            <div id="profileAlert"></div>
+            <button type="submit" id="profileBtn" class="btn btn-primary mt-2">
+              <span class="profile-label">Enregistrer</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- SECURITY PANE -->
+      <div class="dash-pane" id="paneSecurity">
+        <div class="card-lg card max-w-2xl">
+          <h2 class="text-xl font-bold mb-2" style="letter-spacing:-0.02em">Mot de passe</h2>
+          <p class="text-sm mb-6" style="color:var(--gray)">Pour votre sécurité, choisissez un mot de passe robuste, différent de ceux utilisés ailleurs.</p>
+
+          <form id="securityForm" onsubmit="changePassword(event)">
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="sCurrent">Mot de passe actuel</label>
+              <input type="password" id="sCurrent" name="current" class="apple-input" required autocomplete="current-password">
+            </div>
+            <div style="margin-bottom:14px">
+              <label class="apple-label" for="sNext">Nouveau mot de passe</label>
+              <input type="password" id="sNext" name="next" class="apple-input" required minlength="8" autocomplete="new-password">
+              <p class="text-xs mt-2" style="color:var(--gray)">8 caractères minimum.</p>
+            </div>
+            <div id="securityAlert"></div>
+            <button type="submit" id="securityBtn" class="btn btn-primary mt-2">
+              <span class="security-label">Mettre à jour</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal détail commande -->
+  <div class="order-modal-overlay" id="orderModal" onclick="if(event.target===this)closeOrderModal()">
+    <div class="order-modal">
+      <div class="order-modal-head">
+        <div>
+          <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.08em">Commande</div>
+          <div class="text-lg font-bold mt-1" id="modalOrderNumber">—</div>
+        </div>
+        <button class="order-modal-close" onclick="closeOrderModal()" aria-label="Fermer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="order-modal-body" id="modalBody">
+        <div class="skeleton" style="height:300px"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="/assets/js/shared.js"></script>
+<script>
+let CURRENT_USER = null;
+
+// ===== Bootstrap : vérifier auth =====
+(async () => {
+  CURRENT_USER = await fetchMe();
+  if (!CURRENT_USER) {
+    location.href = '/account';
+    return;
+  }
+  const greeting = CURRENT_USER.prenom ? 'Bonjour ' + CURRENT_USER.prenom : 'Bonjour';
+  document.getElementById('dashTitle').textContent = greeting;
+
+  // Welcome message
+  if (new URLSearchParams(location.search).get('welcome')) {
+    document.getElementById('welcomeAlert').innerHTML = `
+      <div class="alert alert-success mb-6">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <div><strong>Compte créé.</strong> Bienvenue chez PureSpec. Vos prochaines commandes seront listées ici.</div>
+      </div>`;
+  }
+
+  loadOrders();
+  fillProfileForm();
+})();
+
+// ===== Tabs =====
+document.querySelectorAll('.dash-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.dash-tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.dash-pane').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('pane' + t.dataset.tab.charAt(0).toUpperCase() + t.dataset.tab.slice(1)).classList.add('active');
+  });
+});
+
+// ===== Orders =====
+async function loadOrders() {
+  const c = document.getElementById('ordersList');
+  try {
+    const r = await fetch('/api/orders?action=list', { credentials: 'include' });
+    const data = await r.json();
+    const orders = data.orders || [];
+    if (!orders.length) {
+      c.innerHTML = `
+        <div class="card-lg card text-center" style="padding:48px 24px">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c7c7cc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 20px"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M3 21h7a2 2 0 0 0 2-2v-7"/><path d="M3 21l7-7"/></svg>
+          <div class="text-xl font-bold" style="letter-spacing:-0.02em">Aucune commande pour l'instant</div>
+          <p class="text-sm mt-2" style="color:var(--gray)">Concevez votre premier PureSpec et il apparaîtra ici.</p>
+          <a href="/#atelier" class="btn btn-primary mt-6">Concevoir un sticker</a>
+        </div>`;
+      return;
+    }
+
+    c.innerHTML = '<div class="grid grid-cols-2 md:grid-cols-3 gap-4">' + orders.map(o => {
+      const ref = escapeHtml(o.reference);
+      const bg = o.bg_color || '#000';
+      return `
+        <div class="order-card" onclick="openOrderModal('${escapeHtml(o.id)}')">
+          <div class="order-card-head">
+            <div>
+              <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.08em">${escapeHtml(o.order_number || '—')}</div>
+              <div class="font-mono font-bold mt-1" style="font-size:13px;letter-spacing:0.08em">${ref}</div>
+            </div>
+            <div class="order-thumb" style="background:${bg}">${escapeHtml(o.marque || '')}</div>
+          </div>
+          <div class="text-sm font-semibold" style="line-height:1.3">${escapeHtml(o.marque || '')} ${escapeHtml(o.modele || '')}</div>
+          <div class="text-xs mt-1" style="color:var(--gray)">${escapeHtml(o.nom_couleur || '')}</div>
+          <div class="order-meta-grid">
+            <div>
+              <div class="order-meta-label">Statut</div>
+              <div class="order-meta-value">${statusBadge(o.statut)}</div>
+            </div>
+            <div>
+              <div class="order-meta-label">Total</div>
+              <div class="order-meta-value">${formatPrice(o.total_eur)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('') + '</div>';
+  } catch (err) {
+    c.innerHTML = `<div class="alert alert-error">Impossible de charger vos commandes.</div>`;
+  }
+}
+
+// ===== Modal détail =====
+async function openOrderModal(id) {
+  const modal = document.getElementById('orderModal');
+  const body = document.getElementById('modalBody');
+  body.innerHTML = '<div class="skeleton" style="height:300px"></div>';
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const r = await fetch('/api/orders?action=get&id=' + encodeURIComponent(id), { credentials: 'include' });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    renderOrderDetail(data.order);
+  } catch (err) {
+    body.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+  }
+}
+function closeOrderModal() {
+  document.getElementById('orderModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function renderOrderDetail(o) {
+  document.getElementById('modalOrderNumber').textContent = o.order_number || '—';
+
+  // Timeline
+  const steps = [
+    { key: 'paid', label: 'Paiement confirmé', date: o.paid_at },
+    { key: 'in_production', label: 'En production', date: o.in_production_at },
+    { key: 'shipped', label: 'Expédié', date: o.shipped_at },
+    { key: 'delivered', label: 'Livré', date: o.delivered_at }
+  ];
+  const statutOrder = ['pending','paid','in_production','shipped','delivered'];
+  const currentIdx = statutOrder.indexOf(o.statut);
+  const cancelled = (o.statut === 'cancelled' || o.statut === 'refunded');
+
+  let timeline = '';
+  if (cancelled) {
+    timeline = `<div class="alert alert-error">Cette commande a été ${o.statut === 'refunded' ? 'remboursée' : 'annulée'}.</div>`;
+  } else {
+    timeline = '<div class="timeline">' + steps.map((s, i) => {
+      const stepIdx = statutOrder.indexOf(s.key);
+      const cls = stepIdx < currentIdx ? 'done' : (stepIdx === currentIdx ? 'current' : '');
+      return `
+        <div class="timeline-step ${cls}">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-title">${s.label}</div>
+            <div class="timeline-sub">${s.date ? formatDate(s.date, true) : (cls === 'current' ? 'En cours' : '—')}</div>
+          </div>
+        </div>
+      `;
+    }).join('') + '</div>';
+  }
+
+  // Tracking
+  let tracking = '';
+  if (o.tracking_number) {
+    tracking = `
+      <div class="card-tight card mt-4" style="background:var(--bg)">
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.08em">Suivi colis</div>
+        <div class="font-mono font-bold text-lg mt-1">${escapeHtml(o.tracking_number)}</div>
+        ${o.carrier ? `<div class="text-xs mt-1" style="color:var(--gray)">via ${escapeHtml(o.carrier)}</div>` : ''}
+        ${o.tracking_url ? `<a href="${escapeHtml(o.tracking_url)}" target="_blank" rel="noopener" class="btn btn-secondary btn-sm mt-3">Suivre le colis →</a>` : ''}
+      </div>`;
+  }
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="flex items-center gap-3 mb-6">
+      <div style="width:64px;height:46px;border-radius:9px;background:${o.bg_color || '#000'};display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.08em">${escapeHtml(o.marque || '')}</div>
+      <div>
+        <div class="font-semibold" style="font-size:15.5px">${escapeHtml(o.marque || '')} ${escapeHtml(o.modele || '')}</div>
+        <div class="text-xs" style="color:var(--gray)">Réf <span class="font-mono">${escapeHtml(o.reference)}</span></div>
+      </div>
+      <div style="margin-left:auto">${statusBadge(o.statut)}</div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-6 pb-6 border-b" style="font-size:13.5px">
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.06em">Version</div>
+        <div class="font-medium mt-1">${escapeHtml(o.type_version || '—')}</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.06em">Code moteur</div>
+        <div class="font-medium mt-1">${escapeHtml(o.moteur || '—')}</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.06em">Couleur</div>
+        <div class="font-medium mt-1">${escapeHtml(o.nom_couleur || '')} ${o.code_couleur ? '<span style="color:var(--gray)">(' + escapeHtml(o.code_couleur) + ')</span>' : ''}</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.06em">Quantité</div>
+        <div class="font-medium mt-1">${o.quantite || 1} × ${formatPrice(o.unit_price_eur)}</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.06em">Livraison</div>
+        <div class="font-medium mt-1">${escapeHtml((o.adresse || '') + ', ' + (o.code_postal || '') + ' ' + (o.ville || ''))}</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.06em">Total</div>
+        <div class="font-medium mt-1">${formatPrice(o.total_eur)}</div>
+      </div>
+    </div>
+
+    ${timeline}
+    ${tracking}
+
+    <div class="mt-6 pt-4 border-t flex justify-end gap-2">
+      <a href="/contact?ref=${encodeURIComponent(o.reference)}" class="btn btn-ghost btn-sm">Une question ?</a>
+      <a href="/registry" class="btn btn-secondary btn-sm">Vérifier au Registry</a>
+    </div>
+  `;
+}
+
+// ===== Profile =====
+function fillProfileForm() {
+  if (!CURRENT_USER) return;
+  const u = CURRENT_USER;
+  document.getElementById('pPrenom').value = u.prenom || '';
+  document.getElementById('pNom').value = u.nom || '';
+  document.getElementById('pEmail').value = u.email || '';
+  document.getElementById('pTel').value = u.telephone || '';
+  document.getElementById('pAdr').value = u.adresse || '';
+  document.getElementById('pCompl').value = u.complement || '';
+  document.getElementById('pCP').value = u.code_postal || '';
+  document.getElementById('pVille').value = u.ville || '';
+  document.getElementById('pPays').value = u.pays || 'France';
+}
+
+async function saveProfile(e) {
+  e.preventDefault();
+  const f = document.getElementById('profileForm');
+  const btn = document.getElementById('profileBtn');
+  const lbl = btn.querySelector('.profile-label');
+  btn.disabled = true;
+  lbl.innerHTML = '<span class="spinner" style="border-top-color:#fff;border-color:rgba(255,255,255,0.3)"></span>';
+  document.getElementById('profileAlert').innerHTML = '';
+
+  const payload = {};
+  ['prenom','nom','telephone','adresse','complement','code_postal','ville','pays'].forEach(k => {
+    payload[k] = (f[k].value || '').trim();
+  });
+
+  try {
+    const r = await fetch('/api/auth?action=update-profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    showToast('Profil mis à jour ✓');
+    CURRENT_USER = { ...CURRENT_USER, ...payload };
+  } catch (err) {
+    document.getElementById('profileAlert').innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    lbl.textContent = 'Enregistrer';
+  }
+}
+
+// ===== Security =====
+async function changePassword(e) {
+  e.preventDefault();
+  const btn = document.getElementById('securityBtn');
+  const lbl = btn.querySelector('.security-label');
+  btn.disabled = true;
+  lbl.innerHTML = '<span class="spinner" style="border-top-color:#fff;border-color:rgba(255,255,255,0.3)"></span>';
+  document.getElementById('securityAlert').innerHTML = '';
+  try {
+    const r = await fetch('/api/auth?action=change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        current: document.getElementById('sCurrent').value,
+        next: document.getElementById('sNext').value
+      })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    document.getElementById('securityForm').reset();
+    document.getElementById('securityAlert').innerHTML = `<div class="alert alert-success">Mot de passe mis à jour ✓</div>`;
+  } catch (err) {
+    document.getElementById('securityAlert').innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    lbl.textContent = 'Mettre à jour';
+  }
+}
+
+// ===== Logout =====
+async function doLogout() {
+  await fetch('/api/auth?action=logout', { method: 'POST', credentials: 'include' });
+  location.href = '/';
+}
+
+// ===== Escape modal =====
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOrderModal(); });
+</script>
+</body>
+</html>

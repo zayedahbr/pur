@@ -1,160 +1,211 @@
 # PureSpec
 
-Site e-commerce pour la vente de stickers électrostatiques premium personnalisés (format vignette d'assurance), avec configurateur visuel, pipette couleur depuis photo, registry de vérification d'authenticité, comptes client et back-office admin.
+Site e-commerce pour stickers électrostatiques personnalisés.
+Stack : HTML/CSS/JS vanilla, Vercel Serverless (Node), Supabase, Stripe, Resend.
 
-## Stack
+---
 
-- **Front** : HTML/CSS/JS vanilla, design Apple-like
-- **Back** : API serverless (Vercel functions, Node 18+)
-- **DB** : Supabase (Postgres + Auth)
-- **Paiement** : Stripe Checkout
-- **Emails** : Resend
-- **Déploiement** : Vercel
-
-## Structure
+## 🏗️ Architecture
 
 ```
-purespec/
-├── public/
-│   ├── index.html          Page d'accueil (atelier + story)
-│   ├── registry.html       Vérification authenticité
-│   ├── account.html        Espace client (commandes + profil)
-│   ├── admin.html          Back-office admin
-│   ├── contact.html        Formulaire contact
-│   ├── login.html          Magic-link auth
-│   ├── legal.html          Mentions légales / CGV / privacy
-│   ├── css/                Styles (main, sticker, modals, atelier)
-│   └── js/                 Scripts partagés (common, layout, atelier, status)
-├── api/
-│   ├── checkout.js         POST → crée commande + session Stripe
-│   ├── webhook.js          Stripe webhook (paid + email)
-│   ├── config.js           Sert URL Supabase publique au client
-│   ├── verify/[ref].js     Vérif authenticité Registry
-│   ├── contact/index.js    Reçoit messages contact
-│   ├── account/
-│   │   ├── orders.js       Liste commandes user
-│   │   ├── order/[ref].js  Détail commande (avec timeline)
-│   │   └── profile.js      GET/PATCH profil
-│   └── admin/
-│       ├── me.js           Vérif rôle admin
-│       ├── orders.js       Liste + filtres + stats
-│       ├── order/[id].js   GET + PATCH (statut, tracking, notes)
-│       ├── messages.js     Liste tickets contact
-│       └── message/[id].js Update statut ticket
-├── lib/
-│   ├── supabase.js         Client + getUserFromToken + requireAdmin
-│   ├── helpers.js          generateReference, validation
-│   └── email-templates.js  4 templates HTML (confirmation, shipped, contact-received, admin-notif)
-├── supabase/
-│   └── schema.sql          Schéma complet (profiles, orders, events, contact_messages + RLS)
-└── package.json
+public/
+├── index.html         → Page d'accueil + configurateur (sacré, ne pas modifier le bloc atelier)
+├── registry.html      → Vérification d'authenticité
+├── contact.html       → Formulaire de contact + mentions légales + CGV
+├── account.html       → Connexion / inscription / mot de passe oublié
+├── dashboard.html     → Espace client (commandes, profil, sécurité)
+├── admin.html         → Back-office (stats, commandes, messages, clients)
+└── assets/
+    ├── css/shared.css
+    └── js/shared.js
+
+api/
+├── checkout.js        → Crée la session Stripe
+├── webhook.js         → Réception des événements Stripe (paiement OK)
+├── verify/[ref].js    → Vérifie une référence sticker
+├── auth.js            → Auth client (signup/login/logout/me/forgot/reset/profil)
+├── orders.js          → Commandes du client connecté
+├── admin.js           → Back-office (auth + CRUD orders/messages/customers + stats)
+├── contact.js         → Soumission du formulaire contact
+└── test-email.js      → Diagnostic email
+
+lib/
+├── supabase.js        → Client Supabase service_role
+├── email-template.js  → Template HTML email confirmation commande
+└── auth.js            → Hash, sessions, cookies, rate limit
+
+supabase/
+└── schema.sql         → Schéma BDD à exécuter dans Supabase
 ```
 
-## Installation
+**8 fonctions Serverless** (sous la limite Hobby de 12 sur Vercel).
 
-### 1. Cloner et installer
+---
+
+## ⚙️ Variables d'environnement
+
+À configurer dans Vercel → Settings → Environment Variables :
+
+| Clé | Description |
+|-----|-------------|
+| `STRIPE_SECRET_KEY` | Clé secrète Stripe (sk_…) |
+| `STRIPE_WEBHOOK_SECRET` | Secret du webhook Stripe (whsec_…) |
+| `STRIPE_PUBLISHABLE_KEY` | Clé publique (utilisable côté client si besoin) |
+| `SUPABASE_URL` | URL du projet Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clé service_role Supabase |
+| `RESEND_API_KEY` | Clé API Resend |
+| `EMAIL_FROM` | Adresse expéditeur (ex: `PureSpec <commandes@purespec.fr>`) |
+| `EMAIL_REPLY_TO` | Adresse de réponse (ex: `contact@purespec.fr`) |
+| `SITE_URL` | URL canonique du site (ex: `https://purespec.fr`) |
+| `ADMIN_EMAIL` | **Nouveau** — Email recevant les notifs (nouvelle commande, nouveau message contact) |
+
+---
+
+## 🚀 Mise en route
+
+### 1. Supabase
+1. Créer un projet sur [supabase.com](https://supabase.com)
+2. Aller dans **SQL Editor → New Query**
+3. Coller le contenu de `supabase/schema.sql` et exécuter
+
+### 2. Créer un compte admin
+
+```bash
+# Génère un hash bcrypt en local :
+node -e "console.log(require('bcryptjs').hashSync('VOTRE_MOT_DE_PASSE', 10))"
+```
+
+Puis dans le SQL Editor de Supabase :
+
+```sql
+INSERT INTO admin_users (email, password_hash, nom, role)
+VALUES ('toi@exemple.fr', 'LE_HASH_GENERE', 'Ton Nom', 'superadmin');
+```
+
+L'admin se connecte ensuite via `/admin` avec ces identifiants.
+
+### 3. Stripe
+1. Créer un compte sur [stripe.com](https://stripe.com)
+2. Activer le **mode Test** d'abord pour vérifier
+3. Récupérer `STRIPE_SECRET_KEY`
+4. Créer un webhook qui pointe vers `https://votresite.fr/api/webhook` et écoute l'évènement `checkout.session.completed`
+5. Récupérer le secret du webhook `STRIPE_WEBHOOK_SECRET`
+
+### 4. Resend (emails)
+1. Créer un compte sur [resend.com](https://resend.com)
+2. Vérifier votre domaine d'envoi
+3. Récupérer la clé API `RESEND_API_KEY`
+
+### 5. Déploiement Vercel
+```bash
+npm install -g vercel
+vercel login
+vercel --prod
+```
+
+---
+
+## 🧭 Routes du site
+
+| URL | Page |
+|-----|------|
+| `/` | Accueil + configurateur sticker |
+| `/registry` | Vérifier l'authenticité d'un sticker |
+| `/contact` | Formulaire de contact + mentions légales + CGV |
+| `/account` | Connexion / inscription |
+| `/account?mode=signup` | Création de compte (onglet pré-sélectionné) |
+| `/account?reset=TOKEN` | Page de réinitialisation (depuis le mail) |
+| `/dashboard` | Espace client (connexion requise) |
+| `/admin` | Back-office (connexion admin requise) |
+
+---
+
+## 🔐 Système d'auth
+
+Auth maison (sans Supabase Auth) :
+- Mots de passe en `bcryptjs` (10 rounds)
+- Sessions stockées en BDD (table `sessions`), 30 jours
+- Token aléatoire de 64 hex char, dans un cookie HttpOnly+SameSite=Lax
+- Deux cookies séparés : `ps_session` (client) et `ps_admin` (admin)
+- Rate-limit basique en mémoire (par instance Vercel)
+
+---
+
+## 📦 Format de référence sticker
+
+Format unique pour tout le site : **`P` + 7 caractères alphanumériques** (ex : `P4K9L2M7`).
+
+- Le `P` est la signature PureSpec gravée verticalement sur la tranche
+- 7 caractères pris dans `ABCDEFGHJKLMNPQRSTUVWXYZ23456789` (exclut O, I, 0, 1 pour la lisibilité)
+- Cohérent côté générateur (index.html), côté backend (checkout/verify) et côté registry
+
+---
+
+## 🔄 Workflow de commande
+
+```
+pending → paid → in_production → shipped → delivered
+                        ↘ (admin)
+            cancelled  /  refunded
+```
+
+Transitions clés :
+- `paid` : déclenchée automatiquement par le webhook Stripe
+- `in_production`, `shipped`, `delivered`, `cancelled`, `refunded` : positionnées manuellement depuis `/admin`
+- L'admin peut renseigner transporteur + n° de suivi
+- Quand le statut passe à `shipped` avec un n° de suivi, un email auto est envoyé au client
+
+---
+
+## 📨 Emails automatiques
+
+| Évènement | Destinataire | Template |
+|-----------|--------------|----------|
+| Inscription | Client | "Bienvenue chez PureSpec" |
+| Mot de passe oublié | Client | Lien de réinitialisation (1h) |
+| Paiement confirmé | Client | Récap commande (template original conservé) |
+| Paiement confirmé | Admin (ADMIN_EMAIL) | Notification nouvelle commande |
+| Commande expédiée | Client | N° de suivi + lien |
+| Nouveau message contact | Client | Confirmation de réception |
+| Nouveau message contact | Admin (ADMIN_EMAIL) | Notification + reply-to client |
+| Réponse admin | Client | Email avec votre réponse |
+
+---
+
+## 🛠️ Développement local
 
 ```bash
 git clone <repo>
 cd purespec
 npm install
-```
-
-### 2. Créer un projet Supabase
-
-1. Aller sur [supabase.com](https://supabase.com) et créer un nouveau projet
-2. SQL Editor → New query → coller le contenu de `supabase/schema.sql` → exécuter
-3. **Activer l'auth email** : Authentication → Providers → Email → "Enable Email provider" + désactiver "Confirm email" (magic link suffit)
-4. **Configurer la redirection** : Authentication → URL Configuration → Redirect URLs : ajouter `https://votre-domaine.com/account` et `http://localhost:3000/account`
-5. Récupérer dans Settings → API :
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY` (service_role — secret)
-   - `SUPABASE_ANON_KEY` (anon public)
-
-### 3. Stripe
-
-1. [stripe.com](https://stripe.com) → Dashboard → Récupérer `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY`
-2. Webhooks → Add endpoint : `https://votre-domaine.com/api/webhook`, événement `checkout.session.completed`
-3. Récupérer le `STRIPE_WEBHOOK_SECRET`
-
-### 4. Resend
-
-1. [resend.com](https://resend.com) → Créer une API key
-2. Vérifier votre domaine d'envoi (DNS)
-
-### 5. Variables d'environnement Vercel
-
-Dans Vercel → Settings → Environment Variables (ou `.env.local` en dev) :
-
-```bash
-SITE_URL=https://purespec.fr
-SUPABASE_URL=https://xxx.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-SUPABASE_ANON_KEY=eyJ...
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_PUBLISHABLE_KEY=pk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-RESEND_API_KEY=re_...
-EMAIL_FROM=PureSpec <hello@purespec.fr>
-EMAIL_REPLY_TO=hello@purespec.fr
-ADMIN_EMAIL=admin@purespec.fr
-```
-
-### 6. Déployer
-
-```bash
-vercel --prod
-```
-
-### 7. Créer un admin
-
-Après votre premier déploiement :
-
-1. Aller sur `/account/login`, se connecter avec votre email (réception magic link)
-2. Cliquer le lien — votre compte est créé automatiquement (trigger Supabase)
-3. Dans Supabase SQL Editor :
-
-```sql
-UPDATE profiles SET is_admin = TRUE WHERE email = 'votre@email.com';
-```
-
-4. Aller sur `/admin` — vous avez accès au back-office.
-
-## Développement local
-
-```bash
+cp .env.example .env.local   # à créer manuellement avec les vars du tableau
 vercel dev
 ```
 
-Le site tourne sur `http://localhost:3000`. Les routes API sont accessibles.
+Ouvrir `http://localhost:3000`.
 
-Pour les emails en dev : Resend permet d'envoyer en mode test. Pour Stripe webhook en dev :
+---
 
-```bash
-stripe listen --forward-to localhost:3000/api/webhook
-```
+## ⚠️ Notes
 
-## Format de référence
+- Le **bloc atelier (configurateur)** dans `index.html` ne doit pas être modifié sans précaution : polices, animations, structure des SVG du sticker, pipette desktop et stepper mobile sont calibrés pour produire un rendu fidèle.
+- Les **3 images de fond** (`m3 rouge.png`, `m3 jaune.png`, `m3 noire.png`) et **3 SVG circuits** sont hébergées sur GitHub Raw — pour passer en production sérieuse, idéalement les uploader sur Vercel/Supabase Storage ou un CDN.
+- L'**eyedropper natif (window.EyeDropper)** est utilisé en priorité quand disponible (Chrome desktop). Fallback : pipette sur image uploadée.
 
-Chaque sticker porte une référence unique de **8 caractères** : `PS` + 6 alphanumériques (ex: `PS7K9L2M`). Les chars `O`, `I`, `0`, `1` sont exclus pour éviter la confusion visuelle.
+---
 
-## Workflow d'une commande
+## 📝 Changelog v2.0
 
-1. **Client** : configure son sticker dans l'atelier, clique "Commander"
-2. **API checkout** : génère ref + order_number, crée la commande (statut `pending`), session Stripe
-3. **Client** : paie sur Stripe
-4. **Webhook Stripe** : passe la commande à `paid`, envoie email de confirmation
-5. **Admin** : voit la commande dans `/admin`, la passe à `in_production` puis `shipped` (avec n° tracking → email auto)
-6. **Client** : suit le statut sur `/account` + reçoit les emails à chaque étape
-
-## Sécurité
-
-- Service-role key uniquement côté serveur (env var, jamais exposée)
-- RLS activée sur toutes les tables sensibles
-- Tokens JWT vérifiés côté API pour `/api/account/*` et `/api/admin/*`
-- Sanitization basique des inputs utilisateurs
-- Stripe webhook signé
-
-## License
-
-Tous droits réservés.
+- ✅ Page registry séparée (`/registry`), avec mention précision teintes
+- ✅ Référence unifiée au format `P` + 7 chars (sur l'ensemble du site)
+- ✅ Comptes clients complets (signup, login, mot de passe oublié, profil)
+- ✅ Espace client `/dashboard` avec suivi des commandes et timeline
+- ✅ Back-office `/admin` complet (stats, gestion commandes/messages/clients, envoi de réponses)
+- ✅ Page contact `/contact` avec mentions légales et CGV
+- ✅ Workflow de commande étendu (pending → paid → in_production → shipped → delivered)
+- ✅ Notifications email à l'admin sur nouvelle commande / nouveau message
+- ✅ Email automatique au client à l'expédition (avec tracking)
+- ✅ Retrait du routeur SPA et de la callout Registry de la home
+- ✅ Mentions de précision des teintes (sous le bouton pipette + sur la modal + au footer + sur le registry)
+- ✅ Structure multi-pages propre (SEO, partages, deep-linking)
+- ✅ N° de commande lisible (`PW-000001`) auto-incrémenté
