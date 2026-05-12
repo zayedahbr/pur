@@ -5,6 +5,20 @@ Stack : HTML/CSS/JS vanilla, Vercel Serverless (Node), Supabase, Stripe, Resend.
 
 ---
 
+## 🆕 Refonte 2026-05
+
+- **Hero** : nouveau layout split (typo gauche, produit droite) sur fond blanc, dans l'esprit Porsche/Apple. La bannière noire plein-écran a été supprimée.
+- **Navbar** : redessinée, hamburger mobile fonctionnel (`navMobileMenu` plein écran). Brand • Atelier • Philosophie • Registry • Contact • avatar • CTA.
+- **Configurator (atelier + sticker)** : **inchangé** — structure, IDs, JS, visuels du sticker préservés à 100 %.
+- **Commande forcée avec compte** : nouveau flow en 3 étapes — récap → auth gate (login/signup/Google/Apple) → livraison auto-remplie. L'adresse est sauvegardée sur le profil à la commande.
+- **OAuth Google + Apple** : endpoints `/api/auth?action=oauth-google` / `oauth-apple` + callback. Google complet ; Apple stub (voir ENV plus bas).
+- **Eyebrows recolorés** : "L'EXPÉRIENCE", "PRÉCISION TECHNIQUE", "NETTETÉ ABSOLUE", "AUTHENTICITÉ" sont passés en gris neutre.
+- **Emails** : tous les templates ont été migrés en design clair (blanc/gris), cohérent avec la nouvelle DA. Tous les `PureWerk` → `PureSpec`.
+- **Schéma** : `customers.password_hash` est désormais nullable + colonnes `google_sub`, `apple_sub`, `auth_provider`.
+- **Nettoyage** : ~420 lignes de CSS mort supprimées (sections `install-*`, `faq-*`, `registry-*` qui n'étaient plus dans le HTML).
+
+---
+
 ## 🏗️ Architecture
 
 ```
@@ -57,7 +71,21 @@ supabase/
 | `EMAIL_FROM` | Adresse expéditeur (ex: `PureSpec <commandes@purespec.fr>`) |
 | `EMAIL_REPLY_TO` | Adresse de réponse (ex: `contact@purespec.fr`) |
 | `SITE_URL` | URL canonique du site (ex: `https://purespec.fr`) |
-| `ADMIN_EMAIL` | **Nouveau** — Email recevant les notifs (nouvelle commande, nouveau message contact) |
+| `ADMIN_EMAIL` | Email recevant les notifs (nouvelle commande, nouveau message contact) |
+| `GOOGLE_CLIENT_ID` | **OAuth** — Client ID Google (Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Client). Laissez vide pour désactiver. |
+| `GOOGLE_CLIENT_SECRET` | **OAuth** — Client secret Google associé. |
+| `APPLE_CLIENT_ID` | **OAuth** — Services ID Apple (apple.com → Developer → Identifiers). Laissez vide pour désactiver. |
+| `APPLE_TEAM_ID` | **OAuth** — Team ID Apple Developer. |
+| `APPLE_KEY_ID` | **OAuth** — Key ID Apple (associé à la clé privée Sign in with Apple). |
+| `APPLE_PRIVATE_KEY` | **OAuth** — Clé privée ES256 (`.p8` content) Apple, multiligne ou en base64. |
+
+### Redirect URIs à configurer côté Google / Apple
+
+- Google : `https://votresite.fr/api/auth?action=oauth-callback&provider=google`
+- Apple : `https://votresite.fr/api/auth?action=oauth-callback&provider=apple`
+
+> Note : la connexion Google est entièrement opérationnelle dès que `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` sont définies. La connexion Apple nécessite en plus la finalisation du client_secret JWT (`oauthCallback` dans `api/auth.js`) — laissée en stub car elle dépend de la `APPLE_PRIVATE_KEY` et de la lib JWT que vous choisirez (`jsonwebtoken` ou `jose`).
+
 
 ---
 
