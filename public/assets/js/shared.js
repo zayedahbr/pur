@@ -56,10 +56,10 @@ async function setupNavAuth() {
   const user = await fetchMe();
   if (user) {
     const initial = (user.prenom || user.email || '?').charAt(0).toUpperCase();
-    ic.innerHTML = `<span style="font-size:13px;font-weight:600;color:#1d1d1f;letter-spacing:-0.01em">${initial}</span>`;
+    ic.innerHTML = `<span style="font-size:13px;font-weight:600;color:#0a0a0a;letter-spacing:-0.01em">${initial}</span>`;
     ic.setAttribute('href', '/dashboard');
     ic.setAttribute('aria-label', 'Mon espace');
-    ic.style.background = '#e8e8ed';
+    ic.style.background = '#f4f4f4';
   }
 }
 
@@ -100,25 +100,9 @@ function statusBadge(status) {
 }
 
 // ===== Inject language switcher into nav-actions (pages secondaires) =====
+// v4 : FR-only — fonction conservée mais désactivée. Réactivable en supprimant le early return.
 function injectLangSwitch() {
-  // Si déjà présent (legal/cgv en ont un en dur dans le markup) → skip
-  if (document.getElementById('langSwitchBtn')) return;
-  const actions = document.querySelector('.nav-actions');
-  if (!actions) return;
-  const btn = document.createElement('button');
-  btn.id = 'langSwitchBtn';
-  btn.type = 'button';
-  btn.className = 'lang-switch';
-  btn.setAttribute('aria-label', 'Langue / Language');
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span id="langSwitchLabel">' + (window.PS_LANG || 'fr').toUpperCase() + '</span>';
-  // Insère en première position de .nav-actions
-  actions.insertBefore(btn, actions.firstChild);
-  btn.addEventListener('click', () => {
-    const cur = window.PS_LANG || 'fr';
-    if (typeof window.PS_SET_LANG === 'function') {
-      window.PS_SET_LANG(cur === 'fr' ? 'en' : 'fr');
-    }
-  });
+  return; // v4 : pas de switcher
 }
 
 // ===== Navbar mobile menu (auto-injection sur les pages secondaires) =====

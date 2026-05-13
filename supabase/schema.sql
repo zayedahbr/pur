@@ -115,7 +115,8 @@ CREATE SEQUENCE IF NOT EXISTS order_number_seq START 1;
 CREATE OR REPLACE FUNCTION set_order_number() RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.order_number IS NULL THEN
-    NEW.order_number := '#' || LPAD(nextval('order_number_seq')::TEXT, 6, '0');
+    -- v4 : format simple 000123 (sans préfixe #)
+    NEW.order_number := LPAD(nextval('order_number_seq')::TEXT, 6, '0');
   END IF;
   NEW.updated_at := NOW();
   RETURN NEW;
@@ -213,4 +214,23 @@ $$ LANGUAGE plpgsql;
 -- 2. Puis exécute (dans le SQL Editor de Supabase) :
 --      INSERT INTO admin_users (email, password_hash, nom, role)
 --      VALUES ('toi@exemple.fr', 'LE_HASH_GENERE', 'Ton Nom', 'superadmin');
+-- ================================================================
+
+-- ===== 10. Table SITE_CONTENT (v4 — overrides éditables sans redéploiement) =====
+-- Permet à l'admin (avec EDIT_KEY) de modifier les textes via le mode édition inline.
+-- Chaque texte du HTML peut porter un data-edit-key qui matche une key ici.
+CREATE TABLE IF NOT EXISTS site_content (
+  key         VARCHAR(120) PRIMARY KEY,
+  content     TEXT NOT NULL,
+  updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_site_content_updated ON site_content(updated_at DESC);
+
+-- ================================================================
+-- MIGRATION v3 → v4 :
+-- Si tu as déjà des commandes avec préfixe '#' (ex: '#000001'), tu peux les
+-- normaliser pour cohérence d'affichage avec :
+--      UPDATE orders SET order_number = LPAD(REGEXP_REPLACE(order_number, '^#', ''), 6, '0')
+--      WHERE order_number LIKE '#%';
+-- (Optionnel : les anciens reçus/emails contiennent encore le # ; pas obligé de migrer.)
 -- ================================================================

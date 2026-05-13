@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/shared.css">
 <style>
   body { background: #fafafc; }
@@ -21,7 +21,7 @@
   }
   .registry-input-wrap {
     position: relative;
-    background: #f5f5f7;
+    background: #fafafa;
     border-radius: 16px;
     border: 1.5px solid transparent;
     transition: border-color .25s, background .25s;
@@ -30,7 +30,7 @@
     padding: 0 20px;
   }
   .registry-input-wrap:focus-within {
-    border-color: #1d1d1f;
+    border-color: #0a0a0a;
     background: #fff;
     box-shadow: 0 0 0 4px rgba(29,29,31,.06);
   }
@@ -43,7 +43,7 @@
     border-right: 1px solid rgba(0,0,0,0.08);
     transition: color 0.25s;
   }
-  .registry-input-wrap:focus-within .registry-input-prefix { color: #1d1d1f; }
+  .registry-input-wrap:focus-within .registry-input-prefix { color: #0a0a0a; }
   .registry-input {
     flex: 1;
     background: transparent;
@@ -53,7 +53,7 @@
     font-size: 24px;
     font-weight: 600;
     letter-spacing: 0.18em;
-    color: #1d1d1f;
+    color: #0a0a0a;
     outline: none;
     text-transform: uppercase;
   }
@@ -75,11 +75,11 @@
   .registry-trust-item { text-align: center; }
   .registry-trust-num {
     font-size: 30px; font-weight: 700;
-    color: #1d1d1f; letter-spacing: -0.02em;
+    color: #0a0a0a; letter-spacing: -0.02em;
     line-height: 1;
   }
   .registry-trust-text {
-    color: #86868b;
+    color: #525252;
     font-size: 12.5px;
     margin-top: 6px;
     line-height: 1.4;
@@ -148,24 +148,24 @@
   @media (min-width: 600px) { .verify-grid { grid-template-columns: 1fr 1fr; } }
   .verify-field-label {
     font-size: 11px;
-    color: #86868b;
+    color: #525252;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 600;
     margin-bottom: 4px;
   }
-  .verify-field-value { color: #1d1d1f; font-weight: 500; font-size: 14.5px; }
+  .verify-field-value { color: #0a0a0a; font-weight: 500; font-size: 14.5px; }
   .verify-precision-note {
     margin-top: 24px;
     padding: 16px;
     background: #fafafa;
     border-radius: 12px;
     font-size: 12px;
-    color: #86868b;
+    color: #525252;
     line-height: 1.55;
-    border-left: 2px solid #d2d2d7;
+    border-left: 2px solid #e8e8e8;
   }
-  .verify-precision-note strong { color: #1d1d1f; }
+  .verify-precision-note strong { color: #0a0a0a; }
 </style>
 </head>
 <body>
@@ -175,7 +175,7 @@
     <a href="/" class="nav-brand">PureSpec</a>
     <div class="nav-links">
       <a href="/#atelier" class="nav-link" data-i18n="nav.atelier">Atelier</a>
-      <a href="/#story" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
+      <a href="/#philosophie" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
       <a href="/registry" class="nav-link active" data-i18n="nav.registry">Registry</a>
       <a href="/contact" class="nav-link" data-i18n="nav.contact">Contact</a>
     </div>
@@ -201,7 +201,7 @@
 
   <div class="max-w-2xl px-6" style="padding-top: 40px">
     <div class="registry-card">
-      <div class="text-xs uppercase tracking-wider font-semibold" style="color:#86868b;margin-bottom:18px;letter-spacing:0.18em">RÉFÉRENCE GRAVÉE</div>
+      <div class="text-xs uppercase tracking-wider font-semibold" style="color:#525252;margin-bottom:18px;letter-spacing:0.18em">RÉFÉRENCE GRAVÉE</div>
 
       <form id="verifyForm" onsubmit="verifyReference(event)" style="display:flex;flex-direction:column;gap:14px">
         <div class="registry-input-wrap">
@@ -224,7 +224,7 @@
         </button>
       </form>
 
-      <p class="mt-4 text-sm" style="color:#86868b;display:flex;align-items:center;gap:8px;line-height:1.5">
+      <p class="mt-4 text-sm" style="color:#525252;display:flex;align-items:center;gap:8px;line-height:1.5">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         La référence est gravée verticalement sur la tranche droite, en 8 caractères commençant par&nbsp;P.
       </p>
@@ -243,7 +243,7 @@
         <div class="footer-col-title" data-i18n="footer.product">Produit</div>
         <ul>
           <li><a href="/#atelier" data-i18n="nav.atelier">Atelier</a></li>
-          <li><a href="/#story" data-i18n="nav.philosophy">Philosophie</a></li>
+          <li><a href="/#philosophie" data-i18n="nav.philosophy">Philosophie</a></li>
           <li><a href="/registry" data-i18n="nav.registry">Registry</a></li>
         </ul>
       </div>
@@ -375,7 +375,7 @@ function renderResult(data) {
             </div>
             <div>
               <div class="verify-field-label">Couleur</div>
-              <div class="verify-field-value">${escapeHtml(s.couleur || '—')} ${s.code_couleur ? '<span style="color:#86868b">(' + escapeHtml(s.code_couleur) + ')</span>' : ''}</div>
+              <div class="verify-field-value">${escapeHtml(s.couleur || '—')} ${s.code_couleur ? '<span style="color:#525252">(' + escapeHtml(s.code_couleur) + ')</span>' : ''}</div>
             </div>
             <div>
               <div class="verify-field-label">Instagram</div>
@@ -405,9 +405,9 @@ function renderResult(data) {
           </div>
         </div>
         <div class="verify-content">
-          <p style="color:#1d1d1f;line-height:1.6;margin:0">${escapeHtml(data.message || 'Aucun sticker authentique ne correspond à cette référence.')}</p>
-          <p style="color:#86868b;font-size:14px;margin-top:16px;line-height:1.6">
-            Vérifiez que vous avez bien recopié les 8 caractères de la tranche droite du sticker. Si le doute persiste, <a href="/contact" style="color:#1d1d1f;font-weight:500;text-decoration:underline">contactez-nous</a> — ce sticker pourrait être une contrefaçon.
+          <p style="color:#0a0a0a;line-height:1.6;margin:0">${escapeHtml(data.message || 'Aucun sticker authentique ne correspond à cette référence.')}</p>
+          <p style="color:#525252;font-size:14px;margin-top:16px;line-height:1.6">
+            Vérifiez que vous avez bien recopié les 8 caractères de la tranche droite du sticker. Si le doute persiste, <a href="/contact" style="color:#0a0a0a;font-weight:500;text-decoration:underline">contactez-nous</a> — ce sticker pourrait être une contrefaçon.
           </p>
         </div>
       </div>
@@ -423,5 +423,6 @@ document.getElementById('verifyRefInput').addEventListener('input', function(e){
   e.target.value = v;
 });
 </script>
+<script src="/assets/js/edit-mode.js"></script>
 </body>
 </html>

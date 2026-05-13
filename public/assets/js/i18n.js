@@ -1,16 +1,18 @@
 // ============================================================
 // PureSpec — i18n (FR / EN)
-// Auto-détection de la langue navigateur, switcher manuel,
-// stockage en cookie 1an pour persistance.
+// v4 : lancement FR-only, le switcher est désactivé, mais le code reste
+// pour ajout futur de langues sans refonte.
 // ============================================================
 
 (function () {
   const STORAGE_KEY = 'ps_lang';
   const SUPPORTED = ['fr', 'en'];
   const DEFAULT_LANG = 'fr';
+  const FORCE_FR = true; // v4 : on force FR pour le lancement
 
   // Détection : 1) cookie 2) navigator.language 3) fallback FR
   function detectLang() {
+    if (FORCE_FR) return 'fr';
     try {
       const cookieMatch = document.cookie.match(/(?:^|; )ps_lang=([^;]+)/);
       if (cookieMatch && SUPPORTED.includes(cookieMatch[1])) return cookieMatch[1];
@@ -21,9 +23,7 @@
     } catch {}
     try {
       const nav = (navigator.language || navigator.userLanguage || '').toLowerCase().slice(0, 2);
-      // FR : France, Belgique francophone, Suisse francophone, Luxembourg, Monaco
       if (nav === 'fr') return 'fr';
-      // Tout le reste de l'Europe (DE, IT, ES, NL, PT, EN-GB...) → anglais
       return 'en';
     } catch {}
     return DEFAULT_LANG;
