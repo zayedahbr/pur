@@ -45,12 +45,67 @@ export default async function handler(req, res) {
     if (action === 'reply-message' && method === 'POST') return await replyMessage(req, res, auth);
     if (action === 'update-message' && method === 'POST') return await updateMessage(req, res);
     if (action === 'list-customers' && method === 'GET') return await listCustomers(req, res);
+    if (action === 'get-settings' && method === 'GET') return await getSettings(req, res);
+    if (action === 'update-settings' && method === 'POST') return await updateSettings(req, res);
 
     return res.status(400).json({ error: 'Action inconnue' });
   } catch (err) {
     console.error('[admin]', action, err);
     return res.status(500).json({ error: err.message });
   }
+}
+
+// ---------- SETTINGS (prix + livraison) ----------
+async function getSettings(req, res) {
+  const { data, error } = await supabase
+    .from('app_settings')
+    .select('key, value')
+    .in('key', ['unit_price_eur', 'shipping_rates']);
+  if (error) return res.status(500).json({ error: error.message });
+  const out = { unit_price_eur: 9.90, shipping_rates: {} };
+  (data || []).forEach(r => {
+    if (r.key === 'unit_price_eur') out.unit_price_eur = Number(r.value);
+    if (r.key === 'shipping_rates') out.shipping_rates = r.value || {};
+  });
+  return res.status(200).json(out);
+}
+
+async function updateSettings(req, res) {
+  const { unit_price_eur, shipping_rates } = req.body || {};
+  const ops = [];
+
+  if (typeof unit_price_eur === 'number' && unit_price_eur >= 0) {
+    ops.push(
+      supabase.from('app_settings').upsert({
+        key: 'unit_price_eur',
+        value: unit_price_eur,
+        updated_at: new Date().toISOString()
+      })
+    );
+  }
+
+  if (shipping_rates && typeof shipping_rates === 'object') {
+    // Validation rapide : que des codes ISO de 2 lettres et des nombres positifs
+    const cleaned = {};
+    for (const [code, price] of Object.entries(shipping_rates)) {
+      const c = String(code).toUpperCase().slice(0, 2);
+      const p = Number(price);
+      if (/^[A-Z]{2}$/.test(c) && !Number.isNaN(p) && p >= 0) cleaned[c] = p;
+    }
+    ops.push(
+      supabase.from('app_settings').upsert({
+        key: 'shipping_rates',
+        value: cleaned,
+        updated_at: new Date().toISOString()
+      })
+    );
+  }
+
+  if (!ops.length) return res.status(400).json({ error: 'Aucune valeur à mettre à jour' });
+  const results = await Promise.all(ops);
+  const err = results.find(r => r.error);
+  if (err) return res.status(500).json({ error: err.error.message });
+  return res.status(200).json({ ok: true });
 }
 
 // ---------- AUTH ----------

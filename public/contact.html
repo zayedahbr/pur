@@ -77,10 +77,10 @@
   <div class="nav-inner">
     <a href="/" class="nav-brand">PureSpec</a>
     <div class="nav-links">
-      <a href="/#atelier" class="nav-link">Atelier</a>
-      <a href="/#story" class="nav-link">Philosophie</a>
-      <a href="/registry" class="nav-link">Registry</a>
-      <a href="/contact" class="nav-link active">Contact</a>
+      <a href="/#atelier" class="nav-link" data-i18n="nav.atelier">Atelier</a>
+      <a href="/#story" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
+      <a href="/registry" class="nav-link" data-i18n="nav.registry">Registry</a>
+      <a href="/contact" class="nav-link active" data-i18n="nav.contact">Contact</a>
     </div>
     <div class="nav-actions">
       <a href="/account" class="nav-account" id="navAccountIcon" aria-label="Mon compte">
@@ -141,7 +141,7 @@
 
           <div style="margin-bottom:14px">
             <label class="apple-label" for="contactRef">Référence de commande (facultatif)</label>
-            <input id="contactRef" name="order_ref" type="text" class="apple-input" placeholder="PW-000123 ou P4K9L2M7" maxlength="20" style="text-transform:uppercase;font-family:ui-monospace,monospace;letter-spacing:0.04em">
+            <input id="contactRef" name="order_ref" type="text" class="apple-input" placeholder="#000123 ou P4K9L2M7" maxlength="20" style="text-transform:uppercase;font-family:ui-monospace,monospace;letter-spacing:0.04em">
           </div>
 
           <div style="margin-bottom:18px">
@@ -156,7 +156,7 @@
           </button>
 
           <p class="text-xs mt-4" style="color:var(--gray);line-height:1.5">
-            En envoyant ce formulaire, vous acceptez que vos informations soient utilisées pour traiter votre demande. <a href="#legal" style="color:var(--ink);text-decoration:underline">En savoir plus</a>.
+            <span data-i18n="contact.form.consent">En envoyant ce formulaire, vous acceptez que vos informations soient utilisées pour traiter votre demande.</span> <a href="/legal" style="color:var(--ink);text-decoration:underline" data-i18n="contact.form.consent.link">En savoir plus</a>.
           </p>
         </form>
       </div>
@@ -186,87 +186,13 @@
         </div>
 
         <div class="card mt-6" style="background:#fafafa">
-          <div class="flex gap-3 items-start">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink);flex-shrink:0;margin-top:1px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            <div>
-              <div class="font-semibold mb-2" style="font-size:14.5px">À propos des teintes</div>
-              <div class="text-sm" style="color:var(--gray);line-height:1.6">La fidélité de la teinte sur le sticker dépend de la qualité de la photo soumise. Pour un résultat optimal, prélevez votre couleur à la lumière du jour, sans reflets prononcés.</div>
-            </div>
+          <div>
+            <div class="font-semibold mb-2" style="font-size:14.5px" data-i18n="contact.tints.title">À propos des teintes</div>
+            <div class="text-sm" style="color:var(--gray);line-height:1.6" data-i18n="contact.tints.body">La fidélité de la teinte sur le sticker dépend de la qualité de la photo soumise. Pour un résultat optimal, prélevez votre couleur à la lumière du jour, sans reflets prononcés.</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Mentions légales + CGV -->
-  <section class="legal-section">
-    <h2 id="legal">Mentions légales</h2>
-    <h3>Éditeur du site</h3>
-    <p>
-      Le site PureSpec est édité et exploité dans le respect du droit français. Pour toute demande relative à l'édition (informations sur l'entreprise, identification du responsable de publication, n° SIREN, etc.), contactez-nous à <a href="mailto:contact@purespec.fr">contact@purespec.fr</a>.
-    </p>
-
-    <h3>Hébergement</h3>
-    <p>
-      Le site est hébergé par Vercel Inc. (440 N Barranca Avenue #4133, Covina, CA 91723, USA — <a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a>) et utilise Supabase pour le stockage de données.
-    </p>
-
-    <h3>Propriété intellectuelle</h3>
-    <p>
-      L'ensemble des éléments du site (textes, illustrations, photographies, identité visuelle PureSpec) est protégé par le droit d'auteur. Toute reproduction sans autorisation préalable est interdite. Les marques, modèles, codes moteur et codes couleur cités sont la propriété de leurs constructeurs respectifs. PureSpec n'est affilié à aucune marque automobile.
-    </p>
-
-    <h3>Données personnelles (RGPD)</h3>
-    <p>
-      Les informations recueillies via les formulaires (compte, commande, contact) sont nécessaires au traitement de votre demande ou de votre commande. Elles sont conservées pour la durée nécessaire à la finalité du traitement et aux obligations légales (notamment comptables). Vous disposez d'un droit d'accès, de rectification, de portabilité et de suppression sur ces données, à exercer par email à <a href="mailto:contact@purespec.fr">contact@purespec.fr</a>.
-    </p>
-
-    <h3>Cookies</h3>
-    <p>
-      Le site utilise uniquement des cookies strictement nécessaires à son fonctionnement (session de connexion). Aucun cookie publicitaire ou de tracking tiers n'est déposé.
-    </p>
-
-    <h2 id="cgv">Conditions Générales de Vente</h2>
-
-    <h3>1. Produit</h3>
-    <p>
-      PureSpec commercialise des stickers électrostatiques sur mesure, conçus à partir des spécifications saisies par le client lors de la configuration (marque, modèle, version, code moteur, code couleur, identifiant Instagram). Chaque sticker reçoit une référence unique de 8 caractères enregistrée au Registry.
-    </p>
-
-    <h3>2. Précision des teintes</h3>
-    <p>
-      L'algorithme de pipette interprète la zone d'image sélectionnée par le client. La fidélité de la teinte rendue dépend des conditions de prise de vue (lumière, reflets, qualité de l'image). Aucune réclamation ne pourra être recevable au titre d'une teinte estimée non conforme dès lors que la couleur appliquée correspond à la valeur enregistrée lors de la commande.
-    </p>
-
-    <h3>3. Commande &amp; paiement</h3>
-    <p>
-      Les commandes sont passées via le site, le paiement étant assuré par Stripe (carte bancaire). La commande est ferme dès validation du paiement. Une confirmation est envoyée par email.
-    </p>
-
-    <h3>4. Production &amp; expédition</h3>
-    <p>
-      Chaque sticker est produit à la commande. Le délai de production est généralement de 2 à 4 jours ouvrés, auxquels s'ajoute le délai de livraison (Colissimo ou Chronopost selon le pays). Les délais sont indicatifs.
-    </p>
-
-    <h3>5. Droit de rétractation</h3>
-    <p>
-      Les stickers PureSpec étant des biens confectionnés selon les spécifications du consommateur ou nettement personnalisés, ils sont exclus du droit de rétractation conformément à l'article L221-28 du Code de la consommation. Cette exclusion est confirmée et acceptée par le client au moment de la commande.
-    </p>
-
-    <h3>6. Conformité &amp; garantie</h3>
-    <p>
-      En cas de défaut de fabrication avéré (impression défectueuse, erreur sur les informations saisies par PureSpec, sticker abîmé à réception), le client est invité à nous contacter sous 14 jours après réception avec photos à l'appui. Nous procéderons au remplacement ou au remboursement après examen du dossier.
-    </p>
-
-    <h3>7. Responsabilité</h3>
-    <p>
-      PureSpec n'est en aucun cas affilié, sponsorisé ou cautionné par les constructeurs automobiles dont les marques, modèles ou codes moteur sont mentionnés à titre purement descriptif sur le produit. L'apposition du sticker sur un véhicule relève de la seule responsabilité du client.
-    </p>
-
-    <h3>8. Litiges</h3>
-    <p>
-      Les présentes CGV sont soumises au droit français. En cas de litige non résolu à l'amiable, le client peut recourir à la plateforme européenne de règlement en ligne des litiges (ec.europa.eu/consumers/odr) ou saisir les tribunaux compétents.
-    </p>
   </section>
 </main>
 
@@ -274,41 +200,46 @@
   <div class="footer-inner">
     <div class="footer-cols">
       <div class="footer-col">
-        <div class="footer-col-title">Produit</div>
+        <div class="footer-col-title" data-i18n="footer.product">Produit</div>
         <ul>
-          <li><a href="/#atelier">Atelier</a></li>
-          <li><a href="/#story">Philosophie</a></li>
-          <li><a href="/registry">Registry</a></li>
+          <li><a href="/#atelier" data-i18n="nav.atelier">Atelier</a></li>
+          <li><a href="/#story" data-i18n="nav.philosophy">Philosophie</a></li>
+          <li><a href="/registry" data-i18n="nav.registry">Registry</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Compte</div>
+        <div class="footer-col-title" data-i18n="footer.account">Compte</div>
         <ul>
-          <li><a href="/account">Se connecter</a></li>
-          <li><a href="/dashboard">Mes commandes</a></li>
+          <li><a href="/account" data-i18n="footer.signin">Se connecter</a></li>
+          <li><a href="/dashboard" data-i18n="footer.orders">Mes commandes</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Aide</div>
+        <div class="footer-col-title" data-i18n="footer.help">Aide</div>
         <ul>
-          <li><a href="/contact">Contact</a></li>
+          <li><a href="/contact" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Légal</div>
+        <div class="footer-col-title" data-i18n="footer.legal">Légal</div>
         <ul>
-          <li><a href="#legal">Mentions légales</a></li>
-          <li><a href="#cgv">CGV</a></li>
+          <li><a href="/legal" data-i18n="footer.legal.mentions">Mentions légales</a></li>
+          <li><a href="/cgv" data-i18n="footer.legal.cgv">CGV</a></li>
+          <li><a href="#" onclick="event.preventDefault();window.openCookieSettings&&window.openCookieSettings()" data-i18n="footer.legal.cookies">Gérer les cookies</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div><span class="footer-brand">PureSpec</span> © 2026 — Tous droits réservés.</div>
-      <div class="text-xs">Conçu en France · Imprimé avec précision</div>
+      <div>
+        <span class="footer-brand">PureSpec</span> © 2026 — <span data-i18n="footer.rights">Tous droits réservés.</span><br>
+        <span class="text-xs" style="opacity:0.75">PURESPEC · SIREN 949 143 101 · <span data-i18n="legal.vat.shortnote">TVA non applicable, art. 293 B du CGI</span></span>
+      </div>
+      <div class="text-xs" data-i18n="footer.tagline">Conçu en France · Imprimé avec précision</div>
     </div>
   </div>
 </footer>
 
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/shared.js"></script>
 <script>
 async function submitContact(e) {

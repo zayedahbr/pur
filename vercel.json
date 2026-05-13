@@ -10,7 +10,9 @@
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/account", "destination": "/account.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/legal", "destination": "/legal.html" },
+    { "source": "/cgv", "destination": "/cgv.html" }
   ],
   "functions": {
     "api/**/*.js": {

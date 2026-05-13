@@ -243,6 +243,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Clients
       </button></li>
+      <li><button data-sec="settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </button></li>
     </ul>
 
     <div class="admin-side-footer">
@@ -371,6 +375,37 @@
       </div>
     </section>
 
+    <!-- SETTINGS -->
+    <section class="admin-section" id="secSettings">
+      <h1 class="text-2xl font-bold mb-2" style="letter-spacing:-0.025em">Paramètres</h1>
+      <p class="text-sm mb-6" style="color:var(--gray)">Prix unitaire du sticker et grille de livraison par pays. Tout est appliqué côté serveur — les modifications prennent effet sur la prochaine commande.</p>
+
+      <div class="card-lg card mb-6">
+        <h2 class="text-lg font-bold mb-1" style="letter-spacing:-0.02em">Prix unitaire du sticker</h2>
+        <p class="text-sm mb-4" style="color:var(--gray)">Prix affiché et facturé pour un sticker, en euros TTC (TVA non applicable, art. 293 B du CGI).</p>
+        <div class="flex items-center gap-3" style="max-width:260px">
+          <input type="number" id="settingUnitPrice" class="apple-input" step="0.10" min="0" placeholder="9.90">
+          <span style="color:var(--gray);font-weight:500">€</span>
+        </div>
+      </div>
+
+      <div class="card-lg card mb-6">
+        <div class="flex items-center justify-between mb-1" style="flex-wrap:wrap;gap:8px">
+          <h2 class="text-lg font-bold" style="letter-spacing:-0.02em">Grille de livraison par pays</h2>
+          <button type="button" class="btn btn-ghost" onclick="addShippingRow()" style="font-size:13px">+ Ajouter un pays</button>
+        </div>
+        <p class="text-sm mb-4" style="color:var(--gray)">Prix de livraison appliqué selon le pays sélectionné par le client. Le code pays est au format ISO-2 (FR, BE, DE, GB…). Un pays absent de cette grille utilisera le tarif FR par défaut.</p>
+        <div id="shippingRatesList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <div class="flex items-center gap-3" style="flex-wrap:wrap">
+        <button type="button" class="btn btn-primary" id="settingsSaveBtn" onclick="saveSettings()">
+          <span class="settings-save-label">Enregistrer les paramètres</span>
+        </button>
+        <span id="settingsAlert" class="text-sm"></span>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -445,6 +480,7 @@ function showShell() {
       if (sec === 'orders') loadOrders();
       if (sec === 'messages') loadMessages();
       if (sec === 'customers') loadCustomers();
+      if (sec === 'settings') loadSettings();
     });
   });
   document.getElementById('ordersFilter').addEventListener('change', loadOrders);
@@ -843,6 +879,136 @@ async function loadCustomers() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeOrderModal(); closeMsgModal(); }
 });
+
+// ============ SETTINGS (prix + livraison) ============
+const KNOWN_COUNTRIES = [
+  ['FR','France'],['MC','Monaco'],['BE','Belgique'],['LU','Luxembourg'],
+  ['NL','Pays-Bas'],['DE','Allemagne'],['AT','Autriche'],['CH','Suisse'],
+  ['IT','Italie'],['ES','Espagne'],['PT','Portugal'],['IE','Irlande'],
+  ['DK','Danemark'],['SE','Suède'],['FI','Finlande'],['NO','Norvège'],
+  ['PL','Pologne'],['CZ','Tchéquie'],['SK','Slovaquie'],['HU','Hongrie'],
+  ['RO','Roumanie'],['BG','Bulgarie'],['GR','Grèce'],['HR','Croatie'],
+  ['SI','Slovénie'],['EE','Estonie'],['LV','Lettonie'],['LT','Lituanie'],
+  ['MT','Malte'],['CY','Chypre'],['GB','Royaume-Uni']
+];
+const COUNTRY_NAME = Object.fromEntries(KNOWN_COUNTRIES);
+
+async function loadSettings() {
+  const list = document.getElementById('shippingRatesList');
+  list.innerHTML = '<div class="skeleton" style="height:200px"></div>';
+  try {
+    const r = await fetch('/api/admin?action=get-settings', { credentials: 'include' });
+    if (!r.ok) throw new Error('Chargement impossible');
+    const data = await r.json();
+    document.getElementById('settingUnitPrice').value =
+      Number(data.unit_price_eur || 9.90).toFixed(2);
+
+    list.innerHTML = '';
+    const rates = data.shipping_rates || {};
+    // Affiche les pays connus en premier (dans l'ordre), puis les autres
+    const seen = new Set();
+    KNOWN_COUNTRIES.forEach(([code]) => {
+      if (rates[code] != null) {
+        appendShippingRow(code, rates[code]);
+        seen.add(code);
+      }
+    });
+    Object.keys(rates).forEach(code => {
+      if (!seen.has(code)) appendShippingRow(code, rates[code]);
+    });
+    if (!Object.keys(rates).length) appendShippingRow('FR', 3.50);
+  } catch (err) {
+    list.innerHTML = `<div class="text-sm" style="color:#c8102e">${err.message}</div>`;
+  }
+}
+
+function appendShippingRow(code, price) {
+  const list = document.getElementById('shippingRatesList');
+  const row = document.createElement('div');
+  row.className = 'shipping-row';
+  row.style.cssText = 'display:grid;grid-template-columns:90px 1fr 110px 40px;gap:10px;align-items:center';
+  const label = COUNTRY_NAME[code] || code;
+  row.innerHTML = `
+    <input type="text" maxlength="2" class="apple-input shipping-code" value="${escapeHtml(code)}" style="text-transform:uppercase;font-family:ui-monospace,monospace;text-align:center;font-weight:600">
+    <div class="shipping-label text-sm" style="color:var(--gray)">${escapeHtml(label)}</div>
+    <div style="position:relative">
+      <input type="number" step="0.10" min="0" class="apple-input shipping-price" value="${Number(price).toFixed(2)}" style="padding-right:28px">
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:14px">€</span>
+    </div>
+    <button type="button" class="shipping-del" onclick="this.closest('.shipping-row').remove()" aria-label="Supprimer" style="background:none;border:none;color:var(--gray);cursor:pointer;padding:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1.5 13a2 2 0 0 1-2 1.83H8.5A2 2 0 0 1 6.5 19L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+    </button>
+  `;
+  // Met à jour le label dès qu'on change le code
+  row.querySelector('.shipping-code').addEventListener('input', e => {
+    const v = (e.target.value || '').toUpperCase().slice(0, 2);
+    e.target.value = v;
+    row.querySelector('.shipping-label').textContent = COUNTRY_NAME[v] || (v ? v : '—');
+  });
+  list.appendChild(row);
+}
+
+function addShippingRow() {
+  appendShippingRow('', 0);
+}
+
+async function saveSettings() {
+  const btn = document.getElementById('settingsSaveBtn');
+  const lbl = btn.querySelector('.settings-save-label');
+  const alert = document.getElementById('settingsAlert');
+  alert.textContent = '';
+  alert.style.color = '';
+
+  const unitPrice = parseFloat(document.getElementById('settingUnitPrice').value);
+  if (Number.isNaN(unitPrice) || unitPrice < 0) {
+    alert.style.color = '#c8102e';
+    alert.textContent = 'Prix unitaire invalide.';
+    return;
+  }
+
+  const rates = {};
+  let formError = null;
+  document.querySelectorAll('#shippingRatesList .shipping-row').forEach(row => {
+    const code = (row.querySelector('.shipping-code').value || '').toUpperCase();
+    const price = parseFloat(row.querySelector('.shipping-price').value);
+    if (!code) return; // ignore lignes vides
+    if (!/^[A-Z]{2}$/.test(code)) { formError = `Code pays invalide : ${code}`; return; }
+    if (Number.isNaN(price) || price < 0) { formError = `Prix invalide pour ${code}`; return; }
+    rates[code] = price;
+  });
+  if (formError) {
+    alert.style.color = '#c8102e';
+    alert.textContent = formError;
+    return;
+  }
+  if (!Object.keys(rates).length) {
+    alert.style.color = '#c8102e';
+    alert.textContent = 'Ajoute au moins un pays.';
+    return;
+  }
+
+  btn.disabled = true;
+  lbl.textContent = 'Enregistrement…';
+  try {
+    const r = await fetch('/api/admin?action=update-settings', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ unit_price_eur: unitPrice, shipping_rates: rates })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Erreur serveur');
+    alert.style.color = '#0a8f3f';
+    alert.textContent = 'Paramètres enregistrés ✓';
+    setTimeout(() => { alert.textContent = ''; }, 3000);
+  } catch (err) {
+    alert.style.color = '#c8102e';
+    alert.textContent = err.message;
+  } finally {
+    btn.disabled = false;
+    lbl.textContent = 'Enregistrer les paramètres';
+  }
+}
 </script>
 </body>
 </html>

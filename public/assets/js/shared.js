@@ -99,6 +99,28 @@ function statusBadge(status) {
   return `<span class="badge ${s.class}">${s.label}</span>`;
 }
 
+// ===== Inject language switcher into nav-actions (pages secondaires) =====
+function injectLangSwitch() {
+  // Si déjà présent (legal/cgv en ont un en dur dans le markup) → skip
+  if (document.getElementById('langSwitchBtn')) return;
+  const actions = document.querySelector('.nav-actions');
+  if (!actions) return;
+  const btn = document.createElement('button');
+  btn.id = 'langSwitchBtn';
+  btn.type = 'button';
+  btn.className = 'lang-switch';
+  btn.setAttribute('aria-label', 'Langue / Language');
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span id="langSwitchLabel">' + (window.PS_LANG || 'fr').toUpperCase() + '</span>';
+  // Insère en première position de .nav-actions
+  actions.insertBefore(btn, actions.firstChild);
+  btn.addEventListener('click', () => {
+    const cur = window.PS_LANG || 'fr';
+    if (typeof window.PS_SET_LANG === 'function') {
+      window.PS_SET_LANG(cur === 'fr' ? 'en' : 'fr');
+    }
+  });
+}
+
 // ===== Navbar mobile menu (auto-injection sur les pages secondaires) =====
 function setupSharedMobileMenu() {
   const navInner = document.querySelector('.nav-inner');
@@ -177,5 +199,51 @@ function setupSharedMobileMenu() {
 document.addEventListener('DOMContentLoaded', () => {
   setupNav();
   setupNavAuth();
+  injectLangSwitch();
   setupSharedMobileMenu();
+  setupCookieBanner();
 });
+
+// ============================================================
+// COOKIE BANNER (auto-injection si pas encore accepté)
+// ============================================================
+function setupCookieBanner() {
+  const KEY = 'ps_cookie_consent';
+  let accepted = null;
+  try { accepted = localStorage.getItem(KEY); } catch {}
+  // Toujours exposer openCookieSettings (lien footer)
+  window.openCookieSettings = () => {
+    try { localStorage.removeItem(KEY); } catch {}
+    showCookieBanner();
+  };
+  if (accepted === '1') return;
+  showCookieBanner();
+
+  function showCookieBanner() {
+    if (document.getElementById('cookieBanner')) {
+      document.getElementById('cookieBanner').classList.add('show');
+      return;
+    }
+    const t = (window._t || (k => k));
+    const banner = document.createElement('div');
+    banner.id = 'cookieBanner';
+    banner.className = 'cookie-banner';
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-label', 'Cookies');
+    banner.innerHTML = `
+      <h4>${t('cookie.title')}</h4>
+      <p>${t('cookie.body')}</p>
+      <div class="cookie-banner-actions">
+        <button type="button" class="cookie-banner-accept" id="cookieAccept">${t('cookie.accept')}</button>
+        <a href="/legal" class="cookie-banner-link">${t('cookie.learn')} →</a>
+      </div>
+    `;
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => banner.classList.add('show'));
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+      try { localStorage.setItem(KEY, '1'); } catch {}
+      banner.classList.remove('show');
+      setTimeout(() => banner.remove(), 500);
+    });
+  }
+}

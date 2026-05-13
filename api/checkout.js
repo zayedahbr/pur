@@ -7,6 +7,38 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-11-20.acacia'
 });
 
+// Defaults si la table app_settings n'est pas seedée
+const FALLBACK_UNIT_PRICE = 9.90;
+const FALLBACK_SHIPPING = {
+  FR: 3.50, MC: 3.50,
+  BE: 5.90, LU: 5.90, NL: 5.90, DE: 5.90,
+  IT: 6.90, ES: 6.90, PT: 6.90, AT: 6.90,
+  IE: 7.90, DK: 7.90, SE: 7.90, FI: 7.90, NO: 9.90,
+  CH: 8.90,
+  PL: 7.90, CZ: 7.90, SK: 7.90, HU: 7.90, RO: 7.90, BG: 7.90,
+  GR: 7.90, HR: 7.90, SI: 7.90,
+  EE: 7.90, LV: 7.90, LT: 7.90, MT: 9.90, CY: 9.90,
+  GB: 9.90
+};
+
+async function loadPricing() {
+  try {
+    const { data } = await supabase
+      .from('app_settings')
+      .select('key, value')
+      .in('key', ['unit_price_eur', 'shipping_rates']);
+    let unit = FALLBACK_UNIT_PRICE;
+    let rates = FALLBACK_SHIPPING;
+    (data || []).forEach(r => {
+      if (r.key === 'unit_price_eur') unit = Number(r.value) || FALLBACK_UNIT_PRICE;
+      if (r.key === 'shipping_rates' && r.value && typeof r.value === 'object') rates = r.value;
+    });
+    return { unit, rates };
+  } catch {
+    return { unit: FALLBACK_UNIT_PRICE, rates: FALLBACK_SHIPPING };
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -15,7 +47,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Méthode non autorisée' });
 
   try {
-    const { config, customer, quantity, unitPrice, shipping } = req.body;
+    const { config, customer, quantity } = req.body;
 
     if (!config || !customer || !customer.email) {
       return res.status(400).json({ error: 'Données manquantes' });
@@ -40,8 +72,12 @@ export default async function handler(req, res) {
     if (existing) reference = generateRef();
 
     const qty = Math.max(1, Math.min(99, parseInt(quantity) || 1));
-    const unit = parseFloat(unitPrice) || 9.90;
-    const ship = parseFloat(shipping) || 0;
+
+    // ⚠️ SÉCURITÉ : on ignore les unitPrice / shipping envoyés par le client.
+    // On les recharge depuis app_settings pour ne pas accepter de tarifs falsifiés.
+    const { unit, rates } = await loadPricing();
+    const countryCode = String(customer.pays || customer.country || 'FR').toUpperCase().slice(0, 2);
+    const ship = rates[countryCode] != null ? Number(rates[countryCode]) : (rates.FR ?? 3.50);
     const subtotal = qty * unit;
     const total = subtotal + ship;
 
@@ -149,7 +185,15 @@ function mapCountry(input) {
   const map = {
     FR: 'France', BE: 'Belgique', CH: 'Suisse',
     LU: 'Luxembourg', DE: 'Allemagne', IT: 'Italie',
-    ES: 'Espagne', NL: 'Pays-Bas', PT: 'Portugal'
+    ES: 'Espagne', NL: 'Pays-Bas', PT: 'Portugal',
+    AT: 'Autriche', IE: 'Irlande', DK: 'Danemark',
+    SE: 'Suède', FI: 'Finlande', NO: 'Norvège',
+    PL: 'Pologne', CZ: 'Tchéquie', SK: 'Slovaquie',
+    HU: 'Hongrie', RO: 'Roumanie', BG: 'Bulgarie',
+    GR: 'Grèce', HR: 'Croatie', SI: 'Slovénie',
+    EE: 'Estonie', LV: 'Lettonie', LT: 'Lituanie',
+    MT: 'Malte', CY: 'Chypre', GB: 'Royaume-Uni',
+    MC: 'Monaco'
   };
   return map[String(input).toUpperCase()] || input;
 }

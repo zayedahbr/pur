@@ -1861,6 +1861,7 @@
 </style>
 <!-- ColorThief v2 (palette extraction) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.7.0/color-thief.umd.js"></script>
+<script src="/assets/js/i18n.js"></script>
 </head>
 <body>
 
@@ -1869,16 +1870,20 @@
   <div class="nav-row">
     <a href="/" class="nav-brand-link" aria-label="PureSpec - Accueil">PureSpec</a>
     <div class="nav-links-row" id="navLinksRow">
-      <a href="#atelier" class="nav-link">Atelier</a>
-      <a href="#story" class="nav-link">Philosophie</a>
-      <a href="/registry" class="nav-link">Registry</a>
-      <a href="/contact" class="nav-link">Contact</a>
+      <a href="#atelier" class="nav-link" data-i18n="nav.atelier">Atelier</a>
+      <a href="#story" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
+      <a href="/registry" class="nav-link" data-i18n="nav.registry">Registry</a>
+      <a href="/contact" class="nav-link" data-i18n="nav.contact">Contact</a>
     </div>
     <div class="nav-actions-row">
+      <button type="button" id="langSwitchBtn" class="lang-switch" aria-label="Langue / Language">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span id="langSwitchLabel">FR</span>
+      </button>
       <a href="/account" class="nav-account" aria-label="Mon compte" id="navAccountIcon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <a href="#atelier" class="nav-cta">Concevoir</a>
+      <a href="#atelier" class="nav-cta" data-i18n="nav.cta">Concevoir</a>
       <button class="nav-burger" id="navBurger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navMobileMenu">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
       </button>
@@ -1895,14 +1900,14 @@
     </button>
   </div>
   <nav class="nav-mobile-body" aria-label="Liens principaux">
-    <a href="#atelier" class="nav-mobile-link" data-nav-close>Atelier</a>
-    <a href="#story" class="nav-mobile-link" data-nav-close>Philosophie</a>
-    <a href="/registry" class="nav-mobile-link" data-nav-close>Registry</a>
-    <a href="/contact" class="nav-mobile-link" data-nav-close>Contact</a>
-    <a href="/account" class="nav-mobile-link" data-nav-close>Mon compte</a>
+    <a href="#atelier" class="nav-mobile-link" data-nav-close data-i18n="nav.atelier">Atelier</a>
+    <a href="#story" class="nav-mobile-link" data-nav-close data-i18n="nav.philosophy">Philosophie</a>
+    <a href="/registry" class="nav-mobile-link" data-nav-close data-i18n="nav.registry">Registry</a>
+    <a href="/contact" class="nav-mobile-link" data-nav-close data-i18n="nav.contact">Contact</a>
+    <a href="/account" class="nav-mobile-link" data-nav-close data-i18n="nav.account">Mon compte</a>
   </nav>
   <div class="nav-mobile-footer">
-    <a href="#atelier" class="btn-hero-primary" data-nav-close>Concevoir le mien</a>
+    <a href="#atelier" class="btn-hero-primary" data-nav-close data-i18n="hero.cta.primary">Concevoir le mien</a>
   </div>
 </div>
 
@@ -1913,19 +1918,20 @@
 <section class="hero-wrap page-home" aria-label="Présentation PureSpec">
   <div class="hero-inner">
     <div class="hero-copy animate-fade-up">
-      <span class="hero-eyebrow">PureSpec — Édition 2026</span>
+      <span class="hero-eyebrow" data-i18n="hero.eyebrow">PureSpec — Édition 2026</span>
       <h1 class="hero-title">
-        La signature<br>de votre build.<br>
-        <em>Discrète. Vérifiée.</em>
+        <span data-i18n="hero.title.l1">La signature</span><br>
+        <span data-i18n="hero.title.l2">de votre build.</span><br>
+        <em data-i18n="hero.title.em">Discrète. Vérifiée.</em>
       </h1>
-      <p class="hero-lead">
+      <p class="hero-lead" data-i18n="hero.lead">
         Un film électrostatique haute définition conçu pour se fondre dans votre pare-brise. Pas pour le couvrir.
       </p>
       <div class="hero-actions">
-        <a href="#atelier" class="btn-hero-primary">Concevoir le mien
+        <a href="#atelier" class="btn-hero-primary"><span data-i18n="hero.cta.primary">Concevoir le mien</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
-        <a href="#story" class="btn-hero-link">Découvrir la philosophie
+        <a href="#story" class="btn-hero-link"><span data-i18n="hero.cta.secondary">Découvrir la philosophie</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
       </div>
@@ -1946,20 +1952,20 @@
   <div class="hero-specs">
     <div class="hero-specs-inner">
       <div class="hero-spec-item">
-        <span class="hero-spec-label">Format</span>
+        <span class="hero-spec-label" data-i18n="hero.spec.format">Format</span>
         <span class="hero-spec-value">48 × 71,8 mm</span>
       </div>
       <div class="hero-spec-item">
-        <span class="hero-spec-label">Pose</span>
-        <span class="hero-spec-value">Électrostatique</span>
+        <span class="hero-spec-label" data-i18n="hero.spec.pose">Pose</span>
+        <span class="hero-spec-value" data-i18n="hero.spec.pose.value">Électrostatique</span>
       </div>
       <div class="hero-spec-item">
-        <span class="hero-spec-label">Référence</span>
-        <span class="hero-spec-value">Unique à 8 caractères</span>
+        <span class="hero-spec-label" data-i18n="hero.spec.ref">Référence</span>
+        <span class="hero-spec-value" data-i18n="hero.spec.ref.value">Gravée sur la tranche</span>
       </div>
       <div class="hero-spec-item">
-        <span class="hero-spec-label">Garantie</span>
-        <span class="hero-spec-value">Registry à vie</span>
+        <span class="hero-spec-label" data-i18n="hero.spec.warranty">Garantie</span>
+        <span class="hero-spec-value" data-i18n="hero.spec.warranty.value">Registry à vie</span>
       </div>
     </div>
   </div>
@@ -1970,10 +1976,10 @@
 <section id="atelier" class="pt-20 md:pt-28 pb-24 px-6 page-home">
   <div class="max-w-[1200px] mx-auto">
 
-    <div class="text-center mb-12 md:mb-16">
-      <p class="text-sm font-semibold tracking-widest uppercase text-apple-gray">L'Expérience</p>
-      <h2 class="headline-lg text-[40px] md:text-[56px] text-apple-ink mt-3">L'Atelier.</h2>
-      <p class="subhead text-lg md:text-xl text-apple-ink/60 mt-4 max-w-xl mx-auto">L'échantillonnage de précision. En temps réel.</p>
+    <div class="text-center mb-14 md:mb-20">
+      <p class="text-[11px] font-semibold tracking-[0.16em] uppercase text-apple-gray mb-5" data-i18n="atelier.eyebrow">L'EXPÉRIENCE</p>
+      <h2 class="headline-lg text-[44px] md:text-[64px] text-apple-ink" style="letter-spacing:-0.04em;line-height:0.98" data-i18n="atelier.title">L'Atelier.</h2>
+      <p class="subhead text-lg md:text-xl text-apple-ink/55 mt-5 max-w-xl mx-auto" style="font-weight:400;letter-spacing:-0.01em" data-i18n="atelier.sub">L'échantillonnage de précision. En temps réel.</p>
     </div>
 
     <div class="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-16">
@@ -2439,8 +2445,8 @@
       <div class="story-card-body">
         <div class="story-card-eyebrow">Authenticité</div>
         <h3 class="story-card-title">Une référence.<br>Un build.</h3>
-        <p class="story-card-text">Chaque création reçoit un numéro de série unique à 8 caractères gravé sur sa tranche. Une archive vérifiable à vie dans le PureSpec Registry.</p>
-        <a href="#/registry" data-route="registry" class="story-card-link">Ouvrir le registre →</a>
+        <p class="story-card-text">Chaque création reçoit un numéro de série unique gravé sur sa tranche. Une archive vérifiable à vie dans le PureSpec Registry.</p>
+        <a href="/registry" class="story-card-link">Ouvrir le registre →</a>
       </div>
       <div class="story-card-visual story-visual-ref">
         <div class="ref-tag">P0789453</div>
@@ -2494,20 +2500,24 @@
         </ul>
       </div>
       <div>
-        <div class="text-xs font-semibold text-apple-ink uppercase tracking-wider mb-3">Légal</div>
+        <div class="text-xs font-semibold text-apple-ink uppercase tracking-wider mb-3" data-i18n="footer.legal">Légal</div>
         <ul class="space-y-2 text-apple-gray">
-          <li><a href="/contact#legal" class="hover:text-apple-ink transition">Mentions légales</a></li>
-          <li><a href="/contact#cgv" class="hover:text-apple-ink transition">CGV</a></li>
+          <li><a href="/legal" class="hover:text-apple-ink transition" data-i18n="footer.legal.mentions">Mentions légales</a></li>
+          <li><a href="/cgv" class="hover:text-apple-ink transition" data-i18n="footer.legal.cgv">CGV</a></li>
+          <li><a href="#" onclick="event.preventDefault();window.openCookieSettings&&window.openCookieSettings()" class="hover:text-apple-ink transition" data-i18n="footer.legal.cookies">Gérer les cookies</a></li>
         </ul>
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-apple-gray">
-      <div class="flex items-center gap-3">
-        <span class="font-semibold text-apple-ink tracking-tight" style="letter-spacing:-0.02em">PureSpec</span>
-        <span>© 2026 — Tous droits réservés.</span>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-sm text-apple-gray">
+      <div>
+        <div class="flex items-center gap-3 mb-1">
+          <span class="font-semibold text-apple-ink tracking-tight" style="letter-spacing:-0.02em">PureSpec</span>
+          <span>© 2026 — <span data-i18n="footer.rights">Tous droits réservés.</span></span>
+        </div>
+        <div class="text-xs" style="opacity:0.75">PURESPEC · SIREN 949 143 101 · <span data-i18n="legal.vat.shortnote">TVA non applicable, art. 293 B du CGI</span></div>
       </div>
-      <div class="text-xs">Conçu en France · Imprimé avec précision</div>
+      <div class="text-xs" data-i18n="footer.tagline">Conçu en France · Imprimé avec précision</div>
     </div>
   </div>
 </footer>
@@ -2518,8 +2528,8 @@
     <div id="orderStep1" class="p-8">
       <div class="flex justify-between items-start mb-6">
         <div>
-          <p class="text-xs font-semibold tracking-widest uppercase text-apple-gray">Étape 1 / 3</p>
-          <h2 class="text-3xl font-bold text-apple-ink mt-2 tracking-tight">Votre commande</h2>
+          <p class="text-xs font-semibold tracking-widest uppercase text-apple-gray" data-i18n="order.step1.eyebrow">Étape 1 / 3</p>
+          <h2 class="text-3xl font-bold text-apple-ink mt-2 tracking-tight" data-i18n="order.step1.title">Votre commande</h2>
         </div>
         <button onclick="closeOrderModal()" class="w-9 h-9 rounded-full bg-apple-bg hover:bg-apple-line transition flex items-center justify-center">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -2536,7 +2546,7 @@
       </div>
 
       <div class="mb-6">
-        <label class="apple-label">Quantité</label>
+        <label class="apple-label" data-i18n="order.step1.qty">Quantité</label>
         <div class="flex items-center gap-4 bg-apple-bg rounded-2xl p-2 w-fit">
           <button onclick="updateQty(-1)" class="w-10 h-10 rounded-full bg-white shadow-sm hover:bg-gray-50 transition flex items-center justify-center">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -2549,17 +2559,17 @@
       </div>
 
       <div class="mb-6">
-        <label class="apple-label mb-3">Récapitulatif de configuration</label>
+        <label class="apple-label mb-3" data-i18n="order.step1.recap">Récapitulatif de configuration</label>
         <div class="bg-apple-bg rounded-2xl p-5" id="orderSummaryDetails"></div>
       </div>
 
       <div class="flex justify-between items-center py-4 border-t border-apple-line">
-        <span class="text-apple-gray">Total</span>
+        <span class="text-apple-gray" data-i18n="order.step1.total">Total</span>
         <span class="text-2xl font-bold text-apple-ink" id="orderTotal">9,90 €</span>
       </div>
 
       <button class="btn-primary-apple w-full mt-6 py-5" onclick="goToOrderAuth()">
-        Continuer
+        <span data-i18n="order.step1.continue">Continuer</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </button>
     </div>
@@ -2598,12 +2608,6 @@
             <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.6l6.2 5.2C40.7 35.4 44 30.1 44 24c0-1.3-.1-2.4-.4-3.5z"/>
           </svg>
           Continuer avec Google
-        </button>
-        <button type="button" class="social-btn social-btn-apple" onclick="startOAuth('apple')">
-          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-            <path d="M16.365 1.43c0 1.14-.464 2.225-1.224 3.012-.825.85-2.166 1.508-3.283 1.417-.13-1.12.435-2.288 1.198-3.078.85-.886 2.282-1.55 3.31-1.351zm4.293 17.108c-.616 1.432-.91 2.072-1.706 3.34-.96 1.516-2.314 3.4-3.99 3.41-1.49.014-1.874-.967-3.897-.957-2.024.011-2.447.974-3.937.96-1.677-.014-2.962-1.71-3.922-3.226C2.74 18.853 1.55 14.34 3.04 11.42c1.06-2.077 2.733-3.39 4.305-3.39 1.62 0 2.633 1.06 3.97 1.06 1.295 0 2.083-1.062 3.95-1.062 1.413 0 2.91.77 3.974 2.097-3.495 1.913-2.926 6.91 1.42 8.413z"/>
-          </svg>
-          Continuer avec Apple
         </button>
       </div>
 
@@ -2657,7 +2661,7 @@
             Créer mon compte et continuer
           </button>
           <p class="text-xs text-apple-gray mt-2 text-center leading-relaxed">
-            En créant un compte vous acceptez nos <a href="/contact#cgv" class="underline hover:text-apple-ink">CGV</a> et notre <a href="/contact#legal" class="underline hover:text-apple-ink">politique de confidentialité</a>.
+            En créant un compte vous acceptez nos <a href="/cgv" class="underline hover:text-apple-ink">CGV</a> et notre <a href="/legal" class="underline hover:text-apple-ink">politique de confidentialité</a>.
           </p>
         </form>
       </div>
@@ -2668,10 +2672,10 @@
         <div>
           <button onclick="backToAuthFromStep2()" class="flex items-center gap-1 text-sm text-apple-gray hover:text-apple-ink transition mb-2">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            Retour
+            <span data-i18n="back">Retour</span>
           </button>
-          <p class="text-xs font-semibold tracking-widest uppercase text-apple-gray">Étape 3 / 3</p>
-          <h2 class="text-3xl font-bold text-apple-ink mt-2 tracking-tight">Livraison</h2>
+          <p class="text-xs font-semibold tracking-widest uppercase text-apple-gray" data-i18n="order.ship.eyebrow">Étape 3 / 3</p>
+          <h2 class="text-3xl font-bold text-apple-ink mt-2 tracking-tight" data-i18n="order.ship.title">Livraison</h2>
         </div>
         <button onclick="closeOrderModal()" class="w-9 h-9 rounded-full bg-apple-bg hover:bg-apple-line transition flex items-center justify-center">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -2688,40 +2692,66 @@
         <button type="button" class="text-xs underline text-apple-gray hover:text-apple-ink" onclick="logoutFromOrder()">Changer de compte</button>
       </div>
 
-      <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-4">
+      <form id="orderForm" onsubmit="confirmBeforeOrder(event)" class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
-          <div><label class="apple-label">Prénom</label><input type="text" class="apple-input" name="firstname" required></div>
-          <div><label class="apple-label">Nom</label><input type="text" class="apple-input" name="lastname" required></div>
+          <div><label class="apple-label" data-i18n="order.ship.first">Prénom</label><input type="text" class="apple-input" name="firstname" required></div>
+          <div><label class="apple-label" data-i18n="order.ship.last">Nom</label><input type="text" class="apple-input" name="lastname" required></div>
         </div>
-        <div><label class="apple-label">Email</label><input type="email" class="apple-input" name="email" required></div>
-        <div><label class="apple-label">Téléphone</label><input type="tel" class="apple-input" name="phone" required></div>
-        <div><label class="apple-label">Adresse</label><input type="text" class="apple-input" name="address" required></div>
+        <div><label class="apple-label" data-i18n="order.ship.email">Email</label><input type="email" class="apple-input" name="email" required></div>
+        <div><label class="apple-label" data-i18n="order.ship.phone">Téléphone</label><input type="tel" class="apple-input" name="phone" required></div>
+        <div><label class="apple-label" data-i18n="order.ship.addr">Adresse</label><input type="text" class="apple-input" name="address" required></div>
         <div class="grid grid-cols-3 gap-4">
-          <div class="col-span-1"><label class="apple-label">Code postal</label><input type="text" class="apple-input" name="postcode" required></div>
-          <div class="col-span-2"><label class="apple-label">Ville</label><input type="text" class="apple-input" name="city" required></div>
+          <div class="col-span-1"><label class="apple-label" data-i18n="order.ship.zip">Code postal</label><input type="text" class="apple-input" name="postcode" required></div>
+          <div class="col-span-2"><label class="apple-label" data-i18n="order.ship.city">Ville</label><input type="text" class="apple-input" name="city" required></div>
         </div>
         <div>
-          <label class="apple-label">Pays</label>
-          <select class="apple-input" name="country" required>
+          <label class="apple-label" data-i18n="order.ship.country">Pays</label>
+          <select class="apple-input" name="country" id="orderCountry" required onchange="updateShippingForCountry()">
             <option value="FR" selected>France</option>
-            <option value="BE">Belgique</option>
-            <option value="CH">Suisse</option>
+            <option value="BE">Belgique / Belgium</option>
             <option value="LU">Luxembourg</option>
-            <option value="DE">Allemagne</option>
+            <option value="CH">Suisse / Switzerland</option>
+            <option value="DE">Allemagne / Germany</option>
+            <option value="AT">Autriche / Austria</option>
+            <option value="NL">Pays-Bas / Netherlands</option>
+            <option value="IT">Italie / Italy</option>
+            <option value="ES">Espagne / Spain</option>
+            <option value="PT">Portugal</option>
+            <option value="IE">Irlande / Ireland</option>
+            <option value="DK">Danemark / Denmark</option>
+            <option value="SE">Suède / Sweden</option>
+            <option value="FI">Finlande / Finland</option>
+            <option value="NO">Norvège / Norway</option>
+            <option value="PL">Pologne / Poland</option>
+            <option value="CZ">Tchéquie / Czech Republic</option>
+            <option value="SK">Slovaquie / Slovakia</option>
+            <option value="HU">Hongrie / Hungary</option>
+            <option value="RO">Roumanie / Romania</option>
+            <option value="BG">Bulgarie / Bulgaria</option>
+            <option value="GR">Grèce / Greece</option>
+            <option value="HR">Croatie / Croatia</option>
+            <option value="SI">Slovénie / Slovenia</option>
+            <option value="EE">Estonie / Estonia</option>
+            <option value="LV">Lettonie / Latvia</option>
+            <option value="LT">Lituanie / Lithuania</option>
+            <option value="MT">Malte / Malta</option>
+            <option value="CY">Chypre / Cyprus</option>
+            <option value="GB">Royaume-Uni / United Kingdom</option>
+            <option value="MC">Monaco</option>
           </select>
         </div>
 
         <div class="pt-4 border-t border-apple-line">
-          <div class="flex justify-between items-center py-2"><span class="text-apple-gray text-sm">Sous-total</span><span class="text-apple-ink font-medium text-sm" id="orderSubtotal">9,90 €</span></div>
-          <div class="flex justify-between items-center py-2"><span class="text-apple-gray text-sm">Livraison</span><span class="text-apple-ink font-medium text-sm">3,50 €</span></div>
-          <div class="flex justify-between items-center py-3 border-t border-apple-line"><span class="text-apple-ink font-semibold">Total TTC</span><span class="text-2xl font-bold text-apple-ink" id="orderGrandTotal">13,40 €</span></div>
+          <div class="flex justify-between items-center py-2"><span class="text-apple-gray text-sm" data-i18n="order.ship.subtotal">Sous-total</span><span class="text-apple-ink font-medium text-sm" id="orderSubtotal">9,90 €</span></div>
+          <div class="flex justify-between items-center py-2"><span class="text-apple-gray text-sm" data-i18n="order.ship.shipping">Livraison</span><span class="text-apple-ink font-medium text-sm" id="orderShipping">3,50 €</span></div>
+          <div class="flex justify-between items-center py-3 border-t border-apple-line"><span class="text-apple-ink font-semibold" data-i18n="order.ship.total">Total TTC</span><span class="text-2xl font-bold text-apple-ink" id="orderGrandTotal">13,40 €</span></div>
         </div>
 
         <button type="submit" class="btn-primary-apple w-full py-5">
-          Passer la commande
+          <span data-i18n="order.ship.submit">Passer la commande</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </button>
-        <p class="text-xs text-apple-gray text-center">Paiement sécurisé · Livraison sous 5 à 7 jours ouvrés</p>
+        <p class="text-xs text-apple-gray text-center" data-i18n="order.ship.note">Paiement sécurisé · Livraison sous 5 à 7 jours ouvrés</p>
       </form>
     </div>
 
@@ -2739,67 +2769,79 @@
           </svg>
         </div>
 
-        <p class="success-eyebrow">PAIEMENT CONFIRMÉ</p>
-        <h2 class="success-title">Merci.</h2>
-        <p class="success-subtitle">Votre PureSpec est en route.</p>
+        <p class="success-eyebrow" data-i18n="success.eyebrow">PAIEMENT CONFIRMÉ</p>
+        <h2 class="success-title" data-i18n="success.title">Merci.</h2>
 
         <div class="success-detail-card">
           <div class="success-detail-row">
-            <span class="success-detail-label">N° de commande</span>
-            <span class="success-detail-value" id="orderNumber">PW-000000</span>
+            <span class="success-detail-label" data-i18n="success.label.order">N° de commande</span>
+            <span class="success-detail-value" id="orderNumber">#000000</span>
           </div>
           <div class="success-detail-divider"></div>
           <div class="success-detail-row">
-            <span class="success-detail-label">Référence sticker</span>
+            <span class="success-detail-label" data-i18n="success.label.ref">Référence sticker</span>
             <span class="success-detail-value success-detail-mono" id="orderStickerRef">—</span>
           </div>
           <div class="success-detail-divider"></div>
           <div class="success-detail-row">
-            <span class="success-detail-label">Livraison estimée</span>
+            <span class="success-detail-label" data-i18n="success.label.delivery">Livraison estimée</span>
             <span class="success-detail-value" id="orderDeliveryEstimate">5 à 7 jours ouvrés</span>
-          </div>
-        </div>
-
-        <div class="success-timeline">
-          <div class="success-timeline-step is-done">
-            <div class="success-timeline-dot"></div>
-            <div class="success-timeline-text">
-              <div class="success-timeline-title">Commande confirmée</div>
-              <div class="success-timeline-sub">À l'instant</div>
-            </div>
-          </div>
-          <div class="success-timeline-step">
-            <div class="success-timeline-dot"></div>
-            <div class="success-timeline-text">
-              <div class="success-timeline-title">Impression UV</div>
-              <div class="success-timeline-sub">Sous 48 h</div>
-            </div>
-          </div>
-          <div class="success-timeline-step">
-            <div class="success-timeline-dot"></div>
-            <div class="success-timeline-text">
-              <div class="success-timeline-title">Expédition</div>
-              <div class="success-timeline-sub">Email avec le suivi</div>
-            </div>
           </div>
         </div>
 
         <p class="success-email-note">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Un récapitulatif a été envoyé à <span id="orderConfirmEmail" class="success-email-strong">votre email</span>.
+          <span data-i18n="success.email">Un récapitulatif a été envoyé à</span> <span id="orderConfirmEmail" class="success-email-strong" data-i18n="success.email.fallback">votre email</span>.
         </p>
 
-        <button onclick="closeOrderModal()" class="success-cta">
+        <button onclick="closeOrderModal()" class="success-cta" data-i18n="success.cta">
           C'est parfait
         </button>
 
-        <p class="success-footer-note">Une question&nbsp;? <a href="mailto:hello@purespec.fr">hello@purespec.fr</a></p>
+        <p class="success-footer-note"><span data-i18n="success.help">Une question&nbsp;?</span> <a href="/contact" data-i18n="success.help.link">Contactez-nous</a></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============ MODAL PIPETTE / PHOTO COULEUR ============ -->
+<!-- ============ MODAL DE CONFIRMATION DE COMMANDE (avant Stripe) ============ -->
+<div class="modal-overlay" id="confirmOrderModal" onclick="if(event.target===this)cancelOrderConfirm()" style="z-index:1200">
+  <div class="modal-content" style="max-width:480px">
+    <div class="p-8">
+      <div class="flex items-center gap-3 mb-5">
+        <div style="width:44px;height:44px;border-radius:999px;background:#fff4cc;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#946800" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-semibold tracking-widest uppercase text-apple-gray" data-i18n="confirm.eyebrow">Dernière vérification</p>
+          <h3 class="text-xl font-bold text-apple-ink mt-1" style="letter-spacing:-0.02em" data-i18n="confirm.title">Tout est bon&nbsp;?</h3>
+        </div>
+      </div>
+
+      <p class="text-sm text-apple-ink/70 mb-5" style="line-height:1.55" data-i18n="confirm.lead">
+        Votre sticker sera produit <strong>exactement</strong> selon ces informations. Une fois la commande validée, aucune modification n'est possible — chaque sticker est gravé à la commande.
+      </p>
+
+      <div class="bg-apple-bg rounded-2xl p-4 mb-5" style="font-size:13.5px">
+        <div class="flex justify-between py-1.5"><span class="text-apple-gray" data-i18n="confirm.row.vehicle">Véhicule</span><span class="font-medium text-apple-ink" id="confirmVehicle">—</span></div>
+        <div class="flex justify-between py-1.5"><span class="text-apple-gray" data-i18n="confirm.row.engine">Moteur</span><span class="font-medium text-apple-ink" id="confirmEngine">—</span></div>
+        <div class="flex justify-between py-1.5"><span class="text-apple-gray" data-i18n="confirm.row.color">Couleur</span><span class="font-medium text-apple-ink flex items-center gap-2" id="confirmColor">—</span></div>
+        <div class="flex justify-between py-1.5"><span class="text-apple-gray" data-i18n="confirm.row.ref">Référence</span><span class="font-medium text-apple-ink font-mono" id="confirmRef" style="font-size:12.5px">—</span></div>
+        <div class="flex justify-between py-1.5"><span class="text-apple-gray" data-i18n="confirm.row.qty">Quantité</span><span class="font-medium text-apple-ink" id="confirmQty">—</span></div>
+        <div class="flex justify-between py-2 mt-1 border-t border-apple-line"><span class="text-apple-ink font-semibold" data-i18n="confirm.row.total">Total TTC</span><span class="font-bold text-apple-ink" id="confirmTotal">—</span></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" onclick="cancelOrderConfirm()" class="flex-1 py-3.5 rounded-full bg-apple-bg hover:bg-apple-line transition font-medium text-apple-ink" style="font-size:15px" data-i18n="confirm.btn.review">
+          Vérifier
+        </button>
+        <button type="button" onclick="proceedOrderConfirm()" id="confirmProceedBtn" class="flex-1 py-3.5 rounded-full bg-apple-ink hover:bg-black transition font-medium text-white" style="font-size:15px" data-i18n="confirm.btn.confirm">
+          Oui, valider
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="eyedropper-modal" id="eyedropperModal" role="dialog" aria-modal="true" aria-labelledby="edTitle">
   <div class="eyedropper-panel">
     <div class="eyedropper-header">
@@ -2888,8 +2930,53 @@ let currentTxtMode = 'white';
 let qty = 1;
 let currentStep = 1;
 const TOTAL_STEPS = 6;
-const UNIT_PRICE = 9.90;
-const SHIPPING = 3.50;
+let UNIT_PRICE = 9.90;
+let SHIPPING = 3.50;
+let SHIPPING_RATES = { FR: 3.50 };
+let CURRENT_COUNTRY = 'FR';
+
+// Récupère la grille tarifaire dynamique depuis l'API et met à jour les affichages
+async function loadPricing() {
+  try {
+    const r = await fetch('/api/pricing', { credentials: 'omit' });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (typeof data.unit_price_eur === 'number') UNIT_PRICE = data.unit_price_eur;
+    if (data.shipping_rates && typeof data.shipping_rates === 'object') SHIPPING_RATES = data.shipping_rates;
+    // Fallback FR si la grille ne contient pas le pays courant
+    SHIPPING = SHIPPING_RATES[CURRENT_COUNTRY] != null ? SHIPPING_RATES[CURRENT_COUNTRY]
+             : (SHIPPING_RATES.FR != null ? SHIPPING_RATES.FR : SHIPPING);
+    // Met à jour l'affichage si la modal commande est ouverte
+    if (typeof updateOrderSummary === 'function') updateOrderSummary();
+  } catch (err) {
+    console.warn('[pricing] fallback statique :', err.message);
+  }
+}
+
+// Recalcule le shipping quand le pays change dans le formulaire de livraison
+function updateShippingForCountry() {
+  const sel = document.getElementById('orderCountry');
+  if (!sel) return;
+  CURRENT_COUNTRY = sel.value || 'FR';
+  if (SHIPPING_RATES[CURRENT_COUNTRY] != null) SHIPPING = SHIPPING_RATES[CURRENT_COUNTRY];
+  else SHIPPING = SHIPPING_RATES.FR != null ? SHIPPING_RATES.FR : SHIPPING;
+  // Met à jour le récap step 1 ET les lignes step 3
+  if (typeof updateOrderSummary === 'function') updateOrderSummary();
+  // Lignes spécifiques au step 3
+  const shipEl = document.getElementById('orderShipping');
+  if (shipEl) shipEl.textContent = SHIPPING.toFixed(2).replace('.', ',') + ' €';
+  const subEl = document.getElementById('orderSubtotal');
+  if (subEl) subEl.textContent = (qty * UNIT_PRICE).toFixed(2).replace('.', ',') + ' €';
+  const totalEl = document.getElementById('orderGrandTotal');
+  if (totalEl) totalEl.textContent = (qty * UNIT_PRICE + SHIPPING).toFixed(2).replace('.', ',') + ' €';
+}
+
+// Charge le pricing au démarrage
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadPricing);
+} else {
+  loadPricing();
+}
 
 // ============ SETTER GÉNÉRIQUE ============
 function setUpper(field, inputEl) {
@@ -3990,6 +4077,75 @@ function refreshNavAccountIcon(user) {
   ic.style.background = '#e8e8ed';
 }
 
+// ====== CONFIRMATION COMMANDE (avant Stripe) ======
+let _pendingOrderEvent = null;
+
+function confirmBeforeOrder(e) {
+  e.preventDefault();
+  // Valide le form HTML5 d'abord
+  if (!e.target.checkValidity()) {
+    e.target.reportValidity();
+    return;
+  }
+  _pendingOrderEvent = { target: e.target };
+
+  // Récapitulatif : on lit la config actuelle pour l'afficher
+  const cfg = getConfigData();
+  const t = (window._t || (k => k));
+  document.getElementById('confirmVehicle').textContent = [cfg.marque, cfg.modele, cfg.type].filter(Boolean).join(' ');
+  document.getElementById('confirmEngine').textContent = cfg.moteur || '—';
+  const colorEl = document.getElementById('confirmColor');
+  colorEl.innerHTML = '';
+  if (cfg.bgColor) {
+    const chip = document.createElement('span');
+    chip.style.cssText = `display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,0.1);background:${cfg.bgColor}`;
+    colorEl.appendChild(chip);
+  }
+  const colorTxt = document.createElement('span');
+  colorTxt.textContent = (cfg.nomcouleur || '—') + (cfg.codecouleur ? ` (${cfg.codecouleur})` : '');
+  colorEl.appendChild(colorTxt);
+  document.getElementById('confirmRef').textContent = cfg.ref || '—';
+  document.getElementById('confirmQty').textContent = String(qty);
+  document.getElementById('confirmTotal').textContent =
+    document.getElementById('orderGrandTotal').textContent;
+
+  document.getElementById('confirmOrderModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function cancelOrderConfirm() {
+  document.getElementById('confirmOrderModal').classList.remove('show');
+  document.body.style.overflow = '';
+  _pendingOrderEvent = null;
+}
+
+function proceedOrderConfirm() {
+  const btn = document.getElementById('confirmProceedBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = (window._t ? window._t('confirm.btn.loading') : 'Redirection…');
+  }
+  if (!_pendingOrderEvent) {
+    cancelOrderConfirm();
+    return;
+  }
+  const evt = _pendingOrderEvent;
+  // submitOrder s'occupe de la suite ; on simule juste un preventDefault déjà fait
+  submitOrder({
+    preventDefault: () => {},
+    target: evt.target
+  }).finally(() => {
+    // Si on est encore sur la page (erreur), on rouvre le formulaire
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = (window._t ? window._t('confirm.btn.confirm') : 'Oui, valider');
+    }
+    document.getElementById('confirmOrderModal').classList.remove('show');
+    document.body.style.overflow = '';
+    _pendingOrderEvent = null;
+  });
+}
+
 async function submitOrder(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
@@ -4063,7 +4219,7 @@ async function submitOrder(e) {
   const params = new URLSearchParams(window.location.search);
   if (params.get('success') === '1') {
     const ref = params.get('ref') || '';
-    const orderNum = params.get('order') || ('PW-' + Date.now().toString().slice(-6));
+    const orderNum = params.get('order') || ('#' + Date.now().toString().slice(-6));
     const email = params.get('email') || '';
 
     setTimeout(() => {

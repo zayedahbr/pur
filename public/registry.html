@@ -174,16 +174,16 @@
   <div class="nav-inner">
     <a href="/" class="nav-brand">PureSpec</a>
     <div class="nav-links">
-      <a href="/#atelier" class="nav-link">Atelier</a>
-      <a href="/#story" class="nav-link">Philosophie</a>
-      <a href="/registry" class="nav-link active">Registry</a>
-      <a href="/contact" class="nav-link">Contact</a>
+      <a href="/#atelier" class="nav-link" data-i18n="nav.atelier">Atelier</a>
+      <a href="/#story" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
+      <a href="/registry" class="nav-link active" data-i18n="nav.registry">Registry</a>
+      <a href="/contact" class="nav-link" data-i18n="nav.contact">Contact</a>
     </div>
     <div class="nav-actions">
       <a href="/account" class="nav-account" id="navAccountIcon" aria-label="Mon compte">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <a href="/#atelier" class="nav-cta">Concevoir</a>
+      <a href="/#atelier" class="nav-cta" data-i18n="nav.cta">Concevoir</a>
     </div>
   </div>
 </nav>
@@ -192,13 +192,9 @@
 <main>
   <section class="page-hero">
     <div class="page-hero-inner">
-      <div class="page-hero-eyebrow">
-        <span class="page-hero-dot"></span>
-        PureSpec Registry · Officiel
-      </div>
-      <h1 class="page-hero-title">Le PureSpec<br>Registry.</h1>
-      <p class="page-hero-lead">
-        Chaque création reçoit un numéro de série unique à 8 caractères gravé sur sa tranche. Une archive vérifiable à vie pour confirmer l'authenticité de votre configuration.
+      <h1 class="page-hero-title" data-i18n="registry.title">Le PureSpec<br>Registry.</h1>
+      <p class="page-hero-lead" data-i18n="registry.lead">
+        Chaque création reçoit un numéro de série unique gravé sur sa tranche. Une archive vérifiable à vie pour confirmer l'authenticité de votre configuration.
       </p>
     </div>
   </section>
@@ -237,27 +233,6 @@
     <div id="verifyResult" class="hidden"></div>
   </div>
 
-  <div class="px-6">
-    <div class="registry-trust">
-      <div class="registry-trust-grid">
-        <div class="registry-trust-item">
-          <div class="registry-trust-num">8</div>
-          <div class="registry-trust-text">caractères uniques par sticker</div>
-        </div>
-        <div class="registry-trust-divider"></div>
-        <div class="registry-trust-item">
-          <div class="registry-trust-num">∞</div>
-          <div class="registry-trust-text">conservé à vie dans le registre</div>
-        </div>
-        <div class="registry-trust-divider"></div>
-        <div class="registry-trust-item">
-          <div class="registry-trust-num">100%</div>
-          <div class="registry-trust-text">des PureSpec imprimés y figurent</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div style="height: 100px"></div>
 </main>
 
@@ -265,41 +240,46 @@
   <div class="footer-inner">
     <div class="footer-cols">
       <div class="footer-col">
-        <div class="footer-col-title">Produit</div>
+        <div class="footer-col-title" data-i18n="footer.product">Produit</div>
         <ul>
-          <li><a href="/#atelier">Atelier</a></li>
-          <li><a href="/#story">Philosophie</a></li>
-          <li><a href="/registry">Registry</a></li>
+          <li><a href="/#atelier" data-i18n="nav.atelier">Atelier</a></li>
+          <li><a href="/#story" data-i18n="nav.philosophy">Philosophie</a></li>
+          <li><a href="/registry" data-i18n="nav.registry">Registry</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Compte</div>
+        <div class="footer-col-title" data-i18n="footer.account">Compte</div>
         <ul>
-          <li><a href="/account">Se connecter</a></li>
-          <li><a href="/dashboard">Mes commandes</a></li>
+          <li><a href="/account" data-i18n="footer.signin">Se connecter</a></li>
+          <li><a href="/dashboard" data-i18n="footer.orders">Mes commandes</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Aide</div>
+        <div class="footer-col-title" data-i18n="footer.help">Aide</div>
         <ul>
-          <li><a href="/contact">Contact</a></li>
+          <li><a href="/contact" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Légal</div>
+        <div class="footer-col-title" data-i18n="footer.legal">Légal</div>
         <ul>
-          <li><a href="/contact#legal">Mentions légales</a></li>
-          <li><a href="/contact#cgv">CGV</a></li>
+          <li><a href="/legal" data-i18n="footer.legal.mentions">Mentions légales</a></li>
+          <li><a href="/cgv" data-i18n="footer.legal.cgv">CGV</a></li>
+          <li><a href="#" onclick="event.preventDefault();window.openCookieSettings&&window.openCookieSettings()" data-i18n="footer.legal.cookies">Gérer les cookies</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div><span class="footer-brand">PureSpec</span> © 2026 — Tous droits réservés.</div>
-      <div class="text-xs">Conçu en France · Imprimé avec précision</div>
+      <div>
+        <span class="footer-brand">PureSpec</span> © 2026 — <span data-i18n="footer.rights">Tous droits réservés.</span><br>
+        <span class="text-xs" style="opacity:0.75">PURESPEC · SIREN 949 143 101 · <span data-i18n="legal.vat.shortnote">TVA non applicable, art. 293 B du CGI</span></span>
+      </div>
+      <div class="text-xs" data-i18n="footer.tagline">Conçu en France · Imprimé avec précision</div>
     </div>
   </div>
 </footer>
 
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/shared.js"></script>
 <script>
 function escapeHtml(s) {

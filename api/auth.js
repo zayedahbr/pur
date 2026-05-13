@@ -27,7 +27,6 @@ export default async function handler(req, res) {
     if (action === 'update-profile' && method === 'POST') return await updateProfile(req, res);
     if (action === 'change-password' && method === 'POST') return await changePassword(req, res);
     if (action === 'oauth-google' && method === 'GET') return await oauthStart(req, res, 'google');
-    if (action === 'oauth-apple' && method === 'GET') return await oauthStart(req, res, 'apple');
     if (action === 'oauth-callback' && method === 'GET') return await oauthCallback(req, res);
     return res.status(400).json({ error: 'Action inconnue' });
   } catch (err) {
@@ -37,20 +36,14 @@ export default async function handler(req, res) {
 }
 
 // ---------- OAUTH ----------
-// Note : pour activer Google/Apple, configurer dans Vercel les variables :
+// Note : pour activer Google, configurer dans Vercel les variables :
 //   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
-//   APPLE_CLIENT_ID, APPLE_TEAM_ID, APPLE_KEY_ID, APPLE_PRIVATE_KEY
-// La logique complète OAuth (échange code → user) reste à brancher.
 async function oauthStart(req, res, provider) {
   const siteUrl = process.env.SITE_URL || '';
   const ret = (req.query.return || '').toString();
 
   if (provider === 'google' && !process.env.GOOGLE_CLIENT_ID) {
     const msg = encodeURIComponent('Connexion Google non configurée. Utilisez l\'email pour l\'instant.');
-    return res.redirect(302, `${siteUrl}/?auth=error&msg=${msg}`);
-  }
-  if (provider === 'apple' && !process.env.APPLE_CLIENT_ID) {
-    const msg = encodeURIComponent('Connexion Apple non configurée. Utilisez l\'email pour l\'instant.');
     return res.redirect(302, `${siteUrl}/?auth=error&msg=${msg}`);
   }
 
@@ -71,17 +64,6 @@ async function oauthStart(req, res, provider) {
       prompt: 'select_account'
     });
     return res.redirect(302, `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
-  }
-  if (provider === 'apple') {
-    const params = new URLSearchParams({
-      client_id: process.env.APPLE_CLIENT_ID,
-      redirect_uri: redirectUri,
-      response_type: 'code',
-      scope: 'name email',
-      response_mode: 'form_post',
-      state
-    });
-    return res.redirect(302, `https://appleid.apple.com/auth/authorize?${params.toString()}`);
   }
   return res.status(400).json({ error: 'Provider inconnu' });
 }
@@ -129,16 +111,12 @@ async function oauthCallback(req, res) {
       prenom = payload.given_name || null;
       nom = payload.family_name || null;
       sub = payload.sub || null;
-    } else if (provider === 'apple') {
-      // Apple : nécessite un client_secret JWT signé avec une clé ES256 (APPLE_PRIVATE_KEY).
-      // Le code complet utilise la lib `jsonwebtoken` ou `jose`. Laissé en stub :
-      return fail('Connexion Apple bientôt disponible.');
     } else {
       return fail('Provider OAuth inconnu.');
     }
 
     // Upsert : recherche par sub, sinon par email
-    const subCol = provider === 'google' ? 'google_sub' : 'apple_sub';
+    const subCol = 'google_sub';
     let { data: customer } = await supabase
       .from('customers')
       .select('*')

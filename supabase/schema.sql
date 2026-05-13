@@ -115,7 +115,7 @@ CREATE SEQUENCE IF NOT EXISTS order_number_seq START 1;
 CREATE OR REPLACE FUNCTION set_order_number() RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.order_number IS NULL THEN
-    NEW.order_number := 'PW-' || LPAD(nextval('order_number_seq')::TEXT, 6, '0');
+    NEW.order_number := '#' || LPAD(nextval('order_number_seq')::TEXT, 6, '0');
   END IF;
   NEW.updated_at := NOW();
   RETURN NEW;
@@ -163,6 +163,32 @@ ALTER TABLE admin_users     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sessions        ENABLE ROW LEVEL SECURITY;
+
+-- ===== 7b. Paramètres (prix unité + grille livraison) =====
+CREATE TABLE IF NOT EXISTS app_settings (
+  key   TEXT PRIMARY KEY,
+  value JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE app_settings ENABLE ROW LEVEL SECURITY;
+
+-- Valeurs par défaut (prix sticker + grille de livraison par pays ISO-2)
+INSERT INTO app_settings(key, value)
+VALUES
+  ('unit_price_eur', '9.90'::jsonb),
+  ('shipping_rates', '{
+    "FR": 3.50,
+    "MC": 3.50,
+    "BE": 5.90, "LU": 5.90, "NL": 5.90, "DE": 5.90,
+    "IT": 6.90, "ES": 6.90, "PT": 6.90, "AT": 6.90,
+    "IE": 7.90, "DK": 7.90, "SE": 7.90, "FI": 7.90, "NO": 9.90,
+    "CH": 8.90,
+    "PL": 7.90, "CZ": 7.90, "SK": 7.90, "HU": 7.90, "RO": 7.90, "BG": 7.90,
+    "GR": 7.90, "HR": 7.90, "SI": 7.90,
+    "EE": 7.90, "LV": 7.90, "LT": 7.90, "MT": 9.90, "CY": 9.90,
+    "GB": 9.90
+  }'::jsonb)
+ON CONFLICT (key) DO NOTHING;
 
 -- ===== 8. Vue publique (pour /api/verify) =====
 CREATE OR REPLACE VIEW public_verify AS

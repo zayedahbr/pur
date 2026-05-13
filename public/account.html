@@ -160,12 +160,6 @@
               </svg>
               Continuer avec Google
             </button>
-            <button type="button" class="acc-social acc-social-apple" onclick="oauth('apple')">
-              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-                <path d="M16.365 1.43c0 1.14-.464 2.225-1.224 3.012-.825.85-2.166 1.508-3.283 1.417-.13-1.12.435-2.288 1.198-3.078.85-.886 2.282-1.55 3.31-1.351zm4.293 17.108c-.616 1.432-.91 2.072-1.706 3.34-.96 1.516-2.314 3.4-3.99 3.41-1.49.014-1.874-.967-3.897-.957-2.024.011-2.447.974-3.937.96-1.677-.014-2.962-1.71-3.922-3.226C2.74 18.853 1.55 14.34 3.04 11.42c1.06-2.077 2.733-3.39 4.305-3.39 1.62 0 2.633 1.06 3.97 1.06 1.295 0 2.083-1.062 3.95-1.062 1.413 0 2.91.77 3.974 2.097-3.495 1.913-2.926 6.91 1.42 8.413z"/>
-              </svg>
-              Continuer avec Apple
-            </button>
           </div>
 
           <div class="acc-or"><span>ou avec un email</span></div>
@@ -207,12 +201,6 @@
               </svg>
               S'inscrire avec Google
             </button>
-            <button type="button" class="acc-social acc-social-apple" onclick="oauth('apple')">
-              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-                <path d="M16.365 1.43c0 1.14-.464 2.225-1.224 3.012-.825.85-2.166 1.508-3.283 1.417-.13-1.12.435-2.288 1.198-3.078.85-.886 2.282-1.55 3.31-1.351zm4.293 17.108c-.616 1.432-.91 2.072-1.706 3.34-.96 1.516-2.314 3.4-3.99 3.41-1.49.014-1.874-.967-3.897-.957-2.024.011-2.447.974-3.937.96-1.677-.014-2.962-1.71-3.922-3.226C2.74 18.853 1.55 14.34 3.04 11.42c1.06-2.077 2.733-3.39 4.305-3.39 1.62 0 2.633 1.06 3.97 1.06 1.295 0 2.083-1.062 3.95-1.062 1.413 0 2.91.77 3.974 2.097-3.495 1.913-2.926 6.91 1.42 8.413z"/>
-              </svg>
-              S'inscrire avec Apple
-            </button>
           </div>
 
           <div class="acc-or"><span>ou avec un email</span></div>
@@ -243,7 +231,7 @@
               <span class="signup-label">Créer mon compte</span>
             </button>
             <p class="text-xs mt-4" style="color:var(--gray);line-height:1.5;text-align:center">
-              En créant un compte, vous acceptez nos <a href="/contact#cgv" style="color:var(--ink)">CGV</a> et notre <a href="/contact#legal" style="color:var(--ink)">politique de confidentialité</a>.
+              En créant un compte, vous acceptez nos <a href="/cgv" style="color:var(--ink)">CGV</a> et notre <a href="/legal" style="color:var(--ink)">politique de confidentialité</a>.
             </p>
           </form>
         </div>
@@ -295,15 +283,21 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-bottom">
-      <div><span class="footer-brand">PureSpec</span> © 2026 — Tous droits réservés.</div>
+      <div>
+        <span class="footer-brand">PureSpec</span> © 2026 — <span data-i18n="footer.rights">Tous droits réservés.</span><br>
+        <span class="text-xs" style="opacity:0.75">PURESPEC · SIREN 949 143 101 · <span data-i18n="legal.vat.shortnote">TVA non applicable, art. 293 B du CGI</span></span>
+      </div>
       <div class="text-xs">
-        <a href="/contact" style="color:var(--gray);text-decoration:none">Contact</a> ·
-        <a href="/contact#legal" style="color:var(--gray);text-decoration:none">Mentions légales</a>
+        <a href="/contact" style="color:var(--gray);text-decoration:none" data-i18n="nav.contact">Contact</a> ·
+        <a href="/legal" style="color:var(--gray);text-decoration:none" data-i18n="footer.legal.mentions">Mentions légales</a> ·
+        <a href="/cgv" style="color:var(--gray);text-decoration:none" data-i18n="footer.legal.cgv">CGV</a> ·
+        <a href="#" onclick="event.preventDefault();window.openCookieSettings&&window.openCookieSettings()" style="color:var(--gray);text-decoration:none" data-i18n="footer.legal.cookies">Gérer les cookies</a>
       </div>
     </div>
   </div>
 </footer>
 
+<script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/shared.js"></script>
 <script>
 // ===== OAuth =====

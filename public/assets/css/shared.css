@@ -638,3 +638,126 @@ textarea.apple-input { min-height: 120px; resize: vertical; line-height: 1.5; }
 .border-t { border-top: 1px solid rgba(0,0,0,0.08); }
 .border-b { border-bottom: 1px solid rgba(0,0,0,0.08); }
 .divide-y > * + * { border-top: 1px solid rgba(0,0,0,0.06); }
+
+/* ===== LANGUAGE SWITCHER ===== */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.06);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 7px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.lang-switch:hover {
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.12);
+}
+.lang-switch svg { opacity: 0.7; }
+
+/* ===== COOKIE BANNER ===== */
+.cookie-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 12px 40px -8px rgba(0,0,0,0.18);
+  z-index: 1000;
+  transform: translateY(140%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.cookie-banner.show { transform: translateY(0); }
+.cookie-banner h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.cookie-banner p {
+  margin: 0 0 14px;
+  color: #4a4a4f;
+  font-size: 13.5px;
+}
+.cookie-banner-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.cookie-banner-accept {
+  background: var(--ink);
+  color: #fff;
+  border: 0;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--t-fast);
+}
+.cookie-banner-accept:hover { background: #000; }
+.cookie-banner-link {
+  color: var(--gray);
+  text-decoration: underline;
+  font-size: 12.5px;
+}
+.cookie-banner-link:hover { color: var(--ink); }
+
+/* ===== HERO/PAGE refinements (Porsche-style) ===== */
+.hero-specs {
+  border-top: 1px solid rgba(0,0,0,0.06);
+  background: #fafafc;
+}
+.hero-specs-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 22px 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 820px) {
+  .hero-specs-inner { grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 22px 24px; }
+}
+.hero-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+  border-left: 1px solid rgba(0,0,0,0.05);
+  padding-left: 16px;
+}
+.hero-spec-item:first-child { border-left: 0; padding-left: 0; }
+@media (max-width: 820px) {
+  .hero-spec-item { border-left: 0; padding-left: 0; }
+}
+.hero-spec-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #86868b;
+}
+.hero-spec-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
+}
