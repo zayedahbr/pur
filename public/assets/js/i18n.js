@@ -55,6 +55,7 @@
       'nav.cta': 'Concevoir',
       'nav.account': 'Mon compte',
       'nav.signin': 'Se connecter',
+      'nav.menu': 'Menu',
 
       // FOOTER
       'footer.product': 'Produit',
@@ -80,6 +81,7 @@
       'hero.lead': "Un film électrostatique haute définition conçu pour se fondre dans votre pare-brise. Pas pour le couvrir.",
       'hero.cta.primary': 'Concevoir le mien',
       'hero.cta.secondary': 'Découvrir la philosophie',
+      'hero.cta.registry': 'Voir le Registry',
       'hero.spec.format': 'Format',
       'hero.spec.pose': 'Pose',
       'hero.spec.pose.value': 'Électrostatique',
@@ -87,6 +89,17 @@
       'hero.spec.ref.value': 'Gravée sur la tranche',
       'hero.spec.warranty': 'Garantie',
       'hero.spec.warranty.value': 'Registry à vie',
+
+      // HERO SLIDES CAROUSEL (Figma redesign)
+      'hero.s1.eyebrow': 'Atelier sur-mesure',
+      'hero.s1.title': 'Personnalisations infinies',
+      'hero.s1.text': "De la nuance exacte de votre carrosserie aux détails techniques les plus pointus, configurez un sticker qui n'appartient qu'à vous. Aucun build ne se ressemble, votre signature non plus.",
+      'hero.s2.eyebrow': 'Codes historiques',
+      'hero.s2.title': 'Des milliers de configurations.',
+      'hero.s2.text': "Chaque véhicule a une âme, chaque propriétaire a une vision. Explorez un univers de possibilités où les codes couleurs historiques rencontrent vos spécifications les plus pointues. Plus qu'un sticker, une archive physique de votre passion.",
+      'hero.s3.eyebrow': 'La signature',
+      'hero.s3.title': 'La signature de votre build.',
+      'hero.s3.text': 'Film électrostatique haute définition, format 48 × 71,8 mm. Authentique, vérifié, gravé dans le PureSpec Registry à vie.',
 
       // ATELIER
       'atelier.eyebrow': "L'EXPÉRIENCE",
@@ -213,6 +226,7 @@
       'nav.cta': 'Design yours',
       'nav.account': 'My account',
       'nav.signin': 'Sign in',
+      'nav.menu': 'Menu',
 
       // FOOTER
       'footer.product': 'Product',
@@ -238,6 +252,7 @@
       'hero.lead': 'A high-definition electrostatic film designed to blend into your windshield. Not to cover it.',
       'hero.cta.primary': 'Design mine',
       'hero.cta.secondary': 'Discover the philosophy',
+      'hero.cta.registry': 'View the Registry',
       'hero.spec.format': 'Format',
       'hero.spec.pose': 'Fitting',
       'hero.spec.pose.value': 'Electrostatic',
@@ -245,6 +260,17 @@
       'hero.spec.ref.value': 'Engraved on the edge',
       'hero.spec.warranty': 'Warranty',
       'hero.spec.warranty.value': 'Lifetime Registry',
+
+      // HERO SLIDES CAROUSEL
+      'hero.s1.eyebrow': 'Bespoke atelier',
+      'hero.s1.title': 'Infinite personalisation',
+      'hero.s1.text': "From the exact shade of your bodywork to the finest technical details, design a sticker that belongs to no one but you. No two builds are alike — your signature shouldn't be either.",
+      'hero.s2.eyebrow': 'Heritage codes',
+      'hero.s2.title': 'Thousands of configurations.',
+      'hero.s2.text': 'Every vehicle has a soul, every owner a vision. Explore a universe of possibilities where historical colour codes meet your most precise specifications. More than a sticker — a physical archive of your passion.',
+      'hero.s3.eyebrow': 'The signature',
+      'hero.s3.title': 'The signature of your build.',
+      'hero.s3.text': 'High-definition electrostatic film, 48 × 71.8 mm format. Authentic, verified, engraved in the PureSpec Registry for life.',
 
       // ATELIER
       'atelier.eyebrow': 'THE EXPERIENCE',

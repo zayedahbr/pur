@@ -38,7 +38,7 @@ body {
 .headline-xl { font-weight: 700; letter-spacing: -0.045em; line-height: 1.05; }
 .headline-lg { font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; }
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR (Figma redesign — rectangles arrondis 9px) ===== */
 .nav-blur {
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -51,75 +51,132 @@ body {
   transition: transform 0.35s var(--ease-apple);
 }
 .nav-blur.nav-hidden { transform: translateY(-100%); }
-.nav-spacer { height: 56px; flex-shrink: 0; }
-.nav-inner {
-  max-width: 1200px;
+.nav-spacer { height: 64px; flex-shrink: 0; }
+@media (max-width: 768px) { .nav-spacer { height: 60px; } }
+.nav-inner, .nav-row {
+  max-width: 1480px;
   margin: 0 auto;
-  padding: 0 24px;
-  height: 56px;
+  padding: 0 28px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
-.nav-brand {
-  font-weight: 600;
+@media (max-width: 768px) {
+  .nav-inner, .nav-row { padding: 0 18px; height: 60px; }
+}
+.nav-brand, .nav-brand-link {
+  font-weight: 700;
   font-size: 17px;
   color: var(--ink);
   text-decoration: none;
   letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
 }
-.nav-links {
+.nav-links, .nav-links-row {
   display: none;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
 }
-@media (min-width: 768px) { .nav-links { display: flex; } }
+@media (min-width: 900px) { .nav-links, .nav-links-row { display: flex; } }
 .nav-link {
-  color: rgba(29,29,31,0.8);
+  color: rgba(29,29,31,0.78);
   font-size: 14px;
+  font-weight: 500;
   text-decoration: none;
   transition: color var(--t-fast);
+  letter-spacing: -0.005em;
 }
 .nav-link:hover, .nav-link.active { color: var(--ink); }
-.nav-actions { display: flex; align-items: center; gap: 12px; }
+.nav-actions, .nav-actions-row { display: flex; align-items: center; gap: 10px; }
+
+/* Avatar carré arrondi noir (Figma) */
 .nav-account {
   width: 36px; height: 36px;
-  border-radius: 999px;
-  background: var(--bg);
+  border-radius: 9px;
+  background: var(--ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
   transition: background var(--t-fast);
   text-decoration: none;
 }
-.nav-account:hover { background: var(--line); }
+.nav-account:hover { background: #000; }
+.nav-account svg { display: none; }
+
+/* CTA Concevoir rectangulaire arrondi noir (Figma) */
 .nav-cta {
   background: var(--ink);
   color: #fff;
-  padding: 7px 16px;
-  border-radius: 999px;
+  padding: 8px 18px;
+  border-radius: 9px;
   font-size: 14px;
+  font-weight: 500;
   text-decoration: none;
   transition: background var(--t-fast);
+  letter-spacing: -0.005em;
 }
 .nav-cta:hover { background: #000; }
 
-/* ===== HAMBURGER + MOBILE MENU ===== */
+/* Bouton Menu rectangulaire arrondi avec texte (Figma) */
+.nav-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: var(--bg);
+  color: var(--ink);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition: background var(--t-fast);
+}
+.nav-menu-btn:hover { background: var(--line); }
+@media (min-width: 900px) { .nav-menu-btn { display: none; } }
+
+/* Switch langue */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(29,29,31,0.78);
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.lang-switch:hover { background: var(--bg); color: var(--ink); }
+
+/* Vieux hamburger : caché (remplacé par .nav-menu-btn) */
 .nav-burger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: transparent;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: var(--bg);
   border: none;
   cursor: pointer;
   color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
   transition: background var(--t-fast);
 }
-.nav-burger:hover { background: var(--bg); }
+.nav-burger:hover { background: var(--line); }
 @media (min-width: 900px) { .nav-burger { display: none; } }
 
 .nav-mobile-menu {
@@ -142,8 +199,8 @@ body {
   transform: translateY(0);
 }
 .nav-mobile-head {
-  height: 56px;
-  padding: 0 24px;
+  height: 64px;
+  padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
