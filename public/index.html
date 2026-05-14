@@ -170,7 +170,6 @@
     opacity: 0;
     transition: opacity 1.2s var(--ease-apple);
     will-change: opacity;
-    margin-left: auto;
   }
   .hero-m3.active { opacity: 1; }
 
@@ -1919,6 +1918,7 @@
 <section class="hero-wrap page-home" aria-label="Présentation PureSpec">
   <div class="hero-inner">
     <div class="hero-copy animate-fade-up">
+      <span class="hero-eyebrow" data-i18n="hero.eyebrow">PureSpec — Édition 2026</span>
       <h1 class="hero-title">
         <span data-i18n="hero.title.l1">La signature</span><br>
         <span data-i18n="hero.title.l2">de votre build.</span><br>
@@ -1928,7 +1928,7 @@
         Un film électrostatique haute définition conçu pour se fondre dans votre pare-brise. Pas pour le couvrir.
       </p>
       <div class="hero-actions">
-        <a href="#atelier" class="btn-hero-primary" style="border-radius: 9px; overflow: hidden; box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 1);"><span data-i18n="hero.cta.primary">Concevoir le mien</span>
+        <a href="#atelier" class="btn-hero-primary"><span data-i18n="hero.cta.primary">Concevoir le mien</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
         <a href="#story" class="btn-hero-link"><span data-i18n="hero.cta.secondary">Découvrir la philosophie</span>
@@ -1937,9 +1937,9 @@
       </div>
     </div>
     <div class="hero-stage animate-fade-up" style="animation-delay: 0.1s">
-      <img class="hero-m3 active" data-idx="0" src="https://github.com/zayedahbr/pur/blob/main/m3%20rouge.png?raw=true" alt="BMW M3 build — rouge" style="object-position: right;">
-      <img class="hero-m3" data-idx="1" src="https://github.com/zayedahbr/pur/blob/main/M3%20JAUNE.png?raw=true" alt="BMW M3 build — jaune" style="object-position: right;">
-      <img class="hero-m3" data-idx="2" src="https://github.com/zayedahbr/pur/blob/main/M3%20NOIRE.png?raw=true" alt="BMW M3 build — noir" style="object-position: right;">
+      <img class="hero-m3 active" data-idx="0" src="https://github.com/zayedahbr/pur/blob/main/m3%20rouge.png?raw=true" alt="BMW M3 build — rouge">
+      <img class="hero-m3" data-idx="1" src="https://github.com/zayedahbr/pur/blob/main/M3%20JAUNE.png?raw=true" alt="BMW M3 build — jaune">
+      <img class="hero-m3" data-idx="2" src="https://github.com/zayedahbr/pur/blob/main/M3%20NOIRE.png?raw=true" alt="BMW M3 build — noir">
       <div class="hero-dots" role="tablist" aria-label="Choisir une teinte d'aperçu">
         <button class="hero-dot active" data-go="0" type="button" aria-label="Rouge"></button>
         <button class="hero-dot" data-go="1" type="button" aria-label="Jaune"></button>
@@ -1948,6 +1948,27 @@
     </div>
   </div>
 
+  <!-- Ligne de spec Porsche-like -->
+  <div class="hero-specs">
+    <div class="hero-specs-inner">
+      <div class="hero-spec-item">
+        <span class="hero-spec-label" data-i18n="hero.spec.format">Format</span>
+        <span class="hero-spec-value">48 × 71,8 mm</span>
+      </div>
+      <div class="hero-spec-item">
+        <span class="hero-spec-label" data-i18n="hero.spec.pose">Pose</span>
+        <span class="hero-spec-value" data-i18n="hero.spec.pose.value">Électrostatique</span>
+      </div>
+      <div class="hero-spec-item">
+        <span class="hero-spec-label" data-i18n="hero.spec.ref">Référence</span>
+        <span class="hero-spec-value" data-i18n="hero.spec.ref.value">Gravée sur la tranche</span>
+      </div>
+      <div class="hero-spec-item">
+        <span class="hero-spec-label" data-i18n="hero.spec.warranty">Garantie</span>
+        <span class="hero-spec-value" data-i18n="hero.spec.warranty.value">Registry à vie</span>
+      </div>
+    </div>
+  </div>
 </section>
 
 
@@ -2141,7 +2162,7 @@
 
         <!-- CTA -->
         <div class="pt-4 flex flex-col gap-3">
-          <button class="btn-primary-apple w-full py-5 text-[17px]" onclick="openOrderModal()" style="border-radius: 9px; overflow: hidden;">
+          <button class="btn-primary-apple w-full py-5 text-[17px]" onclick="openOrderModal()">
             Finaliser la configuration
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
@@ -2404,7 +2425,7 @@
         <div class="size-frame">
           <div class="size-rect"></div>
           <div class="size-label-w">48 mm</div>
-          <div class="size-label-h" style="left: 189.3px; top: 164px;">71,8 mm</div>
+          <div class="size-label-h">71,8 mm</div>
         </div>
       </div>
     </div>
@@ -2416,7 +2437,7 @@
         <p class="story-card-text">Importez votre photo, prélevez la nuance exacte de votre carrosserie. Notre algorithme analyse la zone sélectionnée pour générer la teinte la plus fidèle à votre réalité.</p>
       </div>
       <div class="story-card-visual story-visual-colors">
-        <img src="https://github.com/zayedahbr/pur/blob/main/m3%20couleur.png?raw=true" alt="Échantillonnage de couleurs" class="m3-couleur-img" style="object-fit: cover; max-height: 227px; min-width: 426px;">
+        <img src="https://github.com/zayedahbr/pur/blob/main/m3%20couleur.png?raw=true" alt="Échantillonnage de couleurs" class="m3-couleur-img">
       </div>
     </div>
 
@@ -2604,7 +2625,7 @@
             <input type="password" id="orderLoginPass" class="apple-input" required autocomplete="current-password">
           </div>
           <div id="orderAuthAlert"></div>
-          <button type="submit" class="btn-primary-apple w-full py-4" id="orderLoginBtn" style="border-radius: 9px; overflow: hidden;">
+          <button type="submit" class="btn-primary-apple w-full py-4" id="orderLoginBtn">
             Se connecter et continuer
           </button>
           <p class="text-xs text-apple-gray text-center mt-1">
