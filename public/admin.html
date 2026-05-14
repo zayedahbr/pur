@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — PureSpec</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/shared.css">
+<style>
+  body { background: #f5f5f7; }
+  .admin-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+  @media (max-width: 900px) {
+    .admin-shell { grid-template-columns: 1fr; }
+    .admin-side { display: none; }
+  }
+  .admin-side {
+    background: #0a0a0a;
+    color: #f5f5f7;
+    padding: 24px 16px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+  .admin-brand {
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    padding: 8px 12px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .admin-brand-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .admin-nav {
+    list-style: none;
+    padding: 16px 0;
+    margin: 0;
+  }
+  .admin-nav button {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    padding: 11px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all .2s;
+    font-family: inherit;
+    margin-bottom: 2px;
+  }
+  .admin-nav button:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .admin-nav button.active { color: #fff; background: rgba(255,255,255,0.1); }
+  .admin-nav-badge {
+    margin-left: auto;
+    background: #e0223f;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .admin-side-footer {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    right: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+  }
+
+  .admin-main { padding: 32px; overflow-x: auto; }
+  @media (max-width: 600px) { .admin-main { padding: 20px 16px; } }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-top: 6px;
+    line-height: 1;
+  }
+  .stat-sub { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  .filter-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-row .apple-input { width: auto; flex: 1; min-width: 200px; }
+
+  /* Modal admin */
+  .ad-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .ad-modal-overlay.show { display: flex; }
+  .ad-modal {
+    background: #fff;
+    border-radius: 18px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .ad-modal-head {
+    padding: 22px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .ad-modal-body { padding: 22px; }
+  .ad-modal-foot {
+    padding: 16px 22px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    background: #fafafa;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  /* Login screen */
+  .login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f5f5f7;
+  }
+  .login-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 24px;
+    padding: 36px;
+    width: 100%;
+    max-width: 380px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ECRAN DE CONNEXION (affiché par défaut, masqué si auth OK) -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="text-center mb-6">
+      <div class="font-bold" style="font-size:24px;letter-spacing:-0.02em">PureSpec</div>
+      <div class="text-xs uppercase tracking-wider mt-1" style="color:var(--gray);letter-spacing:0.08em">Back-office</div>
+    </div>
+    <form id="adminLoginForm" onsubmit="adminLogin(event)">
+      <div style="margin-bottom:14px">
+        <label class="apple-label" for="alEmail">Email</label>
+        <input type="email" id="alEmail" class="apple-input" required autocomplete="username">
+      </div>
+      <div style="margin-bottom:14px">
+        <label class="apple-label" for="alPass">Mot de passe</label>
+        <input type="password" id="alPass" class="apple-input" required autocomplete="current-password">
+      </div>
+      <div id="alAlert"></div>
+      <button type="submit" id="alBtn" class="btn btn-primary btn-block mt-2">
+        <span class="al-label">Connexion</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD ADMIN -->
+<div class="admin-shell hidden" id="adminShell">
+  <aside class="admin-side">
+    <div class="admin-brand">
+      PureSpec <span class="admin-brand-badge">Admin</span>
+    </div>
+    <ul class="admin-nav">
+      <li><button class="active" data-sec="dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Tableau de bord
+      </button></li>
+      <li><button data-sec="orders">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Commandes
+      </button></li>
+      <li><button data-sec="messages">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span class="admin-nav-badge hidden" id="badgeMsg">0</span>
+      </button></li>
+      <li><button data-sec="customers">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Clients
+      </button></li>
+      <li><button data-sec="settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </button></li>
+    </ul>
+
+    <div class="admin-side-footer">
+      <div id="adminUserInfo" class="mb-2"></div>
+      <button onclick="adminLogout()" style="background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;padding:6px 0;font-size:12px;font-family:inherit">
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <section class="admin-section active" id="secDashboard">
+      <h1 class="text-2xl font-bold mb-6" style="letter-spacing:-0.025em">Tableau de bord</h1>
+      <div class="stat-grid" id="statGrid">
+        <div class="skeleton" style="height:96px"></div>
+        <div class="skeleton" style="height:96px"></div>
+        <div class="skeleton" style="height:96px"></div>
+        <div class="skeleton" style="height:96px"></div>
+      </div>
+
+      <div class="card-lg card">
+        <h2 class="text-lg font-bold mb-4" style="letter-spacing:-0.02em">Activité récente</h2>
+        <div id="recentActivity">
+          <div class="skeleton" style="height:48px;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:48px;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:48px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="admin-section" id="secOrders">
+      <div class="flex items-center justify-between mb-4" style="flex-wrap:wrap;gap:12px">
+        <h1 class="text-2xl font-bold" style="letter-spacing:-0.025em">Commandes</h1>
+        <div class="text-sm" style="color:var(--gray)" id="ordersCount"></div>
+      </div>
+
+      <div class="filter-row">
+        <input type="search" id="ordersSearch" class="apple-input" placeholder="Rechercher par nom, email, référence…">
+        <select id="ordersFilter" class="apple-input" style="max-width:240px">
+          <option value="all">Tous les statuts</option>
+          <option value="paid">Payées</option>
+          <option value="in_production">En production</option>
+          <option value="shipped">Expédiées</option>
+          <option value="delivered">Livrées</option>
+          <option value="cancelled">Annulées</option>
+          <option value="refunded">Remboursées</option>
+          <option value="pending">En attente</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table table-mobile-stack">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Client</th>
+              <th>Produit</th>
+              <th>Total</th>
+              <th>Statut</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTbody">
+            <tr><td colspan="6"><div class="skeleton" style="height:160px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MESSAGES -->
+    <section class="admin-section" id="secMessages">
+      <div class="flex items-center justify-between mb-4" style="flex-wrap:wrap;gap:12px">
+        <h1 class="text-2xl font-bold" style="letter-spacing:-0.025em">Messages</h1>
+        <div class="text-sm" style="color:var(--gray)" id="messagesCount"></div>
+      </div>
+      <div class="filter-row">
+        <select id="messagesFilter" class="apple-input" style="max-width:240px">
+          <option value="all">Tous</option>
+          <option value="new">Non lus</option>
+          <option value="read">Lus</option>
+          <option value="replied">Répondus</option>
+          <option value="archived">Archivés</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="table table-mobile-stack">
+          <thead>
+            <tr>
+              <th>De</th>
+              <th>Sujet</th>
+              <th>Statut</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="messagesTbody">
+            <tr><td colspan="4"><div class="skeleton" style="height:120px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CUSTOMERS -->
+    <section class="admin-section" id="secCustomers">
+      <h1 class="text-2xl font-bold mb-4" style="letter-spacing:-0.025em">Clients</h1>
+      <div class="filter-row">
+        <input type="search" id="customersSearch" class="apple-input" placeholder="Rechercher par nom ou email…">
+      </div>
+      <div class="table-wrap">
+        <table class="table table-mobile-stack">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Ville</th>
+              <th>Inscription</th>
+              <th>Dernière connexion</th>
+            </tr>
+          </thead>
+          <tbody id="customersTbody">
+            <tr><td colspan="5"><div class="skeleton" style="height:120px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="admin-section" id="secSettings">
+      <h1 class="text-2xl font-bold mb-2" style="letter-spacing:-0.025em">Paramètres</h1>
+      <p class="text-sm mb-6" style="color:var(--gray)">Prix unitaire du sticker et grille de livraison par pays. Tout est appliqué côté serveur — les modifications prennent effet sur la prochaine commande.</p>
+
+      <div class="card-lg card mb-6">
+        <h2 class="text-lg font-bold mb-1" style="letter-spacing:-0.02em">Prix unitaire du sticker</h2>
+        <p class="text-sm mb-4" style="color:var(--gray)">Prix affiché et facturé pour un sticker, en euros TTC (TVA non applicable, art. 293 B du CGI).</p>
+        <div class="flex items-center gap-3" style="max-width:260px">
+          <input type="number" id="settingUnitPrice" class="apple-input" step="0.10" min="0" placeholder="9.90">
+          <span style="color:var(--gray);font-weight:500">€</span>
+        </div>
+      </div>
+
+      <div class="card-lg card mb-6">
+        <div class="flex items-center justify-between mb-1" style="flex-wrap:wrap;gap:8px">
+          <h2 class="text-lg font-bold" style="letter-spacing:-0.02em">Grille de livraison par pays</h2>
+          <button type="button" class="btn btn-ghost" onclick="addShippingRow()" style="font-size:13px">+ Ajouter un pays</button>
+        </div>
+        <p class="text-sm mb-4" style="color:var(--gray)">Prix de livraison appliqué selon le pays sélectionné par le client. Le code pays est au format ISO-2 (FR, BE, DE, GB…). Un pays absent de cette grille utilisera le tarif FR par défaut.</p>
+        <div id="shippingRatesList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <div class="flex items-center gap-3" style="flex-wrap:wrap">
+        <button type="button" class="btn btn-primary" id="settingsSaveBtn" onclick="saveSettings()">
+          <span class="settings-save-label">Enregistrer les paramètres</span>
+        </button>
+        <span id="settingsAlert" class="text-sm"></span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL ORDER -->
+<div class="ad-modal-overlay" id="orderModal" onclick="if(event.target===this)closeOrderModal()">
+  <div class="ad-modal">
+    <div class="ad-modal-head">
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.08em">Commande</div>
+        <div class="text-xl font-bold mt-1" id="omNumber">—</div>
+      </div>
+      <button class="order-modal-close" onclick="closeOrderModal()" aria-label="Fermer" style="width:32px;height:32px;border-radius:999px;background:var(--bg);border:none;cursor:pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="ad-modal-body" id="omBody"></div>
+    <div class="ad-modal-foot">
+      <button class="btn btn-ghost" onclick="closeOrderModal()">Annuler</button>
+      <button class="btn btn-primary" id="omSaveBtn" onclick="saveOrder()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MESSAGE -->
+<div class="ad-modal-overlay" id="msgModal" onclick="if(event.target===this)closeMsgModal()">
+  <div class="ad-modal">
+    <div class="ad-modal-head">
+      <div>
+        <div class="text-xs uppercase tracking-wider" style="color:var(--gray);font-weight:600;letter-spacing:0.08em">Message</div>
+        <div class="text-base font-bold mt-1" id="mmSubject">—</div>
+        <div class="text-sm mt-1" style="color:var(--gray)" id="mmFrom"></div>
+      </div>
+      <button onclick="closeMsgModal()" style="width:32px;height:32px;border-radius:999px;background:var(--bg);border:none;cursor:pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="ad-modal-body" id="mmBody"></div>
+  </div>
+</div>
+
+<script src="/assets/js/shared.js"></script>
+<script>
+let ADMIN = null;
+let CURRENT_ORDER = null;
+let CURRENT_MSG = null;
+
+// ===== Bootstrap =====
+(async () => {
+  const r = await fetch('/api/admin?action=me', { credentials: 'include' });
+  const data = await r.json();
+  if (data.admin) {
+    ADMIN = data.admin;
+    showShell();
+  } else {
+    showLogin();
+  }
+})();
+
+function showShell() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('adminShell').classList.remove('hidden');
+  document.getElementById('adminUserInfo').textContent = ADMIN.nom || ADMIN.email;
+  loadStats();
+  // Nav
+  document.querySelectorAll('.admin-nav button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.admin-nav button').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.admin-section').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const sec = b.dataset.sec;
+      document.getElementById('sec' + sec.charAt(0).toUpperCase() + sec.slice(1)).classList.add('active');
+      if (sec === 'orders') loadOrders();
+      if (sec === 'messages') loadMessages();
+      if (sec === 'customers') loadCustomers();
+      if (sec === 'settings') loadSettings();
+    });
+  });
+  document.getElementById('ordersFilter').addEventListener('change', loadOrders);
+  document.getElementById('ordersSearch').addEventListener('input', debounce(loadOrders, 300));
+  document.getElementById('messagesFilter').addEventListener('change', loadMessages);
+  document.getElementById('customersSearch').addEventListener('input', debounce(loadCustomers, 300));
+}
+function showLogin() {
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('adminShell').classList.add('hidden');
+}
+
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+// ===== Admin login =====
+async function adminLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('alBtn');
+  const lbl = btn.querySelector('.al-label');
+  btn.disabled = true;
+  lbl.innerHTML = '<span class="spinner" style="border-top-color:#fff;border-color:rgba(255,255,255,0.3)"></span>';
+  document.getElementById('alAlert').innerHTML = '';
+  try {
+    const r = await fetch('/api/admin?action=login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        email: document.getElementById('alEmail').value.trim(),
+        password: document.getElementById('alPass').value
+      })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    ADMIN = data.admin;
+    showShell();
+  } catch (err) {
+    document.getElementById('alAlert').innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+    btn.disabled = false;
+    lbl.textContent = 'Connexion';
+  }
+}
+
+async function adminLogout() {
+  await fetch('/api/admin?action=logout', { method: 'POST', credentials: 'include' });
+  location.reload();
+}
+
+// ===== Stats =====
+async function loadStats() {
+  try {
+    const r = await fetch('/api/admin?action=stats', { credentials: 'include' });
+    const data = await r.json();
+    const s = data.stats || {};
+    document.getElementById('statGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Total commandes</div><div class="stat-value">${s.orders_total || 0}</div><div class="stat-sub">${s.orders_paid || 0} payées</div></div>
+      <div class="stat-card"><div class="stat-label">À expédier</div><div class="stat-value">${s.orders_to_ship || 0}</div><div class="stat-sub">payées + en production</div></div>
+      <div class="stat-card"><div class="stat-label">Revenu 7 jours</div><div class="stat-value">${formatPrice(s.revenue_7d)}</div></div>
+      <div class="stat-card"><div class="stat-label">Revenu ce mois</div><div class="stat-value">${formatPrice(s.revenue_month)}</div></div>
+      <div class="stat-card"><div class="stat-label">Clients inscrits</div><div class="stat-value">${s.customers_total || 0}</div></div>
+      <div class="stat-card"><div class="stat-label">Messages non lus</div><div class="stat-value">${s.messages_new || 0}</div></div>
+    `;
+    if (s.messages_new > 0) {
+      const b = document.getElementById('badgeMsg');
+      b.textContent = s.messages_new;
+      b.classList.remove('hidden');
+    }
+    // Recent activity = 10 dernières commandes
+    const ordersR = await fetch('/api/admin?action=list-orders&page=1', { credentials: 'include' });
+    const ordersData = await ordersR.json();
+    const recent = (ordersData.orders || []).slice(0, 8);
+    if (!recent.length) {
+      document.getElementById('recentActivity').innerHTML = '<div class="text-sm text-center" style="color:var(--gray);padding:24px">Aucune commande pour le moment.</div>';
+      return;
+    }
+    document.getElementById('recentActivity').innerHTML = `
+      <table class="table">
+        <thead><tr><th>N°</th><th>Client</th><th>Produit</th><th>Total</th><th>Statut</th></tr></thead>
+        <tbody>${recent.map(o => `
+          <tr class="clickable" onclick="openOrder('${escapeHtml(o.id)}')">
+            <td class="font-mono">${escapeHtml(o.order_number || '—')}</td>
+            <td>${escapeHtml(o.prenom || '')} ${escapeHtml(o.nom || '')}<br><span class="text-xs" style="color:var(--gray)">${escapeHtml(o.email)}</span></td>
+            <td>${escapeHtml(o.marque || '')} ${escapeHtml(o.modele || '')}</td>
+            <td>${formatPrice(o.total_eur)}</td>
+            <td>${statusBadge(o.statut)}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>`;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ===== Orders list =====
+async function loadOrders() {
+  const tbody = document.getElementById('ordersTbody');
+  tbody.innerHTML = '<tr><td colspan="6"><div class="skeleton" style="height:120px"></div></td></tr>';
+  try {
+    const filter = document.getElementById('ordersFilter').value;
+    const search = document.getElementById('ordersSearch').value.trim();
+    const url = `/api/admin?action=list-orders&statut=${encodeURIComponent(filter)}&search=${encodeURIComponent(search)}`;
+    const r = await fetch(url, { credentials: 'include' });
+    const data = await r.json();
+    const orders = data.orders || [];
+    document.getElementById('ordersCount').textContent = `${data.total || 0} commande${(data.total||0) > 1 ? 's' : ''}`;
+    if (!orders.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Aucune commande trouvée.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = orders.map(o => `
+      <tr class="clickable" onclick="openOrder('${escapeHtml(o.id)}')">
+        <td data-label="N°"><div class="font-mono font-semibold">${escapeHtml(o.order_number || '—')}</div><div class="text-xs" style="color:var(--gray)">${escapeHtml(o.reference)}</div></td>
+        <td data-label="Client">${escapeHtml(o.prenom || '')} ${escapeHtml(o.nom || '')}<br><span class="text-xs" style="color:var(--gray)">${escapeHtml(o.email)}</span></td>
+        <td data-label="Produit">${escapeHtml(o.marque || '')} ${escapeHtml(o.modele || '')}</td>
+        <td data-label="Total">${formatPrice(o.total_eur)}</td>
+        <td data-label="Statut">${statusBadge(o.statut)}</td>
+        <td data-label="Date"><span class="text-xs">${formatDate(o.created_at)}</span></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Erreur de chargement.</td></tr>';
+  }
+}
+
+// ===== Order modal =====
+async function openOrder(id) {
+  const modal = document.getElementById('orderModal');
+  const body = document.getElementById('omBody');
+  body.innerHTML = '<div class="skeleton" style="height:400px"></div>';
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const r = await fetch('/api/admin?action=get-order&id=' + encodeURIComponent(id), { credentials: 'include' });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    CURRENT_ORDER = data.order;
+    renderOrderEdit(CURRENT_ORDER);
+  } catch (err) {
+    body.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+  }
+}
+function closeOrderModal() {
+  document.getElementById('orderModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function renderOrderEdit(o) {
+  document.getElementById('omNumber').textContent = o.order_number || '—';
+  document.getElementById('omBody').innerHTML = `
+    <!-- Récap commande -->
+    <div class="card-tight" style="background:var(--bg);margin-bottom:20px">
+      <div class="flex items-center gap-3 mb-3">
+        <div style="width:54px;height:38px;border-radius:8px;background:${o.bg_color || '#000'};display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.06em">${escapeHtml(o.marque || '')}</div>
+        <div>
+          <div class="font-semibold">${escapeHtml(o.marque || '')} ${escapeHtml(o.modele || '')}</div>
+          <div class="text-xs" style="color:var(--gray)">${escapeHtml(o.type_version || '')} · ${escapeHtml(o.moteur || '')} · ${escapeHtml(o.nom_couleur || '')}</div>
+        </div>
+      </div>
+      <div class="text-sm">
+        <strong>Référence :</strong> <span class="font-mono">${escapeHtml(o.reference)}</span> ·
+        <strong>${o.quantite || 1} × ${formatPrice(o.unit_price_eur)}</strong> + ${formatPrice(o.shipping_eur)} liv. =
+        <strong>${formatPrice(o.total_eur)}</strong>
+      </div>
+    </div>
+
+    <!-- Client -->
+    <div class="mb-4">
+      <div class="text-xs uppercase tracking-wider mb-2" style="color:var(--gray);font-weight:600;letter-spacing:0.08em">Livraison</div>
+      <div class="text-sm" style="line-height:1.5">
+        ${escapeHtml(o.prenom || '')} ${escapeHtml(o.nom || '')}<br>
+        ${escapeHtml(o.email)}${o.telephone ? ' · ' + escapeHtml(o.telephone) : ''}<br>
+        ${escapeHtml(o.adresse || '')}${o.complement ? ', ' + escapeHtml(o.complement) : ''}<br>
+        ${escapeHtml(o.code_postal || '')} ${escapeHtml(o.ville || '')}${o.pays ? ', ' + escapeHtml(o.pays) : ''}
+      </div>
+    </div>
+
+    <!-- Édition statut + tracking -->
+    <div style="margin-bottom:14px">
+      <label class="apple-label" for="omStatut">Statut</label>
+      <select id="omStatut" class="apple-input">
+        <option value="pending"${o.statut === 'pending' ? ' selected' : ''}>En attente paiement</option>
+        <option value="paid"${o.statut === 'paid' ? ' selected' : ''}>Payée</option>
+        <option value="in_production"${o.statut === 'in_production' ? ' selected' : ''}>En production</option>
+        <option value="shipped"${o.statut === 'shipped' ? ' selected' : ''}>Expédiée</option>
+        <option value="delivered"${o.statut === 'delivered' ? ' selected' : ''}>Livrée</option>
+        <option value="cancelled"${o.statut === 'cancelled' ? ' selected' : ''}>Annulée</option>
+        <option value="refunded"${o.statut === 'refunded' ? ' selected' : ''}>Remboursée</option>
+      </select>
+    </div>
+    <div class="grid grid-cols-2 gap-3" style="margin-bottom:14px">
+      <div>
+        <label class="apple-label" for="omCarrier">Transporteur</label>
+        <select id="omCarrier" class="apple-input">
+          <option value="">—</option>
+          <option value="La Poste"${o.carrier === 'La Poste' ? ' selected' : ''}>La Poste</option>
+          <option value="Colissimo"${o.carrier === 'Colissimo' ? ' selected' : ''}>Colissimo</option>
+          <option value="Chronopost"${o.carrier === 'Chronopost' ? ' selected' : ''}>Chronopost</option>
+          <option value="Mondial Relay"${o.carrier === 'Mondial Relay' ? ' selected' : ''}>Mondial Relay</option>
+          <option value="UPS"${o.carrier === 'UPS' ? ' selected' : ''}>UPS</option>
+          <option value="DHL"${o.carrier === 'DHL' ? ' selected' : ''}>DHL</option>
+        </select>
+      </div>
+      <div>
+        <label class="apple-label" for="omTracking">N° suivi</label>
+        <input type="text" id="omTracking" class="apple-input" value="${escapeHtml(o.tracking_number || '')}" placeholder="Ex : 9L23456789FR">
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="apple-label" for="omTrackingUrl">URL de suivi (facultatif)</label>
+      <input type="url" id="omTrackingUrl" class="apple-input" value="${escapeHtml(o.tracking_url || '')}" placeholder="https://...">
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="apple-label" for="omNotes">Notes internes</label>
+      <textarea id="omNotes" class="apple-input" rows="3" placeholder="Visible uniquement par l'équipe">${escapeHtml(o.admin_notes || '')}</textarea>
+    </div>
+
+    <div class="text-xs mt-4" style="color:var(--gray);padding-top:14px;border-top:1px solid rgba(0,0,0,0.06)">
+      Créée le ${formatDate(o.created_at, true)}<br>
+      ${o.paid_at ? 'Payée le ' + formatDate(o.paid_at, true) + '<br>' : ''}
+      ${o.shipped_at ? 'Expédiée le ' + formatDate(o.shipped_at, true) + '<br>' : ''}
+      ${o.delivered_at ? 'Livrée le ' + formatDate(o.delivered_at, true) : ''}
+    </div>
+  `;
+}
+
+async function saveOrder() {
+  if (!CURRENT_ORDER) return;
+  const btn = document.getElementById('omSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="border-top-color:#fff;border-color:rgba(255,255,255,0.3)"></span>';
+
+  const payload = {
+    id: CURRENT_ORDER.id,
+    statut: document.getElementById('omStatut').value,
+    carrier: document.getElementById('omCarrier').value,
+    tracking_number: document.getElementById('omTracking').value.trim(),
+    tracking_url: document.getElementById('omTrackingUrl').value.trim(),
+    admin_notes: document.getElementById('omNotes').value.trim()
+  };
+
+  try {
+    const r = await fetch('/api/admin?action=update-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    showToast('Commande mise à jour ✓');
+    closeOrderModal();
+    loadOrders();
+    loadStats();
+  } catch (err) {
+    showToast('Erreur : ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Enregistrer';
+  }
+}
+
+// ===== Messages =====
+async function loadMessages() {
+  const tbody = document.getElementById('messagesTbody');
+  tbody.innerHTML = '<tr><td colspan="4"><div class="skeleton" style="height:120px"></div></td></tr>';
+  try {
+    const filter = document.getElementById('messagesFilter').value;
+    const r = await fetch('/api/admin?action=list-messages&statut=' + encodeURIComponent(filter), { credentials: 'include' });
+    const data = await r.json();
+    const msgs = data.messages || [];
+    document.getElementById('messagesCount').textContent = `${msgs.length} message${msgs.length > 1 ? 's' : ''}`;
+    if (!msgs.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="table-empty">Aucun message.</td></tr>';
+      return;
+    }
+    const badges = { new: 'badge-red', read: 'badge-gray', replied: 'badge-green', archived: 'badge-gray' };
+    const labels = { new: 'Nouveau', read: 'Lu', replied: 'Répondu', archived: 'Archivé' };
+    tbody.innerHTML = msgs.map(m => `
+      <tr class="clickable" onclick="openMessage('${escapeHtml(m.id)}')">
+        <td data-label="De">${escapeHtml(m.nom || '—')}<br><span class="text-xs" style="color:var(--gray)">${escapeHtml(m.email)}</span></td>
+        <td data-label="Sujet"><div class="font-medium">${escapeHtml(m.sujet || '—')}</div><div class="text-xs" style="color:var(--gray);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(m.message.slice(0, 80))}…</div></td>
+        <td data-label="Statut"><span class="badge ${badges[m.statut] || 'badge-gray'}">${labels[m.statut] || m.statut}</span></td>
+        <td data-label="Date"><span class="text-xs">${formatDate(m.created_at, true)}</span></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="4" class="table-empty">Erreur de chargement.</td></tr>';
+  }
+}
+
+async function openMessage(id) {
+  const modal = document.getElementById('msgModal');
+  const body = document.getElementById('mmBody');
+  body.innerHTML = '<div class="skeleton" style="height:200px"></div>';
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  try {
+    const r = await fetch('/api/admin?action=get-message&id=' + encodeURIComponent(id), { credentials: 'include' });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    CURRENT_MSG = data.message;
+    document.getElementById('mmSubject').textContent = CURRENT_MSG.sujet || '—';
+    document.getElementById('mmFrom').textContent = `${CURRENT_MSG.nom ? CURRENT_MSG.nom + ' · ' : ''}${CURRENT_MSG.email} · ${formatDate(CURRENT_MSG.created_at, true)}`;
+    const safeMsg = escapeHtml(CURRENT_MSG.message).replace(/\n/g, '<br>');
+    const replyHtml = CURRENT_MSG.admin_reply
+      ? `<div class="card-tight mt-4" style="background:#f0fdf4">
+          <div class="text-xs uppercase tracking-wider mb-2" style="color:#166534;font-weight:600;letter-spacing:0.08em">Votre réponse · ${formatDate(CURRENT_MSG.replied_at, true)}</div>
+          <div style="font-size:14px;line-height:1.6">${escapeHtml(CURRENT_MSG.admin_reply).replace(/\n/g, '<br>')}</div>
+        </div>`
+      : `<div style="margin-top:18px">
+          <label class="apple-label" for="mmReply">Votre réponse</label>
+          <textarea id="mmReply" class="apple-input" rows="5" placeholder="Réponse au client…"></textarea>
+          <div class="flex gap-2 mt-3 justify-end">
+            <button class="btn btn-ghost btn-sm" onclick="archiveMessage()">Archiver</button>
+            <button class="btn btn-primary btn-sm" onclick="sendReply()">Envoyer la réponse</button>
+          </div>
+        </div>`;
+    body.innerHTML = `
+      ${CURRENT_MSG.order_ref ? `<div class="text-xs mb-3" style="color:var(--gray)">Réf commande : <span class="font-mono">${escapeHtml(CURRENT_MSG.order_ref)}</span></div>` : ''}
+      <div class="card-tight" style="background:var(--bg);font-size:14px;line-height:1.6">${safeMsg}</div>
+      ${replyHtml}
+    `;
+  } catch (err) {
+    body.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+  }
+}
+function closeMsgModal() {
+  document.getElementById('msgModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+async function sendReply() {
+  const txt = (document.getElementById('mmReply').value || '').trim();
+  if (txt.length < 5) { showToast('Réponse trop courte'); return; }
+  try {
+    const r = await fetch('/api/admin?action=reply-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ id: CURRENT_MSG.id, reply: txt })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    showToast('Réponse envoyée ✓');
+    closeMsgModal();
+    loadMessages();
+    loadStats();
+  } catch (err) {
+    showToast('Erreur : ' + err.message);
+  }
+}
+async function archiveMessage() {
+  try {
+    await fetch('/api/admin?action=update-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ id: CURRENT_MSG.id, statut: 'archived' })
+    });
+    showToast('Message archivé');
+    closeMsgModal();
+    loadMessages();
+  } catch (err) { showToast('Erreur : ' + err.message); }
+}
+
+// ===== Customers =====
+async function loadCustomers() {
+  const tbody = document.getElementById('customersTbody');
+  tbody.innerHTML = '<tr><td colspan="5"><div class="skeleton" style="height:120px"></div></td></tr>';
+  try {
+    const search = document.getElementById('customersSearch').value.trim();
+    const r = await fetch('/api/admin?action=list-customers&search=' + encodeURIComponent(search), { credentials: 'include' });
+    const data = await r.json();
+    const list = data.customers || [];
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="table-empty">Aucun client trouvé.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td data-label="Nom">${escapeHtml(c.prenom || '')} ${escapeHtml(c.nom || '')}</td>
+        <td data-label="Email">${escapeHtml(c.email)}</td>
+        <td data-label="Ville">${escapeHtml(c.ville || '—')}</td>
+        <td data-label="Inscription"><span class="text-xs">${formatDate(c.created_at)}</span></td>
+        <td data-label="Dernière connexion"><span class="text-xs">${c.last_login_at ? formatDate(c.last_login_at, true) : '—'}</span></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="5" class="table-empty">Erreur de chargement.</td></tr>';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeOrderModal(); closeMsgModal(); }
+});
+
+// ============ SETTINGS (prix + livraison) ============
+const KNOWN_COUNTRIES = [
+  ['FR','France'],['MC','Monaco'],['BE','Belgique'],['LU','Luxembourg'],
+  ['NL','Pays-Bas'],['DE','Allemagne'],['AT','Autriche'],['CH','Suisse'],
+  ['IT','Italie'],['ES','Espagne'],['PT','Portugal'],['IE','Irlande'],
+  ['DK','Danemark'],['SE','Suède'],['FI','Finlande'],['NO','Norvège'],
+  ['PL','Pologne'],['CZ','Tchéquie'],['SK','Slovaquie'],['HU','Hongrie'],
+  ['RO','Roumanie'],['BG','Bulgarie'],['GR','Grèce'],['HR','Croatie'],
+  ['SI','Slovénie'],['EE','Estonie'],['LV','Lettonie'],['LT','Lituanie'],
+  ['MT','Malte'],['CY','Chypre'],['GB','Royaume-Uni']
+];
+const COUNTRY_NAME = Object.fromEntries(KNOWN_COUNTRIES);
+
+async function loadSettings() {
+  const list = document.getElementById('shippingRatesList');
+  list.innerHTML = '<div class="skeleton" style="height:200px"></div>';
+  try {
+    const r = await fetch('/api/admin?action=get-settings', { credentials: 'include' });
+    if (!r.ok) throw new Error('Chargement impossible');
+    const data = await r.json();
+    document.getElementById('settingUnitPrice').value =
+      Number(data.unit_price_eur || 9.90).toFixed(2);
+
+    list.innerHTML = '';
+    const rates = data.shipping_rates || {};
+    // Affiche les pays connus en premier (dans l'ordre), puis les autres
+    const seen = new Set();
+    KNOWN_COUNTRIES.forEach(([code]) => {
+      if (rates[code] != null) {
+        appendShippingRow(code, rates[code]);
+        seen.add(code);
+      }
+    });
+    Object.keys(rates).forEach(code => {
+      if (!seen.has(code)) appendShippingRow(code, rates[code]);
+    });
+    if (!Object.keys(rates).length) appendShippingRow('FR', 3.50);
+  } catch (err) {
+    list.innerHTML = `<div class="text-sm" style="color:#c8102e">${err.message}</div>`;
+  }
+}
+
+function appendShippingRow(code, price) {
+  const list = document.getElementById('shippingRatesList');
+  const row = document.createElement('div');
+  row.className = 'shipping-row';
+  row.style.cssText = 'display:grid;grid-template-columns:90px 1fr 110px 40px;gap:10px;align-items:center';
+  const label = COUNTRY_NAME[code] || code;
+  row.innerHTML = `
+    <input type="text" maxlength="2" class="apple-input shipping-code" value="${escapeHtml(code)}" style="text-transform:uppercase;font-family:ui-monospace,monospace;text-align:center;font-weight:600">
+    <div class="shipping-label text-sm" style="color:var(--gray)">${escapeHtml(label)}</div>
+    <div style="position:relative">
+      <input type="number" step="0.10" min="0" class="apple-input shipping-price" value="${Number(price).toFixed(2)}" style="padding-right:28px">
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:14px">€</span>
+    </div>
+    <button type="button" class="shipping-del" onclick="this.closest('.shipping-row').remove()" aria-label="Supprimer" style="background:none;border:none;color:var(--gray);cursor:pointer;padding:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1.5 13a2 2 0 0 1-2 1.83H8.5A2 2 0 0 1 6.5 19L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+    </button>
+  `;
+  // Met à jour le label dès qu'on change le code
+  row.querySelector('.shipping-code').addEventListener('input', e => {
+    const v = (e.target.value || '').toUpperCase().slice(0, 2);
+    e.target.value = v;
+    row.querySelector('.shipping-label').textContent = COUNTRY_NAME[v] || (v ? v : '—');
+  });
+  list.appendChild(row);
+}
+
+function addShippingRow() {
+  appendShippingRow('', 0);
+}
+
+async function saveSettings() {
+  const btn = document.getElementById('settingsSaveBtn');
+  const lbl = btn.querySelector('.settings-save-label');
+  const alert = document.getElementById('settingsAlert');
+  alert.textContent = '';
+  alert.style.color = '';
+
+  const unitPrice = parseFloat(document.getElementById('settingUnitPrice').value);
+  if (Number.isNaN(unitPrice) || unitPrice < 0) {
+    alert.style.color = '#c8102e';
+    alert.textContent = 'Prix unitaire invalide.';
+    return;
+  }
+
+  const rates = {};
+  let formError = null;
+  document.querySelectorAll('#shippingRatesList .shipping-row').forEach(row => {
+    const code = (row.querySelector('.shipping-code').value || '').toUpperCase();
+    const price = parseFloat(row.querySelector('.shipping-price').value);
+    if (!code) return; // ignore lignes vides
+    if (!/^[A-Z]{2}$/.test(code)) { formError = `Code pays invalide : ${code}`; return; }
+    if (Number.isNaN(price) || price < 0) { formError = `Prix invalide pour ${code}`; return; }
+    rates[code] = price;
+  });
+  if (formError) {
+    alert.style.color = '#c8102e';
+    alert.textContent = formError;
+    return;
+  }
+  if (!Object.keys(rates).length) {
+    alert.style.color = '#c8102e';
+    alert.textContent = 'Ajoute au moins un pays.';
+    return;
+  }
+
+  btn.disabled = true;
+  lbl.textContent = 'Enregistrement…';
+  try {
+    const r = await fetch('/api/admin?action=update-settings', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ unit_price_eur: unitPrice, shipping_rates: rates })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Erreur serveur');
+    alert.style.color = '#0a8f3f';
+    alert.textContent = 'Paramètres enregistrés ✓';
+    setTimeout(() => { alert.textContent = ''; }, 3000);
+  } catch (err) {
+    alert.style.color = '#c8102e';
+    alert.textContent = err.message;
+  } finally {
+    btn.disabled = false;
+    lbl.textContent = 'Enregistrer les paramètres';
+  }
+}
+</script>
+</body>
+</html>

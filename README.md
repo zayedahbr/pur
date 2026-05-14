@@ -5,35 +5,6 @@ Stack : HTML/CSS/JS vanilla, Vercel Serverless (Node), Supabase, Stripe, Resend.
 
 ---
 
-## 🆕 Refonte 2026-05 (round 3 — v4 Porsche-inspired)
-
-Refonte design complète **white-dominant** inspirée de l'univers Porsche.
-Voir `CHANGELOG.md` pour le détail complet. Points clés :
-
-- **Design** : palette ink+gris+blanc, typographie Sora (display) + Inter
-  (body) + JetBrains Mono (refs), boutons rectangulaires aux coins doucement
-  arrondis, cartes à `border-radius: 4px`.
-- **Hero plein écran** avec carrousel 3 images + bandeau specs.
-- **Atelier** : 2 colonnes desktop, stepper mobile 6 étapes (logique
-  préservée). Le sticker final est **identique pixel-pour-pixel** à v3.
-- **Philosophie** : carrousel horizontal scroll-snap 4 cards (au lieu d'une
-  grille statique).
-- **Bandeau réassurance noir** 4 colonnes.
-- **Footer 5 colonnes** (Brand / Produit / Compte / Aide / Légal).
-- **Sélecteur FR/EN retiré** (v4 = FR-only, dictionnaires EN conservés pour
-  réactivation).
-- **Numéro de commande** : `000123` (sans préfixe `#`).
-- **Mode édition admin inline** (nouveau) : `?edit=EDIT_KEY` rend les textes
-  éditables, sauvegarde dans `site_content`. Voir `CHANGELOG.md`.
-
-Variables d'env additionnelles à v4 : **`EDIT_KEY`** (clé d'accès au mode
-édition admin).
-
-Migration SQL : `site_content` + `set_order_number()` modifié. Détails dans
-`CHANGELOG.md`.
-
----
-
 ## 🆕 Refonte 2026-05 (round 2)
 
 - **Confirmation avant paiement** : nouveau pop-up «&nbsp;Tout est bon&nbsp;?&nbsp;» entre la livraison et Stripe, listant véhicule / moteur / couleur / référence / quantité / total, avec deux boutons (Vérifier / Oui, valider).
@@ -60,40 +31,38 @@ public/
 ├── index.html         → Page d'accueil + configurateur (sacré, ne pas modifier le bloc atelier)
 ├── registry.html      → Vérification d'authenticité
 ├── contact.html       → Formulaire de contact uniquement
-├── legal.html         → Mentions légales
-├── cgv.html           → Conditions générales de vente
+├── legal.html         → Mentions légales (NOUVEAU)
+├── cgv.html           → Conditions générales de vente (NOUVEAU)
 ├── account.html       → Connexion / inscription / mot de passe oublié
 ├── dashboard.html     → Espace client (commandes, profil, sécurité)
-├── admin.html         → Back-office
+├── admin.html         → Back-office (stats, commandes, messages, clients, paramètres)
 └── assets/
-    ├── css/shared.css → Design system v4 (Sora + Inter + JetBrains Mono)
+    ├── css/shared.css
     └── js/
-        ├── i18n.js    → Dictionnaires FR/EN (v4 : FR forcé)
-        ├── shared.js  → Nav, auth, toast, bannière cookies
-        └── edit-mode.js → Mode édition admin inline (NOUVEAU v4)
+        ├── i18n.js    → Dictionnaires FR/EN + détection + switcher (NOUVEAU)
+        └── shared.js  → Nav, auth, toast, bannière cookies, etc.
 
 api/
 ├── checkout.js        → Crée la session Stripe (prix BDD-validés)
 ├── webhook.js         → Réception des événements Stripe (paiement OK)
 ├── verify/[ref].js    → Vérifie une référence sticker
-├── auth.js            → Auth client (Google OAuth + email/pass)
+├── auth.js            → Auth client (signup/login/logout/me/forgot/reset/profil/OAuth Google)
 ├── orders.js          → Commandes du client connecté
-├── admin.js           → Back-office
-├── pricing.js         → Lecture publique de la grille tarifaire
+├── admin.js           → Back-office (auth + CRUD orders/messages/customers/settings + stats)
+├── pricing.js         → Lecture publique de la grille tarifaire (NOUVEAU)
 ├── contact.js         → Soumission du formulaire contact
-├── site-content.js    → Mode édition admin (NOUVEAU v4)
 └── test-email.js      → Diagnostic email
 
 lib/
-├── supabase.js
-├── email-template.js
-└── auth.js
+├── supabase.js        → Client Supabase service_role
+├── email-template.js  → Template HTML email confirmation commande
+└── auth.js            → Hash, sessions, cookies, rate limit
 
 supabase/
-└── schema.sql         → Schéma BDD (v4 : + table site_content)
+└── schema.sql         → Schéma BDD + table app_settings (NOUVEAU)
 ```
 
-**10 fonctions Serverless** (sous la limite Hobby de 12 sur Vercel).
+**9 fonctions Serverless** (sous la limite Hobby de 12 sur Vercel).
 
 ---
 
@@ -115,7 +84,6 @@ supabase/
 | `ADMIN_EMAIL` | Email recevant les notifs (nouvelle commande, nouveau message contact) |
 | `GOOGLE_CLIENT_ID` | **OAuth** — Client ID Google (Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Client). Laissez vide pour désactiver. |
 | `GOOGLE_CLIENT_SECRET` | **OAuth** — Client secret Google associé. |
-| `EDIT_KEY` | **v4** — Clé secrète pour activer le mode édition admin via `?edit=...`. Générez-la avec `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`. |
 
 > Apple OAuth a été retiré : aucune variable Apple à configurer.
 
@@ -213,11 +181,7 @@ Format unique pour tout le site : **`P` + 7 caractères alphanumériques** (ex :
 
 ## 🔢 Format de numéro de commande
 
-**v4** : 6 chiffres auto-incrémentés sans préfixe (ex : `000123`). Géré par
-séquence Postgres `order_number_seq` + trigger `set_order_number()`.
-
-> **v3 utilisait** `#000123` (avec préfixe dièse). Voir `CHANGELOG.md` pour la
-> migration optionnelle des anciennes commandes.
+`#` + 6 chiffres auto-incrémentés (ex : `#000123`). Géré par séquence Postgres `order_number_seq` + trigger `set_order_number()`.
 
 ---
 
