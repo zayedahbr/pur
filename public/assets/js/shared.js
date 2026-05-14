@@ -56,10 +56,10 @@ async function setupNavAuth() {
   const user = await fetchMe();
   if (user) {
     const initial = (user.prenom || user.email || '?').charAt(0).toUpperCase();
-    ic.innerHTML = `<span style="font-size:13px;font-weight:600;color:#1d1d1f;letter-spacing:-0.01em">${initial}</span>`;
+    ic.textContent = initial;
     ic.setAttribute('href', '/dashboard');
     ic.setAttribute('aria-label', 'Mon espace');
-    ic.style.background = '#e8e8ed';
+    // garde le style noir + lettre blanche (Figma)
   }
 }
 
@@ -121,61 +121,12 @@ function injectLangSwitch() {
   });
 }
 
-// ===== Navbar mobile menu (auto-injection sur les pages secondaires) =====
+// ===== Navbar mobile menu (câble le bouton Menu au drawer pour les pages secondaires) =====
 function setupSharedMobileMenu() {
-  const navInner = document.querySelector('.nav-inner');
-  const navActions = navInner ? navInner.querySelector('.nav-actions') : null;
-  const navLinks = navInner ? navInner.querySelector('.nav-links') : null;
-  if (!navInner || !navActions || !navLinks) return;
-  if (document.getElementById('sharedNavBurger')) return; // déjà fait
-
-  // 1. Injecte le bouton hamburger dans nav-actions
-  const burger = document.createElement('button');
-  burger.id = 'sharedNavBurger';
-  burger.type = 'button';
-  burger.className = 'nav-burger';
-  burger.setAttribute('aria-label', 'Ouvrir le menu');
-  burger.setAttribute('aria-expanded', 'false');
-  burger.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>';
-  navActions.appendChild(burger);
-
-  // 2. Construit le drawer plein écran à partir des liens existants
-  const links = Array.from(navLinks.querySelectorAll('.nav-link'));
-  const drawer = document.createElement('div');
-  drawer.className = 'nav-mobile-menu';
-  drawer.setAttribute('role', 'dialog');
-  drawer.setAttribute('aria-modal', 'true');
-  drawer.innerHTML = `
-    <div class="nav-mobile-head">
-      <a href="/" class="nav-brand">PureSpec</a>
-      <button class="nav-burger" id="sharedNavBurgerClose" type="button" aria-label="Fermer">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <nav class="nav-mobile-body"></nav>
-    <div class="nav-mobile-footer">
-      <a href="/#atelier" class="btn btn-primary btn-block" data-nav-close>Concevoir</a>
-    </div>
-  `;
-  const body = drawer.querySelector('.nav-mobile-body');
-  links.forEach(a => {
-    const m = document.createElement('a');
-    m.href = a.getAttribute('href');
-    m.textContent = a.textContent.trim();
-    m.className = 'nav-mobile-link';
-    m.dataset.navClose = '';
-    body.appendChild(m);
-  });
-  // Ajoute "Mon compte" si pas déjà présent
-  if (!links.some(a => /compte|espace|connect/i.test(a.textContent))) {
-    const acc = document.createElement('a');
-    acc.href = '/account';
-    acc.textContent = 'Mon compte';
-    acc.className = 'nav-mobile-link';
-    acc.dataset.navClose = '';
-    body.appendChild(acc);
-  }
-  document.body.appendChild(drawer);
+  const burger = document.getElementById('navBurger');
+  const drawer = document.getElementById('navMobileMenu');
+  const closeBtn = document.getElementById('navBurgerClose');
+  if (!burger || !drawer) return;
 
   const open = () => {
     drawer.classList.add('open');
@@ -188,7 +139,7 @@ function setupSharedMobileMenu() {
     burger.setAttribute('aria-expanded', 'false');
   };
   burger.addEventListener('click', open);
-  drawer.querySelector('#sharedNavBurgerClose').addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
   drawer.querySelectorAll('[data-nav-close]').forEach(el => el.addEventListener('click', close));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer.classList.contains('open')) close();

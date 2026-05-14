@@ -10,7 +10,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE1.png">
+<link rel="preload" as="image" href="https://github.com/zayedahbr/pur/blob/main/m3%20rouge.png?raw=true">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
 
@@ -43,123 +43,77 @@
   .headline-lg { font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; }
   .subhead { font-weight: 400; letter-spacing: -0.015em; color: #1d1d1f; }
 
-  /* ========== HERO — Carousel pleine largeur (Figma redesign) ========== */
+  /* ========== HERO — Porsche/Apple split sur fond blanc ========== */
   .hero-wrap {
     position: relative;
     width: 100%;
-    background: #f5f5f5;
+    background: #ffffff;
     overflow: hidden;
-    padding: 32px 32px 24px;
   }
-  @media (max-width: 768px) {
-    .hero-wrap { padding: 20px 16px 16px; }
-  }
-  .hero-carousel {
-    position: relative;
-    max-width: 1480px;
+  .hero-inner {
+    max-width: 1240px;
     margin: 0 auto;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 32px;
-    overflow: hidden;
-    background: #1a1a1a;
-    box-shadow: 0 24px 64px -16px rgba(0,0,0,0.25);
+    padding: 64px 32px 88px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 48px;
+    align-items: center;
+    min-height: 68vh;
   }
   @media (max-width: 1024px) {
-    .hero-carousel { aspect-ratio: 4 / 5; border-radius: 24px; }
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 48px 24px 64px;
+      min-height: auto;
+    }
   }
-  @media (max-width: 640px) {
-    .hero-carousel { border-radius: 20px; }
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 540px;
   }
-  .hero-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.8s var(--ease-apple);
-    will-change: opacity;
-    pointer-events: none;
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #86868b;
+    margin-bottom: 28px;
+    display: block;
   }
-  .hero-slide.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .hero-slide-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-  /* Gradient bas → haut, noir → transparent */
-  .hero-slide-gradient {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 65%;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.85) 100%);
-    pointer-events: none;
-  }
-  .hero-slide-content {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 64px 56px 56px;
-    color: #fafbff;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-width: 760px;
-  }
-  @media (max-width: 1024px) {
-    .hero-slide-content { padding: 48px 32px 40px; }
-  }
-  @media (max-width: 640px) {
-    .hero-slide-content { padding: 32px 22px 28px; }
-  }
-  .hero-slide-title {
-    font-size: clamp(28px, 3.4vw, 44px);
+  .hero-title {
+    font-size: clamp(44px, 6.2vw, 84px);
     font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.12;
-    color: #fafbff;
-    margin: 0 0 14px;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    color: #1d1d1f;
+    margin: 0 0 24px;
   }
-  .hero-slide-text {
-    font-size: clamp(15px, 1.15vw, 17px);
-    line-height: 1.55;
-    color: rgba(250,251,255,0.88);
-    letter-spacing: -0.005em;
-    margin: 0 0 28px;
-    max-width: 580px;
+  .hero-title em {
+    font-style: normal;
+    color: #86868b;
+    font-weight: 600;
   }
-  .hero-slide-actions {
+  .hero-lead {
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.45;
+    color: #424245;
+    letter-spacing: -0.01em;
+    margin: 0 0 40px;
+    max-width: 480px;
+  }
+  .hero-actions {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     flex-wrap: wrap;
   }
-  /* Eyebrow optionnel au-dessus du titre */
-  .hero-slide-eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(250,251,255,0.7);
-    margin-bottom: 18px;
-    display: inline-block;
-  }
-
-  /* Boutons principaux : rectangle arrondi (Figma) */
   .btn-hero-primary {
     background: #1d1d1f;
     color: #ffffff;
-    padding: 12px 22px;
-    border-radius: 9px;
+    padding: 14px 24px;
+    border-radius: 12px;
     font-size: 15px;
     font-weight: 500;
     letter-spacing: -0.01em;
@@ -171,103 +125,196 @@
     justify-content: center;
     gap: 8px;
     text-decoration: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
   }
   .btn-hero-primary:hover { background: #000; transform: translateY(-1px); }
   .btn-hero-primary:active { transform: translateY(0); }
-  .btn-hero-primary.on-dark {
-    background: #ffffff;
-    color: #1d1d1f;
-  }
-  .btn-hero-primary.on-dark:hover { background: #f0f0f0; }
   .btn-hero-link {
-    color: #fafbff;
-    font-size: 14px;
+    color: #1d1d1f;
+    font-size: 15px;
     font-weight: 500;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 10px 4px;
+    padding: 16px 4px;
     text-decoration: none;
     transition: opacity var(--t-fast);
     display: inline-flex;
     align-items: center;
     gap: 6px;
   }
-  .btn-hero-link:hover { opacity: 0.7; }
+  .btn-hero-link:hover { opacity: 0.6; }
 
-  /* Indicateurs (dots) du carousel */
-  .hero-dots {
-    position: absolute;
-    bottom: 22px;
-    right: 28px;
-    display: flex;
-    gap: 8px;
-    z-index: 5;
+  /* Stage produit côté droit */
+  .hero-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #f5f5f7;
+  }
+  @media (max-width: 1024px) {
+    .hero-stage { aspect-ratio: 4 / 3; border-radius: 24px; }
   }
   @media (max-width: 640px) {
-    .hero-dots { bottom: 14px; right: 16px; }
+    .hero-stage { aspect-ratio: 5 / 4; border-radius: 20px; }
+  }
+  .hero-m3 {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-apple);
+    will-change: opacity;
+    margin-left: auto;
+  }
+  .hero-m3.active { opacity: 1; }
+
+  /* Indicateurs (dots) sur le stage */
+  .hero-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 3;
   }
   .hero-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.5);
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: all var(--t-std);
+    transition: all var(--t-fast);
   }
-  .hero-dot:hover { background: rgba(255,255,255,0.75); }
   .hero-dot.active {
     background: #ffffff;
-    width: 28px;
+    width: 22px;
   }
 
-  /* Slide 3 (sticker preview) : look spécial, fond clair */
-  .hero-slide.slide-sticker {
-    background: #f5f5f7;
+  /* Ligne de spec sous le hero (Porsche-like) */
+  .hero-specs {
+    border-top: 1px solid rgba(0,0,0,0.08);
+    background: #ffffff;
   }
-  .hero-slide.slide-sticker .hero-slide-gradient { display: none; }
-  .hero-slide.slide-sticker .hero-slide-content {
+  .hero-specs-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  @media (max-width: 768px) {
+    .hero-specs-inner {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      padding: 24px 24px;
+    }
+  }
+  .hero-spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .hero-spec-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #86868b;
+  }
+  .hero-spec-value {
+    font-size: 15px;
+    font-weight: 500;
     color: #1d1d1f;
-    max-width: 50%;
-    top: 50%;
-    bottom: auto;
-    transform: translateY(-50%);
-    padding-left: 64px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ========== 3 CARDS HORIZONTALES (Figma : Personnalisations / Configurations / Connectez) ========== */
+  .features-cards {
+    background: #f5f5f5;
+    padding: 16px 24px 64px;
+  }
+  @media (max-width: 768px) {
+    .features-cards { padding: 8px 16px 48px; }
+  }
+  .features-grid {
+    max-width: 1480px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
   @media (max-width: 1024px) {
-    .hero-slide.slide-sticker .hero-slide-content {
-      position: relative;
-      transform: none;
-      top: auto;
-      bottom: auto;
-      max-width: 100%;
-      padding: 32px 22px;
-    }
+    .features-grid { grid-template-columns: 1fr; gap: 14px; }
   }
-  .hero-slide.slide-sticker .hero-slide-title { color: #1d1d1f; }
-  .hero-slide.slide-sticker .hero-slide-text { color: #424245; }
-  .hero-slide.slide-sticker .btn-hero-link { color: #1d1d1f; }
-  .hero-sticker-visual {
+  .feat-card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #2a2a2a;
+    cursor: default;
+    transition: transform var(--t-med) var(--ease-apple);
+  }
+  .feat-card:hover { transform: translateY(-2px); }
+  @media (max-width: 1024px) {
+    .feat-card { aspect-ratio: 16 / 11; border-radius: 24px; }
+  }
+  @media (max-width: 640px) {
+    .feat-card { aspect-ratio: 4 / 5; border-radius: 22px; }
+  }
+  .feat-card-img {
     position: absolute;
-    right: 8%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
   }
-  @media (max-width: 1024px) {
-    .hero-sticker-visual {
-      position: relative;
-      right: auto;
-      top: auto;
-      transform: none;
-      display: flex;
-      justify-content: center;
-      padding: 32px 0;
-    }
+  .feat-card-overlay {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 70%;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.85) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .feat-card-content {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    padding: 32px 32px 28px;
+    color: #fafbff;
+  }
+  @media (max-width: 640px) {
+    .feat-card-content { padding: 24px 22px 22px; }
+  }
+  .feat-card-title {
+    font-size: clamp(22px, 1.9vw, 28px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    color: #fafbff;
+  }
+  .feat-card-text {
+    font-size: clamp(13px, 0.95vw, 14.5px);
+    line-height: 1.5;
+    color: rgba(250,251,255,0.85);
+    letter-spacing: -0.005em;
+    margin: 0;
+    max-width: 95%;
   }
 
   /* ========== STICKER ========== */
@@ -856,7 +903,7 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
-    .hero-slide { transition: opacity 0.3s ease !important; }
+    .hero-m3 { transition: opacity 0.3s ease !important; }
   }
 
   ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -864,11 +911,11 @@
   ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.4); }
 
-  /* ========== NAVBAR ========== */
+  /* ========== NAVBAR (Figma redesign) ========== */
   .nav-blur {
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    background: rgba(255,255,255,0.78);
+    background: rgba(255,255,255,0.85);
     border-bottom: 1px solid rgba(0,0,0,0.06);
   }
   .nav-autohide {
@@ -883,21 +930,44 @@
   }
   .nav-autohide.nav-hidden { transform: translateY(-100%); }
   .nav-spacer { height: 64px; }
-  @media (max-width: 768px) { .nav-spacer { height: 60px; } }
 
+  /* 3 zones : gauche = Menu, centre = Brand, droite = actions */
   .nav-row {
     max-width: 1480px;
     margin: 0 auto;
     padding: 0 28px;
     height: 64px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+    gap: 16px;
   }
   @media (max-width: 768px) {
     .nav-row { padding: 0 18px; height: 60px; }
   }
+
+  /* Zone gauche : bouton Menu Figma */
+  .nav-left { display: flex; align-items: center; justify-content: flex-start; }
+  .nav-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px 8px 12px;
+    border-radius: 10px;
+    background: transparent;
+    color: #1d1d1f;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    transition: background var(--t-fast);
+  }
+  .nav-menu-btn:hover { background: #f5f5f7; }
+  .nav-menu-btn svg { display: block; }
+
+  /* Zone centre : brand PureSpec */
+  .nav-center { display: flex; align-items: center; justify-content: center; }
   .nav-brand-link {
     display: inline-flex;
     align-items: center;
@@ -907,54 +977,35 @@
     font-size: 17px;
     letter-spacing: -0.02em;
   }
-  .nav-links-row {
-    display: none;
-    align-items: center;
-    gap: 28px;
-  }
-  @media (min-width: 900px) {
-    .nav-links-row { display: flex; }
-  }
-  .nav-link {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(29,29,31,0.78);
-    text-decoration: none;
-    transition: color var(--t-fast);
-    letter-spacing: -0.005em;
-  }
-  .nav-link:hover, .nav-link.active { color: #1d1d1f; }
-  .nav-actions-row {
+
+  /* Zone droite : Concevoir + avatar Z */
+  .nav-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 8px;
   }
-
-  /* === Bouton "Menu" Figma : rectangle arrondi avec icône + label === */
-  .nav-menu-btn {
+  .nav-cta {
+    background: #1d1d1f;
+    color: #ffffff;
+    padding: 9px 18px;
+    border-radius: 9px;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    transition: background var(--t-fast);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border-radius: 9px;
-    background: #f5f5f7;
-    color: #1d1d1f;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.005em;
-    transition: background var(--t-fast);
+    gap: 6px;
   }
-  .nav-menu-btn:hover { background: #ececf0; }
-  @media (min-width: 900px) {
-    .nav-menu-btn { display: none; }
-  }
+  .nav-cta svg { width: 12px; height: 12px; }
+  .nav-cta:hover { background: #000; }
 
-  /* === Avatar "Z" carré arrondi (Figma) === */
+  /* Avatar Z carré noir */
   .nav-account {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 9px;
     background: #1d1d1f;
     color: #ffffff;
@@ -962,48 +1013,40 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: -0.005em;
     transition: background var(--t-fast);
   }
   .nav-account:hover { background: #000; }
-  .nav-account svg { display: none; }
 
-  /* === CTA "Concevoir" rectangulaire arrondi noir (Figma) === */
-  .nav-cta {
-    background: #1d1d1f;
-    color: #ffffff;
-    padding: 8px 18px;
-    border-radius: 9px;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    text-decoration: none;
-    transition: background var(--t-fast);
-    display: none;
-  }
-  @media (min-width: 640px) { .nav-cta { display: inline-flex; align-items: center; } }
-  .nav-cta:hover { background: #000; }
-
-  /* === Switch langue === */
+  /* Switch langue dans dropdown du menu (caché de la nav principale) */
   .lang-switch {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 10px;
-    border-radius: 9px;
+    padding: 6px 10px;
+    border-radius: 8px;
     background: transparent;
     color: rgba(29,29,31,0.78);
     border: none;
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
-    transition: background var(--t-fast), color var(--t-fast);
+    transition: background var(--t-fast);
   }
   .lang-switch:hover { background: #f5f5f7; color: #1d1d1f; }
 
-  /* Hamburger mobile (caché : remplacé par .nav-menu-btn) */
+  /* Sur mobile, on cache le label "Concevoir" et on garde juste l'icône */
+  @media (max-width: 520px) {
+    .nav-cta span { display: none; }
+    .nav-cta { padding: 9px 11px; }
+    .nav-menu-btn span { display: none; }
+    .nav-menu-btn { padding: 8px 10px; }
+  }
+
+  /* Anciens classes liens nav (cachés en faveur du menu) */
+  .nav-links-row { display: none !important; }
   .nav-burger { display: none !important; }
 
   /* Menu mobile en plein écran */
@@ -1937,39 +1980,56 @@
 </head>
 <body>
 
-<!-- ============ NAVIGATION ============ -->
+<!-- ============ NAVIGATION (Figma redesign) ============ -->
 <nav class="nav-blur nav-autohide" id="mainNav" aria-label="Navigation principale">
   <div class="nav-row">
-    <a href="/" class="nav-brand-link" aria-label="PureSpec - Accueil">PureSpec</a>
-    <div class="nav-links-row" id="navLinksRow">
-      <a href="#atelier" class="nav-link" data-i18n="nav.atelier">Atelier</a>
-      <a href="#story" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
-      <a href="/registry" class="nav-link" data-i18n="nav.registry">Registry</a>
-      <a href="/contact" class="nav-link" data-i18n="nav.contact">Contact</a>
-    </div>
-    <div class="nav-actions-row">
-      <button type="button" id="langSwitchBtn" class="lang-switch" aria-label="Langue / Language">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span id="langSwitchLabel">FR</span>
-      </button>
-      <a href="#atelier" class="nav-cta" data-i18n="nav.cta">Concevoir</a>
-      <a href="/account" class="nav-account" aria-label="Mon compte" id="navAccountIcon">Z</a>
+
+    <!-- Gauche : Menu -->
+    <div class="nav-left">
       <button class="nav-menu-btn" id="navBurger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navMobileMenu">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
         <span data-i18n="nav.menu">Menu</span>
       </button>
     </div>
+
+    <!-- Centre : Brand -->
+    <div class="nav-center">
+      <a href="/" class="nav-brand-link" aria-label="PureSpec - Accueil">PureSpec</a>
+    </div>
+
+    <!-- Droite : Concevoir + Avatar Z -->
+    <div class="nav-right">
+      <a href="#atelier" class="nav-cta">
+        <span data-i18n="nav.cta">Concevoir</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+      <a href="/account" class="nav-account" aria-label="Mon compte" id="navAccountIcon">Z</a>
+    </div>
+
+  </div>
+
+  <!-- Liens et options déplacés dans le menu mobile (toujours utilisé même desktop) -->
+  <div class="nav-links-row" id="navLinksRow" hidden>
+    <a href="#atelier" class="nav-link" data-i18n="nav.atelier">Atelier</a>
+    <a href="#story" class="nav-link" data-i18n="nav.philosophy">Philosophie</a>
+    <a href="/registry" class="nav-link" data-i18n="nav.registry">Registry</a>
+    <a href="/contact" class="nav-link" data-i18n="nav.contact">Contact</a>
+    <button type="button" id="langSwitchBtn" class="lang-switch" aria-label="Langue / Language">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span id="langSwitchLabel">FR</span>
+    </button>
   </div>
 </nav>
 
-<!-- Menu mobile plein écran -->
+<!-- Menu mobile plein écran : contient TOUS les liens (puisque desktop n'a plus de navlinks visibles) -->
 <div class="nav-mobile-menu" id="navMobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navigation">
   <div class="nav-mobile-head">
-    <a href="/" class="nav-brand-link">PureSpec</a>
     <button class="nav-menu-btn" id="navBurgerClose" type="button" aria-label="Fermer le menu" style="display:inline-flex">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       <span>Fermer</span>
     </button>
+    <a href="/" class="nav-brand-link">PureSpec</a>
+    <span style="width: 88px"></span>
   </div>
   <nav class="nav-mobile-body" aria-label="Liens principaux">
     <a href="#atelier" class="nav-mobile-link" data-nav-close data-i18n="nav.atelier">Atelier</a>
@@ -1977,6 +2037,9 @@
     <a href="/registry" class="nav-mobile-link" data-nav-close data-i18n="nav.registry">Registry</a>
     <a href="/contact" class="nav-mobile-link" data-nav-close data-i18n="nav.contact">Contact</a>
     <a href="/account" class="nav-mobile-link" data-nav-close data-i18n="nav.account">Mon compte</a>
+    <button type="button" id="langSwitchBtnMobile" class="nav-mobile-link" style="text-align:left;background:none;border:none;cursor:pointer;width:100%;font:inherit;" aria-label="Langue / Language">
+      Langue · <span id="langSwitchLabelMobile">FR</span>
+    </button>
   </nav>
   <div class="nav-mobile-footer">
     <a href="#atelier" class="btn-hero-primary" data-nav-close data-i18n="hero.cta.primary">Concevoir le mien</a>
@@ -1986,81 +2049,78 @@
 <div class="nav-spacer" aria-hidden="true"></div>
 
 
-<!-- ============ HERO — Carousel pleine largeur (Figma redesign) ============ -->
+<!-- ============ HERO — split layout sur fond blanc (Figma) ============ -->
 <section class="hero-wrap page-home" aria-label="Présentation PureSpec">
-  <div class="hero-carousel" id="heroCarousel">
+  <div class="hero-inner">
+    <div class="hero-copy animate-fade-up">
+      <h1 class="hero-title">
+        <span data-i18n="hero.title.l1">La signature</span><br>
+        <span data-i18n="hero.title.l2">de votre build.</span>
+      </h1>
+      <p class="hero-lead" data-i18n="hero.lead">
+        Un film électrostatique haute définition conçu pour se fondre dans votre pare-brise. Pas pour le couvrir.
+      </p>
+      <div class="hero-actions">
+        <a href="#atelier" class="btn-hero-primary">
+          <span data-i18n="hero.cta.primary">Concevoir le mien</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="#story" class="btn-hero-link">
+          <span data-i18n="hero.cta.secondary">Découvrir la philosophie</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-stage animate-fade-up" style="animation-delay: 0.1s">
+      <img class="hero-m3 active" data-idx="0" src="https://github.com/zayedahbr/pur/blob/main/M3%20JAUNE.png?raw=true" alt="BMW M3 build — jaune" style="object-position: right;">
+      <img class="hero-m3" data-idx="1" src="https://github.com/zayedahbr/pur/blob/main/m3%20rouge.png?raw=true" alt="BMW M3 build — rouge" style="object-position: right;">
+      <img class="hero-m3" data-idx="2" src="https://github.com/zayedahbr/pur/blob/main/M3%20NOIRE.png?raw=true" alt="BMW M3 build — noir" style="object-position: right;">
+      <div class="hero-dots" role="tablist" aria-label="Choisir une teinte d'aperçu">
+        <button class="hero-dot active" data-go="0" type="button" aria-label="Jaune"></button>
+        <button class="hero-dot" data-go="1" type="button" aria-label="Rouge"></button>
+        <button class="hero-dot" data-go="2" type="button" aria-label="Noir"></button>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Slide 1 : Personnalisations infinies -->
-    <div class="hero-slide active" data-idx="0">
-      <img class="hero-slide-img" src="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE1.png" alt="Porsche en mouvement — personnalisation infinie">
-      <div class="hero-slide-gradient"></div>
-      <div class="hero-slide-content">
-        <span class="hero-slide-eyebrow" data-i18n="hero.s1.eyebrow">Atelier sur-mesure</span>
-        <h1 class="hero-slide-title" data-i18n="hero.s1.title">Personnalisations infinies</h1>
-        <p class="hero-slide-text" data-i18n="hero.s1.text">
+
+<!-- ============ 3 CARDS HORIZONTALES (Figma : Personnalisations / Configurations / Connectez votre passion) ============ -->
+<section class="features-cards page-home" aria-label="Caractéristiques PureSpec">
+  <div class="features-grid">
+
+    <article class="feat-card">
+      <img class="feat-card-img" src="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE1.png" alt="Personnalisations infinies" loading="lazy">
+      <div class="feat-card-overlay"></div>
+      <div class="feat-card-content">
+        <h3 class="feat-card-title" data-i18n="feat.s1.title">Personnalisations infinies</h3>
+        <p class="feat-card-text" data-i18n="feat.s1.text">
           De la nuance exacte de votre carrosserie aux détails techniques les plus pointus, configurez un sticker qui n'appartient qu'à vous. Aucun build ne se ressemble, votre signature non plus.
         </p>
-        <div class="hero-slide-actions">
-          <a href="#atelier" class="btn-hero-primary on-dark">
-            <span data-i18n="hero.cta.primary">Concevoir le mien</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-          <a href="#story" class="btn-hero-link">
-            <span data-i18n="hero.cta.secondary">Découvrir</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
       </div>
-    </div>
+    </article>
 
-    <!-- Slide 2 : Des milliers de configurations -->
-    <div class="hero-slide" data-idx="1">
-      <img class="hero-slide-img" src="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE2.png" alt="Porsche — milliers de configurations">
-      <div class="hero-slide-gradient"></div>
-      <div class="hero-slide-content">
-        <span class="hero-slide-eyebrow" data-i18n="hero.s2.eyebrow">Codes historiques</span>
-        <h2 class="hero-slide-title" data-i18n="hero.s2.title">Des milliers de configurations.</h2>
-        <p class="hero-slide-text" data-i18n="hero.s2.text">
+    <article class="feat-card">
+      <img class="feat-card-img" src="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE2.png" alt="Des milliers de configurations" loading="lazy">
+      <div class="feat-card-overlay"></div>
+      <div class="feat-card-content">
+        <h3 class="feat-card-title" data-i18n="feat.s2.title">Des Milliers de Configurations.</h3>
+        <p class="feat-card-text" data-i18n="feat.s2.text">
           Chaque véhicule a une âme, chaque propriétaire a une vision. Explorez un univers de possibilités où les codes couleurs historiques rencontrent vos spécifications les plus pointues. Plus qu'un sticker, une archive physique de votre passion.
         </p>
-        <div class="hero-slide-actions">
-          <a href="#atelier" class="btn-hero-primary on-dark">
-            <span data-i18n="hero.cta.primary">Concevoir le mien</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-          <a href="/registry" class="btn-hero-link">
-            <span data-i18n="hero.cta.registry">Voir le Registry</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
       </div>
-    </div>
+    </article>
 
-    <!-- Slide 3 : Aperçu visuel (sticker + voiture) -->
-    <div class="hero-slide" data-idx="2">
-      <img class="hero-slide-img" src="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE3.png" alt="PureSpec — aperçu signature build">
-      <div class="hero-slide-gradient"></div>
-      <div class="hero-slide-content">
-        <span class="hero-slide-eyebrow" data-i18n="hero.s3.eyebrow">La signature</span>
-        <h2 class="hero-slide-title" data-i18n="hero.s3.title">La signature de votre build.</h2>
-        <p class="hero-slide-text" data-i18n="hero.s3.text">
-          Film électrostatique haute définition, format 48 × 71,8 mm. Authentique, vérifié, gravé dans le PureSpec Registry à vie.
+    <article class="feat-card">
+      <img class="feat-card-img" src="https://raw.githubusercontent.com/zayedahbr/pur/refs/heads/main/IMAGE3.png" alt="Connectez votre passion" loading="lazy">
+      <div class="feat-card-overlay"></div>
+      <div class="feat-card-content">
+        <h3 class="feat-card-title" data-i18n="feat.s3.title">Connectez votre passion</h3>
+        <p class="feat-card-text" data-i18n="feat.s3.text">
+          En intégrant votre handle Instagram directement sur votre fiche technique, transformez chaque rencontre en une nouvelle connexion. Votre sticker devient le lien physique entre votre voiture et votre communauté.
         </p>
-        <div class="hero-slide-actions">
-          <a href="#atelier" class="btn-hero-primary on-dark">
-            <span data-i18n="hero.cta.primary">Concevoir le mien</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </div>
       </div>
-    </div>
-
-    <!-- Dots -->
-    <div class="hero-dots" role="tablist" aria-label="Choisir une slide">
-      <button class="hero-dot active" data-go="0" type="button" aria-label="Slide 1"></button>
-      <button class="hero-dot" data-go="1" type="button" aria-label="Slide 2"></button>
-      <button class="hero-dot" data-go="2" type="button" aria-label="Slide 3"></button>
-    </div>
+    </article>
 
   </div>
 </section>
@@ -2558,7 +2618,7 @@
 
 <!-- ============ FOOTER ============ -->
 <footer class="border-t border-black/10 py-12 px-6 bg-white">
-  <div class="max-w-[1240px] mx-auto">
+  <div class="max-w-[1200px] mx-auto">
     <!-- Mentions précision teintes -->
     <div class="mb-10 pb-10 border-b border-black/10">
       <p class="text-xs text-apple-gray leading-relaxed max-w-[820px]">
@@ -2573,7 +2633,8 @@
       <div>
         <div class="text-xs font-semibold text-apple-ink uppercase tracking-wider mb-3">Produit</div>
         <ul class="space-y-2 text-apple-gray">
-          <li><a href="#atelier" class="hover:text-apple-ink transition">Configurateur</a></li>
+          <li><a href="#atelier" class="hover:text-apple-ink transition">Atelier</a></li>
+          <li><a href="#story" class="hover:text-apple-ink transition">Philosophie</a></li>
           <li><a href="/registry" class="hover:text-apple-ink transition">Registry</a></li>
         </ul>
       </div>
@@ -2589,6 +2650,7 @@
         <div class="text-xs font-semibold text-apple-ink uppercase tracking-wider mb-3">Aide</div>
         <ul class="space-y-2 text-apple-gray">
           <li><a href="/contact" class="hover:text-apple-ink transition">Nous contacter</a></li>
+          <li><a href="/registry" class="hover:text-apple-ink transition">Vérifier un sticker</a></li>
         </ul>
       </div>
       <div>
@@ -2609,7 +2671,7 @@
         </div>
         <div class="text-xs" style="opacity:0.75">PURESPEC · SIREN 949 143 101 · <span data-i18n="legal.vat.shortnote">TVA non applicable, art. 293 B du CGI</span></div>
       </div>
-      <div class="text-xs" data-i18n="footer.tagline">Conçu et fabriqué en France</div>
+      <div class="text-xs" data-i18n="footer.tagline">Conçu en France · Imprimé avec précision</div>
     </div>
   </div>
 </footer>
@@ -4393,21 +4455,21 @@ function showToast(msg) {
 let heroIdx = 0;
 let heroTimer = null;
 function setHeroSlide(n) {
-  const slides = document.querySelectorAll('.hero-slide');
+  const imgs = document.querySelectorAll('.hero-m3');
   const dots = document.querySelectorAll('.hero-dot');
-  if (!slides.length) return;
-  heroIdx = ((n % slides.length) + slides.length) % slides.length;
-  slides.forEach((s, i) => s.classList.toggle('active', i === heroIdx));
+  if (!imgs.length) return;
+  heroIdx = ((n % imgs.length) + imgs.length) % imgs.length;
+  imgs.forEach((img, i) => img.classList.toggle('active', i === heroIdx));
   dots.forEach((d, i) => d.classList.toggle('active', i === heroIdx));
 }
 function cycleHero() {
-  const slides = document.querySelectorAll('.hero-slide');
-  if (!slides.length) return;
+  const imgs = document.querySelectorAll('.hero-m3');
+  if (!imgs.length) return;
   setHeroSlide(heroIdx + 1);
 }
 function startHeroAutoplay() {
   if (heroTimer) clearInterval(heroTimer);
-  heroTimer = setInterval(cycleHero, 5500);
+  heroTimer = setInterval(cycleHero, 4800);
 }
 function setupHeroDots() {
   document.querySelectorAll('.hero-dot').forEach((d) => {
